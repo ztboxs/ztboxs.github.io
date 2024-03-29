@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>Vue3+Ts+Vite的uniapp小程序项目中引入最新vant-weapp v1.11.2并且以后更新版本全部可用</title>
+    <url>/posts/4b60898c/</url>
+    <content><![CDATA[<h2 id="由于-vant-weapp-是针对微信小程序原生开发的使用在-uniapp-中并不能使用-npm-i-方式引入-vant-weapp，所以采用手动引入的方式"><a href="#由于-vant-weapp-是针对微信小程序原生开发的使用在-uniapp-中并不能使用-npm-i-方式引入-vant-weapp，所以采用手动引入的方式" class="headerlink" title="由于 vant-weapp 是针对微信小程序原生开发的使用在 uniapp 中并不能使用 npm i 方式引入 vant-weapp，所以采用手动引入的方式"></a>由于 vant-weapp 是针对微信小程序原生开发的使用在 uniapp 中并不能使用 npm i 方式引入 vant-weapp，所以采用手动引入的方式</h2><h2 id="1-下载vant-weapp包"><a href="#1-下载vant-weapp包" class="headerlink" title="1.下载vant-weapp包"></a>1.下载<a href="https://github.com/youzan/vant-weapp">vant-weapp</a>包</h2><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">//使用git下载</span></span><br><span class="line">git clone <span class="attr">https</span>:<span class="comment">//github.com/youzan/vant-weapp.git</span></span><br><span class="line"><span class="comment">//也可以直接下载zip文件</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="2-在项目-src-文件里面创建wxcomponents将下载的-vant-weapp-文件打开将里面的-dist-文件复制粘贴到wxcomponents中并且重命名为-vant-这样更好识别"><a href="#2-在项目-src-文件里面创建wxcomponents将下载的-vant-weapp-文件打开将里面的-dist-文件复制粘贴到wxcomponents中并且重命名为-vant-这样更好识别" class="headerlink" title="2.在项目 src 文件里面创建wxcomponents将下载的 vant-weapp 文件打开将里面的 dist 文件复制粘贴到wxcomponents中并且重命名为 vant(这样更好识别)"></a>2.在项目 src 文件里面创建<code>wxcomponents</code>将下载的 vant-weapp 文件打开将里面的 dist 文件复制粘贴到<code>wxcomponents</code>中并且重命名为 vant(这样更好识别)</h2><hr>
+<h2 id="3-打开-app-vue-文件在里添加-import-wxcomponents-vant-common-index-wxss"><a href="#3-打开-app-vue-文件在里添加-import-wxcomponents-vant-common-index-wxss" class="headerlink" title="3.打开 app.vue 文件在&lt;style lang=&quot;scss&quot;&gt;里添加@import &#39;@/wxcomponents/vant/common/index.wxss&#39;"></a>3.打开 app.vue 文件在<code>&lt;style lang=&quot;scss&quot;&gt;</code>里添加<code>@import &#39;@/wxcomponents/vant/common/index.wxss&#39;</code></h2><figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&lt;style lang=<span class="string">&quot;scss&quot;</span>&gt;</span><br><span class="line">  <span class="comment">//1.注意如果没有在vite为vue3配置@路径，请使用 2 @import</span></span><br><span class="line">  <span class="string">&#x27;@/wxcomponents/vant/common/index.wxss&#x27;</span> <span class="comment">//2.未配置配置@路径 @import</span></span><br><span class="line">  <span class="string">&#x27;/wxcomponents/vant/common/index.wxss&#x27;</span> ...省略</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="4-打开pages-json选择你是想全局还是局部引入"><a href="#4-打开pages-json选择你是想全局还是局部引入" class="headerlink" title="4.打开pages.json选择你是想全局还是局部引入"></a>4.打开<code>pages.json</code>选择你是想全局还是局部引入</h2><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">//1.全局引入在globalStyle中创建usingComponents里面放你想引入的样式，？怎么知道样式怎么引入！打开wxcomponents/vant,该文件下选你想要的</span></span><br><span class="line"><span class="string">&quot;globalStyle&quot;</span>: &#123;</span><br><span class="line"></span><br><span class="line">	...省略</span><br><span class="line"></span><br><span class="line">    <span class="string">&quot;usingComponents&quot;</span>: &#123;</span><br><span class="line">      <span class="string">&quot;van-button&quot;</span>: <span class="string">&quot;/wxcomponents/vant/button/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;van-cell&quot;</span>: <span class="string">&quot;/wxcomponents/vant/cell/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;van-cell-group&quot;</span>: <span class="string">&quot;/wxcomponents/vant/cell-group/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;van-icon&quot;</span>: <span class="string">&quot;/wxcomponents/vant/icon/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;van-image&quot;</span>: <span class="string">&quot;/wxcomponents/vant/image/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;van-row&quot;</span>: <span class="string">&quot;/wxcomponents/vant/row/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;van-col&quot;</span>: <span class="string">&quot;/wxcomponents/vant/col/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;van-popup&quot;</span>: <span class="string">&quot;/wxcomponents/vant/popup/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;van-toast&quot;</span>: <span class="string">&quot;/wxcomponents/vant/toast/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;van-card&quot;</span>: <span class="string">&quot;/wxcomponents/vant/card/index&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">//2.局部页面引入,以首页index引入&lt;van-button&gt;为例子</span></span><br><span class="line">    &#123;</span><br><span class="line">      <span class="string">&quot;path&quot;</span>: <span class="string">&quot;pages/index/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;style&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;navigationStyle&quot;</span>: <span class="string">&quot;custom&quot;</span>, <span class="comment">// 隐藏默认导航</span></span><br><span class="line">        <span class="string">&quot;navigationBarTextStyle&quot;</span>: <span class="string">&quot;white&quot;</span>,</span><br><span class="line">        <span class="string">&quot;navigationBarTitleText&quot;</span>: <span class="string">&quot;首页&quot;</span>,</span><br><span class="line">            <span class="string">&quot;usingComponents&quot;</span>: &#123;</span><br><span class="line">			      <span class="string">&quot;van-button&quot;</span>: <span class="string">&quot;/wxcomponents/vant/button/index&quot;</span>,</span><br><span class="line">			    &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>vue3</tag>
+        <tag>uniapp</tag>
+        <tag>小程序</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/posts/4a17b156/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+  </entry>
+</search>
