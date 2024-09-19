@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>解决windows下elasticsearch默认占用内存过大问题</title>
+    <url>/posts/c48a5e72/</url>
+    <content><![CDATA[<h2 id="解决方法1"><a href="#解决方法1" class="headerlink" title="解决方法1"></a>解决方法1</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">##<span class="number">1.</span>修改jvm.options文件 目录为 es/config/jvm.options</span><br><span class="line"></span><br><span class="line">##<span class="number">2.</span>使用文本编译器打开jvm.options  </span><br><span class="line">##<span class="number">3.</span>找到 IMPORTANT: JVM heap size</span><br><span class="line">## IMPORTANT: JVM heap size </span><br><span class="line">##<span class="number">4.</span>去掉  -Xms4g 前面的 ## 注释  </span><br><span class="line">## -Xms4g</span><br><span class="line">## -Xmx4g</span><br><span class="line">##修改后</span><br><span class="line">-Xms4g #JVM启动时的初始堆内存大小为4GB，具体大小可以按自己需求设置</span><br><span class="line">-Xmx4g #JVM可以使用的最大堆内存大小为4GB，具体大小可以按自己需求设置</span><br><span class="line"></span><br><span class="line">##保存并重启 es</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="解决方法2"><a href="#解决方法2" class="headerlink" title="解决方法2"></a>解决方法2</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">##去掉 elasticsearch.yml 里的#注释</span><br><span class="line"></span><br><span class="line">#bootstrap.memory_lock: <span class="literal">true</span> </span><br><span class="line">##配置，修改后</span><br><span class="line">bootstrap.memory_lock: <span class="literal">true</span></span><br><span class="line"></span><br><span class="line">##保存并重启es</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>中间件</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>低成本创业-1</title>
     <url>/posts/80026efd/</url>
     <content><![CDATA[<h2 id="为什么要低成本创业"><a href="#为什么要低成本创业" class="headerlink" title="为什么要低成本创业"></a>为什么要低成本创业</h2><p><strong>创业者找 VC 商量能不能投资我?VC 一看，你这个项目有点早，用户需求和解决方案都没验证，你再跑一跑再找我</strong></p>
