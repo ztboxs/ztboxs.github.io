@@ -1,26 +1,186 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Vue3+Ts+Vite的uniapp小程序项目中引入最新vant-weapp v1.11.2并且以后更新版本全部可用</title>
-    <url>/posts/4b60898c/</url>
-    <content><![CDATA[<h2 id="由于-vant-weapp-是针对微信小程序原生开发的使用在-uniapp-中并不能使用-npm-i-方式引入-vant-weapp，所以采用手动引入的方式"><a href="#由于-vant-weapp-是针对微信小程序原生开发的使用在-uniapp-中并不能使用-npm-i-方式引入-vant-weapp，所以采用手动引入的方式" class="headerlink" title="由于 vant-weapp 是针对微信小程序原生开发的使用在 uniapp 中并不能使用 npm i 方式引入 vant-weapp，所以采用手动引入的方式"></a>由于 vant-weapp 是针对微信小程序原生开发的使用在 uniapp 中并不能使用 npm i 方式引入 vant-weapp，所以采用手动引入的方式</h2><h2 id="1-下载vant-weapp包"><a href="#1-下载vant-weapp包" class="headerlink" title="1.下载vant-weapp包"></a>1.下载<a href="https://github.com/youzan/vant-weapp">vant-weapp</a>包</h2><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">//使用git下载</span></span><br><span class="line">git clone <span class="attr">https</span>:<span class="comment">//github.com/youzan/vant-weapp.git</span></span><br><span class="line"><span class="comment">//也可以直接下载zip文件</span></span><br></pre></td></tr></table></figure>
+    <title>elasticsearch中DevTools的CRUD和常见规则语句</title>
+    <url>/posts/67e1a025/</url>
+    <content><![CDATA[<h2 id="本文章全程使用-elasticsearch-的-DLS-语法"><a href="#本文章全程使用-elasticsearch-的-DLS-语法" class="headerlink" title="本文章全程使用 elasticsearch 的 DLS 语法"></a>本文章全程使用 elasticsearch 的 DLS 语法</h2><h3 id="一-常见-CRUD-语句"><a href="#一-常见-CRUD-语句" class="headerlink" title="一.常见 CRUD 语句"></a>一.常见 CRUD 语句</h3><h3 id="1-创建（索引文档）"><a href="#1-创建（索引文档）" class="headerlink" title="1. 创建（索引文档）"></a>1. <strong>创建（索引文档）</strong></h3><p>在创建文档时，你可以包含元数据和字段来定义安全级别：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">POST /&lt;index&gt;/_doc</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;user_id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;1234&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;security_level&quot;</span><span class="punctuation">:</span> <span class="string">&quot;internal&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;这是一个内部文档。&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-读取（带有-DLS-的搜索）"><a href="#2-读取（带有-DLS-的搜索）" class="headerlink" title="2. 读取（带有 DLS 的搜索）"></a>2. <strong>读取（带有 DLS 的搜索）</strong></h3><p>为了读取带有 DLS 的文档，你可以在角色中配置 DLS 查询。例如，拥有“内部”角色的用户只能查看标记为 <code>security_level: internal</code> 的文档。</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">GET /&lt;index&gt;/_search</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;query&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;bool&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;must&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;term&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;security_level&quot;</span><span class="punctuation">:</span> <span class="string">&quot;internal&quot;</span></span><br><span class="line">          <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>还可以在 Elasticsearch 的角色定义中应用 DLS。以下是一个带有 DLS 的角色定义示例：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">PUT /_security/role/internal_user</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;indices&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;names&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span> <span class="string">&quot;&lt;index&gt;&quot;</span> <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;privileges&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span> <span class="string">&quot;read&quot;</span> <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;query&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;term&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;security_level&quot;</span><span class="punctuation">:</span> <span class="string">&quot;internal&quot;</span> <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-更新（修改文档）"><a href="#3-更新（修改文档）" class="headerlink" title="3. 更新（修改文档）"></a>3. <strong>更新（修改文档）</strong></h3><p>如果用户有访问权限，可以使用文档 ID 来更新特定字段，同时保持对 <code>security_level</code> 的访问控制。</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">POST /&lt;index&gt;/_update/&lt;document_id&gt;</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;doc&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;更新后的内部文档内容。&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-删除（删除文档）"><a href="#4-删除（删除文档）" class="headerlink" title="4. 删除（删除文档）"></a>4. <strong>删除（删除文档）</strong></h3><p>对于删除操作，确保用户具有适当的角色，并且查询应用了正确的 <code>security_level</code>。</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">DELETE /&lt;index&gt;/_doc/&lt;document_id&gt;</span><br></pre></td></tr></table></figure>
 
 <hr>
-<h2 id="2-在项目-src-文件里面创建wxcomponents将下载的-vant-weapp-文件打开将里面的-dist-文件复制粘贴到wxcomponents中并且重命名为-vant-这样更好识别"><a href="#2-在项目-src-文件里面创建wxcomponents将下载的-vant-weapp-文件打开将里面的-dist-文件复制粘贴到wxcomponents中并且重命名为-vant-这样更好识别" class="headerlink" title="2.在项目 src 文件里面创建wxcomponents将下载的 vant-weapp 文件打开将里面的 dist 文件复制粘贴到wxcomponents中并且重命名为 vant(这样更好识别)"></a>2.在项目 src 文件里面创建<code>wxcomponents</code>将下载的 vant-weapp 文件打开将里面的 dist 文件复制粘贴到<code>wxcomponents</code>中并且重命名为 vant(这样更好识别)</h2><hr>
-<h2 id="3-打开-app-vue-文件在里添加-import-wxcomponents-vant-common-index-wxss"><a href="#3-打开-app-vue-文件在里添加-import-wxcomponents-vant-common-index-wxss" class="headerlink" title="3.打开 app.vue 文件在&lt;style lang=&quot;scss&quot;&gt;里添加@import &#39;@/wxcomponents/vant/common/index.wxss&#39;"></a>3.打开 app.vue 文件在<code>&lt;style lang=&quot;scss&quot;&gt;</code>里添加<code>@import &#39;@/wxcomponents/vant/common/index.wxss&#39;</code></h2><figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&lt;style lang=<span class="string">&quot;scss&quot;</span>&gt;</span><br><span class="line">  <span class="comment">//1.注意如果没有在vite为vue3配置@路径，请使用 2 @import</span></span><br><span class="line">  <span class="string">&#x27;@/wxcomponents/vant/common/index.wxss&#x27;</span> <span class="comment">//2.未配置配置@路径 @import</span></span><br><span class="line">  <span class="string">&#x27;/wxcomponents/vant/common/index.wxss&#x27;</span> ...省略</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h2 id="4-打开pages-json选择你是想全局还是局部引入"><a href="#4-打开pages-json选择你是想全局还是局部引入" class="headerlink" title="4.打开pages.json选择你是想全局还是局部引入"></a>4.打开<code>pages.json</code>选择你是想全局还是局部引入</h2><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">//1.全局引入在globalStyle中创建usingComponents里面放你想引入的样式，？怎么知道样式怎么引入！打开wxcomponents/vant,该文件下选你想要的</span></span><br><span class="line"><span class="string">&quot;globalStyle&quot;</span>: &#123;</span><br><span class="line"></span><br><span class="line">	...省略</span><br><span class="line"></span><br><span class="line">    <span class="string">&quot;usingComponents&quot;</span>: &#123;</span><br><span class="line">      <span class="string">&quot;van-button&quot;</span>: <span class="string">&quot;/wxcomponents/vant/button/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;van-cell&quot;</span>: <span class="string">&quot;/wxcomponents/vant/cell/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;van-cell-group&quot;</span>: <span class="string">&quot;/wxcomponents/vant/cell-group/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;van-icon&quot;</span>: <span class="string">&quot;/wxcomponents/vant/icon/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;van-image&quot;</span>: <span class="string">&quot;/wxcomponents/vant/image/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;van-row&quot;</span>: <span class="string">&quot;/wxcomponents/vant/row/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;van-col&quot;</span>: <span class="string">&quot;/wxcomponents/vant/col/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;van-popup&quot;</span>: <span class="string">&quot;/wxcomponents/vant/popup/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;van-toast&quot;</span>: <span class="string">&quot;/wxcomponents/vant/toast/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;van-card&quot;</span>: <span class="string">&quot;/wxcomponents/vant/card/index&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">//2.局部页面引入,以首页index引入&lt;van-button&gt;为例子</span></span><br><span class="line">    &#123;</span><br><span class="line">      <span class="string">&quot;path&quot;</span>: <span class="string">&quot;pages/index/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;style&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;navigationStyle&quot;</span>: <span class="string">&quot;custom&quot;</span>, <span class="comment">// 隐藏默认导航</span></span><br><span class="line">        <span class="string">&quot;navigationBarTextStyle&quot;</span>: <span class="string">&quot;white&quot;</span>,</span><br><span class="line">        <span class="string">&quot;navigationBarTitleText&quot;</span>: <span class="string">&quot;首页&quot;</span>,</span><br><span class="line">            <span class="string">&quot;usingComponents&quot;</span>: &#123;</span><br><span class="line">			      <span class="string">&quot;van-button&quot;</span>: <span class="string">&quot;/wxcomponents/vant/button/index&quot;</span>,</span><br><span class="line">			    &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<hr>
+<h2 id="2-常见搜索规则"><a href="#2-常见搜索规则" class="headerlink" title="2.常见搜索规则"></a>2.常见搜索规则</h2><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">##修改数据</span><br><span class="line">POST post/_doc/<span class="number">1</span></span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;title&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ZT&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;desc&quot;</span><span class="punctuation">:</span> <span class="string">&quot;zt的描述&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;age&quot;</span><span class="punctuation">:</span> <span class="number">22</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line">##根据_id查询数据</span><br><span class="line"></span><br><span class="line">GET post/_doc/<span class="number">1</span>c1FFJIBLxkM6xpy_qpH</span><br><span class="line"></span><br><span class="line">##查询所有</span><br><span class="line">GET post/_search</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;query&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;match_all&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line">##删除</span><br><span class="line">DELETE /post</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">##查看索引结构</span><br><span class="line">GET post/_mapping</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">## 使用SQL查询</span><br><span class="line">POST /_sql?format=txt</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;query&quot;</span><span class="punctuation">:</span> <span class="string">&quot;SELECT * FROM post WHERE title LIKE &#x27;%ZT%&#x27; &quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line">##空格分词器</span><br><span class="line">POST _analyze</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;analyzer&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ik_max_word&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="string">&quot;你好欢迎来到ecs&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line">##建索引，初始化分词和搜索规则</span><br><span class="line">PUT post_v1</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;aliases&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;post&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;mappings&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;properties&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;title&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;text&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;analyzer&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ik_max_word&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;search_analyzer&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ik_smart&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;fields&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;keyword&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;keyword&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;ignore_above&quot;</span><span class="punctuation">:</span> <span class="number">256</span></span><br><span class="line">          <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;text&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;analyzer&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ik_max_word&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;search_analyzer&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ik_smart&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;fields&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;keyword&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;keyword&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;ignore_above&quot;</span><span class="punctuation">:</span> <span class="number">256</span></span><br><span class="line">          <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;tags&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;keyword&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;userId&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;keyword&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;createTime&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;date&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;updateTime&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;date&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;isDelete&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;keyword&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line">##查询java段新增的数据</span><br><span class="line">GET post/_search</span><br><span class="line"></span><br><span class="line">##查询---match(模糊查询)---term(精确查询)---regexp(正则表达式查询)</span><br><span class="line">GET post_v1/_search</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;query&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;bool&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;must&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span><span class="attr">&quot;term&quot;</span><span class="punctuation">:</span><span class="punctuation">&#123;</span> <span class="attr">&quot;tags&quot;</span><span class="punctuation">:</span> <span class="string">&quot;c++&quot;</span> <span class="punctuation">&#125;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="punctuation">&#123;</span><span class="attr">&quot;match&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;知识优加&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
-        <category>前端</category>
+        <category>笔记</category>
       </categories>
       <tags>
-        <tag>vue3</tag>
-        <tag>uniapp</tag>
-        <tag>小程序</tag>
+        <tag>中间件</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>解决windows下elasticsearch默认占用内存过大问题</title>
+    <url>/posts/c48a5e72/</url>
+    <content><![CDATA[<h2 id="解决方法-1"><a href="#解决方法-1" class="headerlink" title="解决方法 1"></a>解决方法 1</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">##<span class="number">1.</span>修改jvm.options文件 目录为 es/config/jvm.options</span><br><span class="line"></span><br><span class="line">##<span class="number">2.</span>使用文本编译器打开jvm.options</span><br><span class="line">##<span class="number">3.</span>找到 IMPORTANT: JVM heap size</span><br><span class="line">## IMPORTANT: JVM heap size</span><br><span class="line">##<span class="number">4.</span>去掉  -Xms4g 前面的 ## 注释</span><br><span class="line">## -Xms4g</span><br><span class="line">## -Xmx4g</span><br><span class="line">##修改后</span><br><span class="line">-Xms4g #JVM启动时的初始堆内存大小为4GB，具体大小可以按自己需求设置</span><br><span class="line">-Xmx4g #JVM可以使用的最大堆内存大小为4GB，具体大小可以按自己需求设置</span><br><span class="line"></span><br><span class="line">##保存并重启 es</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="解决方法-2"><a href="#解决方法-2" class="headerlink" title="解决方法 2"></a>解决方法 2</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">##去掉 elasticsearch.yml 里的#注释</span><br><span class="line"></span><br><span class="line">#bootstrap.memory_lock: <span class="literal">true</span></span><br><span class="line">##配置，修改后</span><br><span class="line">bootstrap.memory_lock: <span class="literal">true</span></span><br><span class="line"></span><br><span class="line">##保存并重启es</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>中间件</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>低成本创业-1</title>
+    <url>/posts/80026efd/</url>
+    <content><![CDATA[<h2 id="为什么要低成本创业"><a href="#为什么要低成本创业" class="headerlink" title="为什么要低成本创业"></a>为什么要低成本创业</h2><p><strong>创业者找 VC 商量能不能投资我?VC 一看，你这个项目有点早，用户需求和解决方案都没验证，你再跑一跑再找我</strong></p>
+<p>一般创始人都觉得自己很委屈：因为钱不够，无法验证业务；没法验证业务，就更拿不到钱了，这就陷入了一个更大的死循环。</p>
+<p>复盘一下业务方案，往往发现多数的效率都很低，”常常做的冗余不堪，甚至很多人还在用着 20 多年前”软件工程”里的老方法，用最原始的方法创业。</p>
+<p><strong>比如下面两个例子：</strong></p>
+<ul>
+<li><p>两个创始人验证同一个项目，比如都做 1 对 N 的线上编程小班课。第一个创业者，可能用了 300 万和 1 年多的时间，一直打磨产品和开发还没正式上线，一个订单都没拿到。</p>
+</li>
+<li><p>而另一个团队，同样 300 万，1 年时间已经尝试了 5 个产品模式，每个方案质量都很高，不断试错，不断转型，最后能让一个项目跑出来，成功融了一大笔钱。</p>
+</li>
+</ul>
+<h3 id="验证一个-idea-可行性，需要-300-万？30-万？3-万？"><a href="#验证一个-idea-可行性，需要-300-万？30-万？3-万？" class="headerlink" title="验证一个 idea 可行性，需要 300 万？30 万？3 万？"></a>验证一个 idea 可行性，需要 300 万？30 万？3 万？</h3><p>大家看，验证同一个 idea，不同人操盘，可能是 300 万和 30 万的区别，甚至有的人，花 3 万块钱就能验证</p>
+<p><strong>预热思考</strong></p>
+<p><strong>第一个题目是个案例设计题。</strong></p>
+<p>国外共享滑板项目很火，你可以理解为是一种新的摩拜单车，只是把自行车换成了电动滑板。国外这个项目最近融了一大笔钱，你觉得国内一定也能做，所以想立刻创业。</p>
+<p>好，问题来了:如果你有 300 万启动资金，你打算怎么启动这个项目?进一步说，如果你只有 10 万，想验证一下这个项目，可以搞定吗?</p>
+<p>这个题目非常有意思，很考验大家的验证能力，你可以想一想，你会怎么做?</p>
+<p><strong>第二个思考题是业务复盘题。</strong></p>
+<p>大家要思考:你现在的业务模式跑通了吗?如果是，你都验证了哪些部分?如果还没有，那还差哪些没有验证?下一步打算如何验证它，你有没有一些方法，可以大幅降低你验证的成本?</p>
+<p><strong>希望大家停下来认真想想，带着问题学习，听完这节课，相信你对这两个问题，会有一个全新的理解。</strong></p>
+<p><strong>低成本创业内容的三个重点：</strong></p>
+<ul>
+<li>解读浪费</li>
+<li>理解原则</li>
+<li>实操方法</li>
+</ul>
+<p>后面的内容将会继续补充…</p>
+]]></content>
+      <categories>
+        <category>MBA</category>
+      </categories>
+      <tags>
+        <tag>创业</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>力扣周记-24-9-7</title>
+    <url>/posts/ed39242/</url>
+    <content><![CDATA[<h2 id="258-各位相加"><a href="#258-各位相加" class="headerlink" title="258. 各位相加"></a><a href="https://leetcode.cn/problems/add-digits/">258. 各位相加</a></h2><p>给定一个非负整数 <code>num</code>，反复将各个位上的数字相加，直到结果为一位数。返回这个结果。</p>
+<p><strong>示例 1:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入: num = 38</span><br><span class="line">输出: 2</span><br><span class="line">解释: 各位相加的过程为：</span><br><span class="line">38 --&gt; 3 + 8 --&gt; 11</span><br><span class="line">11 --&gt; 1 + 1 --&gt; 2</span><br><span class="line">由于 2 是一位数，所以返回 2。</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 2:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入: num = 0</span><br><span class="line">输出: 0</span><br></pre></td></tr></table></figure>
+
+<p><strong>提示：</strong></p>
+<ul>
+<li><code>0 &lt;= num &lt;= 231 - 1</code></li>
+</ul>
+<p><strong>进阶：</strong>你可以不使用循环或者递归，在 <code>O(1)</code> 时间复杂度内解决这个问题吗？</p>
+<h3 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h3><ol>
+<li>能够被 9 整除的整数，各位上的数字加起来也必然能被 9 整除，所以，连续累加起来，最终必然就是 9。<ul>
+<li><code> 81 - 8 + 1 - 9、99 — 9 + 9 - 18 - 1 + 8 - 9 即 X%9 == 0 return 9</code></li>
+</ul>
+</li>
+<li>不能被 9 整除的整数，各位上的数字加起来，结果对 9 取模，和初始数对 9 取摸，是一样的，所以，连续累加起来，最终必然就是初始数对 9 取摸。<ul>
+<li><code>37 - 3 + 7 - 10 - 1 + 0 - 1  即 x%9 != 0 return x%9</code></li>
+</ul>
+</li>
+</ol>
+<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"># <span class="number">1.</span>没简化</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">addDigits</span><span class="params">(<span class="type">int</span> num)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(num &lt; <span class="number">9</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> num;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (num % <span class="number">9</span> == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">9</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> num % <span class="number">9</span>;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"># <span class="number">2.</span>简化</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">addDigits</span><span class="params">(<span class="type">int</span> num)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> (num - <span class="number">1</span>) % <span class="number">9</span> + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="1281-整数的各位积和之差"><a href="#1281-整数的各位积和之差" class="headerlink" title="1281. 整数的各位积和之差"></a><a href="https://leetcode.cn/problems/subtract-the-product-and-sum-of-digits-of-an-integer/">1281. 整数的各位积和之差</a></h2><p>给你一个整数 <code>n</code>，请你帮忙计算并返回该整数「各位数字之积」与「各位数字之和」的差。</p>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 234</span><br><span class="line">输出：15</span><br><span class="line">解释：</span><br><span class="line">各位数之积 = 2 * 3 * 4 = 24</span><br><span class="line">各位数之和 = 2 + 3 + 4 = 9</span><br><span class="line">结果 = 24 - 9 = 15</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 2：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 4421</span><br><span class="line">输出：21</span><br><span class="line">解释：</span><br><span class="line">各位数之积 = 4 * 4 * 2 * 1 = 32</span><br><span class="line">各位数之和 = 4 + 4 + 2 + 1 = 11</span><br><span class="line">结果 = 32 - 11 = 21</span><br></pre></td></tr></table></figure>
+
+<p><strong>提示：</strong></p>
+<ul>
+<li><code>1 &lt;= n &lt;= 10^5</code></li>
+</ul>
+<h3 id="解题思路-1"><a href="#解题思路-1" class="headerlink" title="解题思路"></a>解题思路</h3><p>我们只需要依次取出数字 n 中的各位数字，并计算各个数字的乘积 amass 以及数字和 add，最后返回 amass−add 即可。</p>
+<p>我们可以依次取出 n 的最低位来得到 n 的各位数字：</p>
+<p>通过「取模」操作 n%10 得到此时 n 的最低位。<br>通过「整除」操作 n&#x3D;⌊ n&#x2F;10 ⌋ 来去掉当前 n 的最低位。</p>
+<h3 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a>代码</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">    public int subtractProductAndSum(int n) &#123;</span><br><span class="line">        int amass=1,add=0;</span><br><span class="line">        while (n != 0) &#123;</span><br><span class="line">            int l = n % 10;</span><br><span class="line">            amass *= l;</span><br><span class="line">            add += l;</span><br><span class="line">            n /= 10;</span><br><span class="line">        &#125;</span><br><span class="line">        return amass - add;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="231-2-的幂"><a href="#231-2-的幂" class="headerlink" title="231. 2 的幂"></a><a href="https://leetcode.cn/problems/power-of-two/">231. 2 的幂</a></h3><p>给你一个整数 <code>n</code>，请你判断该整数是否是 2 的幂次方。如果是，返回 <code>true</code> ；否则，返回 <code>false</code> 。</p>
+<p>如果存在一个整数 <code>x</code> 使得 <code>n == 2x</code> ，则认为 <code>n</code> 是 2 的幂次方。</p>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 1</span><br><span class="line">输出：true</span><br><span class="line">解释：20 = 1</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 2：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 16</span><br><span class="line">输出：true</span><br><span class="line">解释：24 = 16</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 3：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 3</span><br><span class="line">输出：false</span><br></pre></td></tr></table></figure>
+
+<p><strong>提示：</strong></p>
+<ul>
+<li><code>-231 &lt;= n &lt;= 231 - 1</code></li>
+</ul>
+<p><strong>进阶：</strong>你能够不使用循环&#x2F;递归解决此问题吗？</p>
+<h3 id="解题思路-2"><a href="#解题思路-2" class="headerlink" title="解题思路"></a>解题思路</h3><p>若 n&#x3D;2^x</p>
+<p>且 x 为自然数（即 n 为 2 的幂），则一定满足以下条件：</p>
+<p>恒有 n &amp; (n - 1) &#x3D;&#x3D; 0，这是因为：</p>
+<ul>
+<li><p>n 二进制最高位为 1，其余所有位为 0；</p>
+</li>
+<li><p>n−1 二进制最高位为 0，其余所有位为 1；</p>
+</li>
+</ul>
+<p>一定满足 n &gt; 0。<br>因此，通过 n &gt; 0 且 n &amp; (n - 1) &#x3D;&#x3D; 0 即可判定是否满足 n&#x3D;2^x。</p>
+<h3 id="代码-2"><a href="#代码-2" class="headerlink" title="代码"></a>代码</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isPowerOfTwo</span><span class="params">(<span class="type">int</span> n)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span>  n &gt; <span class="number">0</span> &amp;&amp; (n &amp; (n - <span class="number">1</span>)) == <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="326-3-的幂"><a href="#326-3-的幂" class="headerlink" title="326. 3 的幂"></a><a href="https://leetcode.cn/problems/power-of-three/">326. 3 的幂</a></h3><p>给定一个整数，写一个函数来判断它是否是 3 的幂次方。如果是，返回 <code>true</code> ；否则，返回 <code>false</code> 。</p>
+<p>整数 <code>n</code> 是 3 的幂次方需满足：存在整数 <code>x</code> 使得 <code>n == 3x</code></p>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 27</span><br><span class="line">输出：true</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 2：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 0</span><br><span class="line">输出：false</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 3：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 9</span><br><span class="line">输出：true</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 4：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 45</span><br><span class="line">输出：false</span><br></pre></td></tr></table></figure>
+
+<p><strong>提示：</strong></p>
+<ul>
+<li><code>-231 &lt;= n &lt;= 231 - 1</code></li>
+</ul>
+<p><strong>进阶：</strong>你能不使用循环或者递归来完成本题吗？</p>
+<h3 id="解题思路-3"><a href="#解题思路-3" class="headerlink" title="解题思路"></a>解题思路</h3><p>做法是将 <em>n</em> 对 3 进行试除，直到 <em>n</em> 不再与 3 呈倍数关系，最后判断 <em>n</em> 是否为 30&#x3D;1 即可。</p>
+<h3 id="代码-3"><a href="#代码-3" class="headerlink" title="代码"></a>代码</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isPowerOfThree</span><span class="params">(<span class="type">int</span> n)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (n &lt;= <span class="number">0</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">while</span> (n % <span class="number">3</span> == <span class="number">0</span>) &#123;</span><br><span class="line">          n /= <span class="number">3</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> n == <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>力扣周记</tag>
       </tags>
   </entry>
   <entry>
@@ -48,6 +208,29 @@
       </categories>
       <tags>
         <tag>web项目</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Vue3+Ts+Vite的uniapp小程序项目中引入最新vant-weapp v1.11.2并且以后更新版本全部可用</title>
+    <url>/posts/4b60898c/</url>
+    <content><![CDATA[<h2 id="由于-vant-weapp-是针对微信小程序原生开发的使用在-uniapp-中并不能使用-npm-i-方式引入-vant-weapp，所以采用手动引入的方式"><a href="#由于-vant-weapp-是针对微信小程序原生开发的使用在-uniapp-中并不能使用-npm-i-方式引入-vant-weapp，所以采用手动引入的方式" class="headerlink" title="由于 vant-weapp 是针对微信小程序原生开发的使用在 uniapp 中并不能使用 npm i 方式引入 vant-weapp，所以采用手动引入的方式"></a>由于 vant-weapp 是针对微信小程序原生开发的使用在 uniapp 中并不能使用 npm i 方式引入 vant-weapp，所以采用手动引入的方式</h2><h2 id="1-下载vant-weapp包"><a href="#1-下载vant-weapp包" class="headerlink" title="1.下载vant-weapp包"></a>1.下载<a href="https://github.com/youzan/vant-weapp">vant-weapp</a>包</h2><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">//使用git下载</span></span><br><span class="line">git clone <span class="attr">https</span>:<span class="comment">//github.com/youzan/vant-weapp.git</span></span><br><span class="line"><span class="comment">//也可以直接下载zip文件</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="2-在项目-src-文件里面创建wxcomponents将下载的-vant-weapp-文件打开将里面的-dist-文件复制粘贴到wxcomponents中并且重命名为-vant-这样更好识别"><a href="#2-在项目-src-文件里面创建wxcomponents将下载的-vant-weapp-文件打开将里面的-dist-文件复制粘贴到wxcomponents中并且重命名为-vant-这样更好识别" class="headerlink" title="2.在项目 src 文件里面创建wxcomponents将下载的 vant-weapp 文件打开将里面的 dist 文件复制粘贴到wxcomponents中并且重命名为 vant(这样更好识别)"></a>2.在项目 src 文件里面创建<code>wxcomponents</code>将下载的 vant-weapp 文件打开将里面的 dist 文件复制粘贴到<code>wxcomponents</code>中并且重命名为 vant(这样更好识别)</h2><hr>
+<h2 id="3-打开-app-vue-文件在里添加-import-wxcomponents-vant-common-index-wxss"><a href="#3-打开-app-vue-文件在里添加-import-wxcomponents-vant-common-index-wxss" class="headerlink" title="3.打开 app.vue 文件在&lt;style lang=&quot;scss&quot;&gt;里添加@import &#39;@/wxcomponents/vant/common/index.wxss&#39;"></a>3.打开 app.vue 文件在<code>&lt;style lang=&quot;scss&quot;&gt;</code>里添加<code>@import &#39;@/wxcomponents/vant/common/index.wxss&#39;</code></h2><figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&lt;style lang=<span class="string">&quot;scss&quot;</span>&gt;</span><br><span class="line">  <span class="comment">//1.注意如果没有在vite为vue3配置@路径，请使用 2 @import</span></span><br><span class="line">  <span class="string">&#x27;@/wxcomponents/vant/common/index.wxss&#x27;</span> <span class="comment">//2.未配置配置@路径 @import</span></span><br><span class="line">  <span class="string">&#x27;/wxcomponents/vant/common/index.wxss&#x27;</span> ...省略</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="4-打开pages-json选择你是想全局还是局部引入"><a href="#4-打开pages-json选择你是想全局还是局部引入" class="headerlink" title="4.打开pages.json选择你是想全局还是局部引入"></a>4.打开<code>pages.json</code>选择你是想全局还是局部引入</h2><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">//1.全局引入在globalStyle中创建usingComponents里面放你想引入的样式，？怎么知道样式怎么引入！打开wxcomponents/vant,该文件下选你想要的</span></span><br><span class="line"><span class="string">&quot;globalStyle&quot;</span>: &#123;</span><br><span class="line"></span><br><span class="line">	...省略</span><br><span class="line"></span><br><span class="line">    <span class="string">&quot;usingComponents&quot;</span>: &#123;</span><br><span class="line">      <span class="string">&quot;van-button&quot;</span>: <span class="string">&quot;/wxcomponents/vant/button/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;van-cell&quot;</span>: <span class="string">&quot;/wxcomponents/vant/cell/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;van-cell-group&quot;</span>: <span class="string">&quot;/wxcomponents/vant/cell-group/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;van-icon&quot;</span>: <span class="string">&quot;/wxcomponents/vant/icon/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;van-image&quot;</span>: <span class="string">&quot;/wxcomponents/vant/image/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;van-row&quot;</span>: <span class="string">&quot;/wxcomponents/vant/row/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;van-col&quot;</span>: <span class="string">&quot;/wxcomponents/vant/col/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;van-popup&quot;</span>: <span class="string">&quot;/wxcomponents/vant/popup/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;van-toast&quot;</span>: <span class="string">&quot;/wxcomponents/vant/toast/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;van-card&quot;</span>: <span class="string">&quot;/wxcomponents/vant/card/index&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">//2.局部页面引入,以首页index引入&lt;van-button&gt;为例子</span></span><br><span class="line">    &#123;</span><br><span class="line">      <span class="string">&quot;path&quot;</span>: <span class="string">&quot;pages/index/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;style&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;navigationStyle&quot;</span>: <span class="string">&quot;custom&quot;</span>, <span class="comment">// 隐藏默认导航</span></span><br><span class="line">        <span class="string">&quot;navigationBarTextStyle&quot;</span>: <span class="string">&quot;white&quot;</span>,</span><br><span class="line">        <span class="string">&quot;navigationBarTitleText&quot;</span>: <span class="string">&quot;首页&quot;</span>,</span><br><span class="line">            <span class="string">&quot;usingComponents&quot;</span>: &#123;</span><br><span class="line">			      <span class="string">&quot;van-button&quot;</span>: <span class="string">&quot;/wxcomponents/vant/button/index&quot;</span>,</span><br><span class="line">			    &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>vue3</tag>
+        <tag>uniapp</tag>
+        <tag>小程序</tag>
       </tags>
   </entry>
   <entry>
@@ -662,190 +845,6 @@
       </categories>
       <tags>
         <tag>Java框架</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>力扣周记-24-9-7</title>
-    <url>/posts/ed39242/</url>
-    <content><![CDATA[<h2 id="258-各位相加"><a href="#258-各位相加" class="headerlink" title="258. 各位相加"></a><a href="https://leetcode.cn/problems/add-digits/">258. 各位相加</a></h2><p>给定一个非负整数 <code>num</code>，反复将各个位上的数字相加，直到结果为一位数。返回这个结果。</p>
-<p><strong>示例 1:</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入: num = 38</span><br><span class="line">输出: 2</span><br><span class="line">解释: 各位相加的过程为：</span><br><span class="line">38 --&gt; 3 + 8 --&gt; 11</span><br><span class="line">11 --&gt; 1 + 1 --&gt; 2</span><br><span class="line">由于 2 是一位数，所以返回 2。</span><br></pre></td></tr></table></figure>
-
-<p><strong>示例 2:</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入: num = 0</span><br><span class="line">输出: 0</span><br></pre></td></tr></table></figure>
-
-<p><strong>提示：</strong></p>
-<ul>
-<li><code>0 &lt;= num &lt;= 231 - 1</code></li>
-</ul>
-<p><strong>进阶：</strong>你可以不使用循环或者递归，在 <code>O(1)</code> 时间复杂度内解决这个问题吗？</p>
-<h3 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h3><ol>
-<li>能够被 9 整除的整数，各位上的数字加起来也必然能被 9 整除，所以，连续累加起来，最终必然就是 9。<ul>
-<li><code> 81 - 8 + 1 - 9、99 — 9 + 9 - 18 - 1 + 8 - 9 即 X%9 == 0 return 9</code></li>
-</ul>
-</li>
-<li>不能被 9 整除的整数，各位上的数字加起来，结果对 9 取模，和初始数对 9 取摸，是一样的，所以，连续累加起来，最终必然就是初始数对 9 取摸。<ul>
-<li><code>37 - 3 + 7 - 10 - 1 + 0 - 1  即 x%9 != 0 return x%9</code></li>
-</ul>
-</li>
-</ol>
-<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"># <span class="number">1.</span>没简化</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">addDigits</span><span class="params">(<span class="type">int</span> num)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(num &lt; <span class="number">9</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> num;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (num % <span class="number">9</span> == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">9</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> num % <span class="number">9</span>;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"># <span class="number">2.</span>简化</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">addDigits</span><span class="params">(<span class="type">int</span> num)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> (num - <span class="number">1</span>) % <span class="number">9</span> + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h2 id="1281-整数的各位积和之差"><a href="#1281-整数的各位积和之差" class="headerlink" title="1281. 整数的各位积和之差"></a><a href="https://leetcode.cn/problems/subtract-the-product-and-sum-of-digits-of-an-integer/">1281. 整数的各位积和之差</a></h2><p>给你一个整数 <code>n</code>，请你帮忙计算并返回该整数「各位数字之积」与「各位数字之和」的差。</p>
-<p><strong>示例 1：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 234</span><br><span class="line">输出：15</span><br><span class="line">解释：</span><br><span class="line">各位数之积 = 2 * 3 * 4 = 24</span><br><span class="line">各位数之和 = 2 + 3 + 4 = 9</span><br><span class="line">结果 = 24 - 9 = 15</span><br></pre></td></tr></table></figure>
-
-<p><strong>示例 2：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 4421</span><br><span class="line">输出：21</span><br><span class="line">解释：</span><br><span class="line">各位数之积 = 4 * 4 * 2 * 1 = 32</span><br><span class="line">各位数之和 = 4 + 4 + 2 + 1 = 11</span><br><span class="line">结果 = 32 - 11 = 21</span><br></pre></td></tr></table></figure>
-
-<p><strong>提示：</strong></p>
-<ul>
-<li><code>1 &lt;= n &lt;= 10^5</code></li>
-</ul>
-<h3 id="解题思路-1"><a href="#解题思路-1" class="headerlink" title="解题思路"></a>解题思路</h3><p>我们只需要依次取出数字 n 中的各位数字，并计算各个数字的乘积 amass 以及数字和 add，最后返回 amass−add 即可。</p>
-<p>我们可以依次取出 n 的最低位来得到 n 的各位数字：</p>
-<p>通过「取模」操作 n%10 得到此时 n 的最低位。<br>通过「整除」操作 n&#x3D;⌊ n&#x2F;10 ⌋ 来去掉当前 n 的最低位。</p>
-<h3 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a>代码</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">    public int subtractProductAndSum(int n) &#123;</span><br><span class="line">        int amass=1,add=0;</span><br><span class="line">        while (n != 0) &#123;</span><br><span class="line">            int l = n % 10;</span><br><span class="line">            amass *= l;</span><br><span class="line">            add += l;</span><br><span class="line">            n /= 10;</span><br><span class="line">        &#125;</span><br><span class="line">        return amass - add;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h3 id="231-2-的幂"><a href="#231-2-的幂" class="headerlink" title="231. 2 的幂"></a><a href="https://leetcode.cn/problems/power-of-two/">231. 2 的幂</a></h3><p>给你一个整数 <code>n</code>，请你判断该整数是否是 2 的幂次方。如果是，返回 <code>true</code> ；否则，返回 <code>false</code> 。</p>
-<p>如果存在一个整数 <code>x</code> 使得 <code>n == 2x</code> ，则认为 <code>n</code> 是 2 的幂次方。</p>
-<p><strong>示例 1：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 1</span><br><span class="line">输出：true</span><br><span class="line">解释：20 = 1</span><br></pre></td></tr></table></figure>
-
-<p><strong>示例 2：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 16</span><br><span class="line">输出：true</span><br><span class="line">解释：24 = 16</span><br></pre></td></tr></table></figure>
-
-<p><strong>示例 3：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 3</span><br><span class="line">输出：false</span><br></pre></td></tr></table></figure>
-
-<p><strong>提示：</strong></p>
-<ul>
-<li><code>-231 &lt;= n &lt;= 231 - 1</code></li>
-</ul>
-<p><strong>进阶：</strong>你能够不使用循环&#x2F;递归解决此问题吗？</p>
-<h3 id="解题思路-2"><a href="#解题思路-2" class="headerlink" title="解题思路"></a>解题思路</h3><p>若 n&#x3D;2^x</p>
-<p>且 x 为自然数（即 n 为 2 的幂），则一定满足以下条件：</p>
-<p>恒有 n &amp; (n - 1) &#x3D;&#x3D; 0，这是因为：</p>
-<ul>
-<li><p>n 二进制最高位为 1，其余所有位为 0；</p>
-</li>
-<li><p>n−1 二进制最高位为 0，其余所有位为 1；</p>
-</li>
-</ul>
-<p>一定满足 n &gt; 0。<br>因此，通过 n &gt; 0 且 n &amp; (n - 1) &#x3D;&#x3D; 0 即可判定是否满足 n&#x3D;2^x。</p>
-<h3 id="代码-2"><a href="#代码-2" class="headerlink" title="代码"></a>代码</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isPowerOfTwo</span><span class="params">(<span class="type">int</span> n)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span>  n &gt; <span class="number">0</span> &amp;&amp; (n &amp; (n - <span class="number">1</span>)) == <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h3 id="326-3-的幂"><a href="#326-3-的幂" class="headerlink" title="326. 3 的幂"></a><a href="https://leetcode.cn/problems/power-of-three/">326. 3 的幂</a></h3><p>给定一个整数，写一个函数来判断它是否是 3 的幂次方。如果是，返回 <code>true</code> ；否则，返回 <code>false</code> 。</p>
-<p>整数 <code>n</code> 是 3 的幂次方需满足：存在整数 <code>x</code> 使得 <code>n == 3x</code></p>
-<p><strong>示例 1：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 27</span><br><span class="line">输出：true</span><br></pre></td></tr></table></figure>
-
-<p><strong>示例 2：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 0</span><br><span class="line">输出：false</span><br></pre></td></tr></table></figure>
-
-<p><strong>示例 3：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 9</span><br><span class="line">输出：true</span><br></pre></td></tr></table></figure>
-
-<p><strong>示例 4：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 45</span><br><span class="line">输出：false</span><br></pre></td></tr></table></figure>
-
-<p><strong>提示：</strong></p>
-<ul>
-<li><code>-231 &lt;= n &lt;= 231 - 1</code></li>
-</ul>
-<p><strong>进阶：</strong>你能不使用循环或者递归来完成本题吗？</p>
-<h3 id="解题思路-3"><a href="#解题思路-3" class="headerlink" title="解题思路"></a>解题思路</h3><p>做法是将 <em>n</em> 对 3 进行试除，直到 <em>n</em> 不再与 3 呈倍数关系，最后判断 <em>n</em> 是否为 30&#x3D;1 即可。</p>
-<h3 id="代码-3"><a href="#代码-3" class="headerlink" title="代码"></a>代码</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isPowerOfThree</span><span class="params">(<span class="type">int</span> n)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (n &lt;= <span class="number">0</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">while</span> (n % <span class="number">3</span> == <span class="number">0</span>) &#123;</span><br><span class="line">          n /= <span class="number">3</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> n == <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>算法</category>
-      </categories>
-      <tags>
-        <tag>力扣周记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>低成本创业-1</title>
-    <url>/posts/80026efd/</url>
-    <content><![CDATA[<h2 id="为什么要低成本创业"><a href="#为什么要低成本创业" class="headerlink" title="为什么要低成本创业"></a>为什么要低成本创业</h2><p><strong>创业者找 VC 商量能不能投资我?VC 一看，你这个项目有点早，用户需求和解决方案都没验证，你再跑一跑再找我</strong></p>
-<p>一般创始人都觉得自己很委屈：因为钱不够，无法验证业务；没法验证业务，就更拿不到钱了，这就陷入了一个更大的死循环。</p>
-<p>复盘一下业务方案，往往发现多数的效率都很低，”常常做的冗余不堪，甚至很多人还在用着 20 多年前”软件工程”里的老方法，用最原始的方法创业。</p>
-<p><strong>比如下面两个例子：</strong></p>
-<ul>
-<li><p>两个创始人验证同一个项目，比如都做 1 对 N 的线上编程小班课。第一个创业者，可能用了 300 万和 1 年多的时间，一直打磨产品和开发还没正式上线，一个订单都没拿到。</p>
-</li>
-<li><p>而另一个团队，同样 300 万，1 年时间已经尝试了 5 个产品模式，每个方案质量都很高，不断试错，不断转型，最后能让一个项目跑出来，成功融了一大笔钱。</p>
-</li>
-</ul>
-<h3 id="验证一个-idea-可行性，需要-300-万？30-万？3-万？"><a href="#验证一个-idea-可行性，需要-300-万？30-万？3-万？" class="headerlink" title="验证一个 idea 可行性，需要 300 万？30 万？3 万？"></a>验证一个 idea 可行性，需要 300 万？30 万？3 万？</h3><p>大家看，验证同一个 idea，不同人操盘，可能是 300 万和 30 万的区别，甚至有的人，花 3 万块钱就能验证</p>
-<p><strong>预热思考</strong></p>
-<p><strong>第一个题目是个案例设计题。</strong></p>
-<p>国外共享滑板项目很火，你可以理解为是一种新的摩拜单车，只是把自行车换成了电动滑板。国外这个项目最近融了一大笔钱，你觉得国内一定也能做，所以想立刻创业。</p>
-<p>好，问题来了:如果你有 300 万启动资金，你打算怎么启动这个项目?进一步说，如果你只有 10 万，想验证一下这个项目，可以搞定吗?</p>
-<p>这个题目非常有意思，很考验大家的验证能力，你可以想一想，你会怎么做?</p>
-<p><strong>第二个思考题是业务复盘题。</strong></p>
-<p>大家要思考:你现在的业务模式跑通了吗?如果是，你都验证了哪些部分?如果还没有，那还差哪些没有验证?下一步打算如何验证它，你有没有一些方法，可以大幅降低你验证的成本?</p>
-<p><strong>希望大家停下来认真想想，带着问题学习，听完这节课，相信你对这两个问题，会有一个全新的理解。</strong></p>
-<p><strong>低成本创业内容的三个重点：</strong></p>
-<ul>
-<li>解读浪费</li>
-<li>理解原则</li>
-<li>实操方法</li>
-</ul>
-<p>后面的内容将会继续补充…</p>
-]]></content>
-      <categories>
-        <category>MBA</category>
-      </categories>
-      <tags>
-        <tag>创业</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>解决windows下elasticsearch默认占用内存过大问题</title>
-    <url>/posts/c48a5e72/</url>
-    <content><![CDATA[<h2 id="解决方法1"><a href="#解决方法1" class="headerlink" title="解决方法1"></a>解决方法1</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">##<span class="number">1.</span>修改jvm.options文件 目录为 es/config/jvm.options</span><br><span class="line"></span><br><span class="line">##<span class="number">2.</span>使用文本编译器打开jvm.options  </span><br><span class="line">##<span class="number">3.</span>找到 IMPORTANT: JVM heap size</span><br><span class="line">## IMPORTANT: JVM heap size </span><br><span class="line">##<span class="number">4.</span>去掉  -Xms4g 前面的 ## 注释  </span><br><span class="line">## -Xms4g</span><br><span class="line">## -Xmx4g</span><br><span class="line">##修改后</span><br><span class="line">-Xms4g #JVM启动时的初始堆内存大小为4GB，具体大小可以按自己需求设置</span><br><span class="line">-Xmx4g #JVM可以使用的最大堆内存大小为4GB，具体大小可以按自己需求设置</span><br><span class="line"></span><br><span class="line">##保存并重启 es</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h2 id="解决方法2"><a href="#解决方法2" class="headerlink" title="解决方法2"></a>解决方法2</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">##去掉 elasticsearch.yml 里的#注释</span><br><span class="line"></span><br><span class="line">#bootstrap.memory_lock: <span class="literal">true</span> </span><br><span class="line">##配置，修改后</span><br><span class="line">bootstrap.memory_lock: <span class="literal">true</span></span><br><span class="line"></span><br><span class="line">##保存并重启es</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>笔记</category>
-      </categories>
-      <tags>
-        <tag>中间件</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>elasticsearch中DevTools的CRUD和常见规则语句</title>
-    <url>/posts/67e1a025/</url>
-    <content><![CDATA[<h2 id="本文章全程使用-elasticsearch-的-DLS-语法"><a href="#本文章全程使用-elasticsearch-的-DLS-语法" class="headerlink" title="本文章全程使用 elasticsearch 的 DLS 语法"></a>本文章全程使用 elasticsearch 的 DLS 语法</h2><h3 id="一-常见-CRUD-语句"><a href="#一-常见-CRUD-语句" class="headerlink" title="一.常见 CRUD 语句"></a>一.常见 CRUD 语句</h3><h3 id="1-创建（索引文档）"><a href="#1-创建（索引文档）" class="headerlink" title="1. 创建（索引文档）"></a>1. <strong>创建（索引文档）</strong></h3><p>在创建文档时，你可以包含元数据和字段来定义安全级别：</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">POST /&lt;index&gt;/_doc</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;user_id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;1234&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;security_level&quot;</span><span class="punctuation">:</span> <span class="string">&quot;internal&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;这是一个内部文档。&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="2-读取（带有-DLS-的搜索）"><a href="#2-读取（带有-DLS-的搜索）" class="headerlink" title="2. 读取（带有 DLS 的搜索）"></a>2. <strong>读取（带有 DLS 的搜索）</strong></h3><p>为了读取带有 DLS 的文档，你可以在角色中配置 DLS 查询。例如，拥有“内部”角色的用户只能查看标记为 <code>security_level: internal</code> 的文档。</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">GET /&lt;index&gt;/_search</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;query&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;bool&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;must&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;term&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;security_level&quot;</span><span class="punctuation">:</span> <span class="string">&quot;internal&quot;</span></span><br><span class="line">          <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>还可以在 Elasticsearch 的角色定义中应用 DLS。以下是一个带有 DLS 的角色定义示例：</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">PUT /_security/role/internal_user</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;indices&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;names&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span> <span class="string">&quot;&lt;index&gt;&quot;</span> <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;privileges&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span> <span class="string">&quot;read&quot;</span> <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;query&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;term&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;security_level&quot;</span><span class="punctuation">:</span> <span class="string">&quot;internal&quot;</span> <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h3 id="3-更新（修改文档）"><a href="#3-更新（修改文档）" class="headerlink" title="3. 更新（修改文档）"></a>3. <strong>更新（修改文档）</strong></h3><p>如果用户有访问权限，可以使用文档 ID 来更新特定字段，同时保持对 <code>security_level</code> 的访问控制。</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">POST /&lt;index&gt;/_update/&lt;document_id&gt;</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;doc&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;更新后的内部文档内容。&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h3 id="4-删除（删除文档）"><a href="#4-删除（删除文档）" class="headerlink" title="4. 删除（删除文档）"></a>4. <strong>删除（删除文档）</strong></h3><p>对于删除操作，确保用户具有适当的角色，并且查询应用了正确的 <code>security_level</code>。</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">DELETE /&lt;index&gt;/_doc/&lt;document_id&gt;</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h2 id="2-常见搜索规则"><a href="#2-常见搜索规则" class="headerlink" title="2.常见搜索规则"></a>2.常见搜索规则</h2><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">##修改数据</span><br><span class="line">POST post/_doc/<span class="number">1</span></span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;title&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ZT&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;desc&quot;</span><span class="punctuation">:</span> <span class="string">&quot;zt的描述&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;age&quot;</span><span class="punctuation">:</span> <span class="number">22</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line">##根据_id查询数据</span><br><span class="line"></span><br><span class="line">GET post/_doc/<span class="number">1</span>c1FFJIBLxkM6xpy_qpH</span><br><span class="line"></span><br><span class="line">##查询所有</span><br><span class="line">GET post/_search</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;query&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;match_all&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line">##删除</span><br><span class="line">DELETE /post</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">##查看索引结构</span><br><span class="line">GET post/_mapping</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">## 使用SQL查询</span><br><span class="line">POST /_sql?format=txt</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;query&quot;</span><span class="punctuation">:</span> <span class="string">&quot;SELECT * FROM post WHERE title LIKE &#x27;%ZT%&#x27; &quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line">##空格分词器</span><br><span class="line">POST _analyze</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;analyzer&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ik_max_word&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="string">&quot;你好欢迎来到ecs&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line">##建索引，初始化分词和搜索规则</span><br><span class="line">PUT post_v1</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;aliases&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;post&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;mappings&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;properties&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;title&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;text&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;analyzer&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ik_max_word&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;search_analyzer&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ik_smart&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;fields&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;keyword&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;keyword&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;ignore_above&quot;</span><span class="punctuation">:</span> <span class="number">256</span></span><br><span class="line">          <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;text&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;analyzer&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ik_max_word&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;search_analyzer&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ik_smart&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;fields&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;keyword&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;keyword&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;ignore_above&quot;</span><span class="punctuation">:</span> <span class="number">256</span></span><br><span class="line">          <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;tags&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;keyword&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;userId&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;keyword&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;createTime&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;date&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;updateTime&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;date&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;isDelete&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;keyword&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line">##查询java段新增的数据</span><br><span class="line">GET post/_search</span><br><span class="line"></span><br><span class="line">##查询---match(模糊查询)---term(精确查询)---regexp(正则表达式查询)</span><br><span class="line">GET post_v1/_search</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;query&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;bool&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;must&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span><span class="attr">&quot;term&quot;</span><span class="punctuation">:</span><span class="punctuation">&#123;</span> <span class="attr">&quot;tags&quot;</span><span class="punctuation">:</span> <span class="string">&quot;c++&quot;</span> <span class="punctuation">&#125;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="punctuation">&#123;</span><span class="attr">&quot;match&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;知识优加&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>笔记</category>
-      </categories>
-      <tags>
-        <tag>中间件</tag>
       </tags>
   </entry>
 </search>
