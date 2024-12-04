@@ -75,7 +75,7 @@
 
 
 
-  <meta name="keywords" content="中间件," />
+  <meta name="keywords" content="Java 基础," />
 
 
 
@@ -86,17 +86,17 @@
 
 
 
-<meta name="description" content="解决方法 112345678910111213##1.修改jvm.options文件 目录为 es&#x2F;config&#x2F;jvm.options##2.使用文本编译器打开jvm.options##3.找到 IMPORTANT: JVM heap size## IMPORTANT: JVM heap size##4.去掉  -Xms4g 前面的 ## 注释## -Xms4g## -Xmx4g##修改后-Xm">
+<meta name="description" content="2.并发-并发基础2.1多线程的出现是要解决什么问题？本质是什么？CPU、内存、I&#x2F;O 设备的速度是有极大差异的，为了合理利用 CPU 的高性能，平衡这三者的速度差异，计算机体系结构、操作系统、编程程序都做出了贡献，主要体现为：  CPU 增加了缓存，以均衡与内存的速度差异； 操作系统增加了进程、线程，以分时复用 CPU，进而均衡 CPU 与 I&#x2F;O 设备的速度差异； 编译程序">
 <meta property="og:type" content="article">
-<meta property="og:title" content="解决windows下elasticsearch默认占用内存过大问题">
-<meta property="og:url" content="http://ztboxs.github.io/posts/c48a5e72/index.html">
+<meta property="og:title" content="Java面试篇-并发-并发基础">
+<meta property="og:url" content="http://ztboxs.github.io/posts/48c3c2af/index.html">
 <meta property="og:site_name" content="ZTBOXS">
-<meta property="og:description" content="解决方法 112345678910111213##1.修改jvm.options文件 目录为 es&#x2F;config&#x2F;jvm.options##2.使用文本编译器打开jvm.options##3.找到 IMPORTANT: JVM heap size## IMPORTANT: JVM heap size##4.去掉  -Xms4g 前面的 ## 注释## -Xms4g## -Xmx4g##修改后-Xm">
+<meta property="og:description" content="2.并发-并发基础2.1多线程的出现是要解决什么问题？本质是什么？CPU、内存、I&#x2F;O 设备的速度是有极大差异的，为了合理利用 CPU 的高性能，平衡这三者的速度差异，计算机体系结构、操作系统、编程程序都做出了贡献，主要体现为：  CPU 增加了缓存，以均衡与内存的速度差异； 操作系统增加了进程、线程，以分时复用 CPU，进而均衡 CPU 与 I&#x2F;O 设备的速度差异； 编译程序">
 <meta property="og:locale">
-<meta property="article:published_time" content="2024-09-19T15:31:22.000Z">
-<meta property="article:modified_time" content="2024-10-03T09:45:52.572Z">
+<meta property="article:published_time" content="2024-12-03T06:22:25.000Z">
+<meta property="article:modified_time" content="2024-12-04T05:37:22.337Z">
 <meta property="article:author" content="YZT">
-<meta property="article:tag" content="中间件">
+<meta property="article:tag" content="Java 基础">
 <meta name="twitter:card" content="summary">
 
 
@@ -127,13 +127,13 @@
 
 
 
-  <link rel="canonical" href="http://ztboxs.github.io/posts/c48a5e72/"/>
+  <link rel="canonical" href="http://ztboxs.github.io/posts/48c3c2af/"/>
 
 
 
 
 
-  <title>解决windows下elasticsearch默认占用内存过大问题 | ZTBOXS</title>
+  <title>Java面试篇-并发-并发基础 | ZTBOXS</title>
   
 
 
@@ -304,7 +304,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://ztboxs.github.io/posts/c48a5e72/">
+    <link itemprop="mainEntityOfPage" href="http://ztboxs.github.io/posts/48c3c2af/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -321,7 +321,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">解决windows下elasticsearch默认占用内存过大问题</h1>
+          <h1 class="post-title" itemprop="name headline">Java面试篇-并发-并发基础</h1>
         
 
         <div class="post-meta">
@@ -334,8 +334,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2024-09-19T23:31:22+08:00">
-                2024-09-19
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2024-12-03T14:22:25+08:00">
+                2024-12-03
               </time>
             
 
@@ -357,8 +357,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
-                    <span itemprop="name">笔记</span>
+                  <a href="/categories/%E9%9D%A2%E8%AF%95/" itemprop="url" rel="index">
+                    <span itemprop="name">面试</span>
                   </a>
                 </span>
 
@@ -375,8 +375,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/posts/c48a5e72/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/posts/c48a5e72/" itemprop="commentCount"></span>
+                <a href="/posts/48c3c2af/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/posts/48c3c2af/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -403,7 +403,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  147
+                  2.9k
                 </span>
               
 
@@ -419,7 +419,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  1
+                  10
                 </span>
               
             </div>
@@ -440,10 +440,85 @@
       
 
       
-        <h2 id="解决方法-1"><a href="#解决方法-1" class="headerlink" title="解决方法 1"></a>解决方法 1</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">##<span class="number">1.</span>修改jvm.options文件 目录为 es/config/jvm.options</span><br><span class="line"></span><br><span class="line">##<span class="number">2.</span>使用文本编译器打开jvm.options</span><br><span class="line">##<span class="number">3.</span>找到 IMPORTANT: JVM heap size</span><br><span class="line">## IMPORTANT: JVM heap size</span><br><span class="line">##<span class="number">4.</span>去掉  -Xms4g 前面的 ## 注释</span><br><span class="line">## -Xms4g</span><br><span class="line">## -Xmx4g</span><br><span class="line">##修改后</span><br><span class="line">-Xms4g #JVM启动时的初始堆内存大小为4GB，具体大小可以按自己需求设置</span><br><span class="line">-Xmx4g #JVM可以使用的最大堆内存大小为4GB，具体大小可以按自己需求设置</span><br><span class="line"></span><br><span class="line">##保存并重启 es</span><br></pre></td></tr></table></figure>
+        <h2 id="2-并发-并发基础"><a href="#2-并发-并发基础" class="headerlink" title="2.并发-并发基础"></a>2.并发-并发基础</h2><h3 id="2-1多线程的出现是要解决什么问题？本质是什么？"><a href="#2-1多线程的出现是要解决什么问题？本质是什么？" class="headerlink" title="2.1多线程的出现是要解决什么问题？本质是什么？"></a>2.1多线程的出现是要解决什么问题？本质是什么？</h3><p>CPU、内存、I&#x2F;O 设备的速度是有极大差异的，为了合理利用 CPU 的高性能，平衡这三者的速度差异，计算机体系结构、操作系统、编程程序都做出了贡献，主要体现为：</p>
+<ul>
+<li>CPU 增加了缓存，以均衡与内存的速度差异；</li>
+<li>操作系统增加了进程、线程，以分时复用 CPU，进而均衡 CPU 与 I&#x2F;O 设备的速度差异；</li>
+<li>编译程序优化指令执行次序，使得缓存能够得到更加合理的利用。</li>
+</ul>
+<h3 id="2-2Java是怎么解决并发问题的？"><a href="#2-2Java是怎么解决并发问题的？" class="headerlink" title="2.2Java是怎么解决并发问题的？"></a>2.2Java是怎么解决并发问题的？</h3><h4 id="2-2-1-理解的第一个维度：核心知识"><a href="#2-2-1-理解的第一个维度：核心知识" class="headerlink" title="2.2.1 理解的第一个维度：核心知识"></a>2.2.1 理解的第一个维度：核心知识</h4><p>本质上可以理解为，java 内存模型规范了 JVM 如何提供按需禁用缓存和编译优化的方法。具体来说，这些方法包括：</p>
+<ul>
+<li>volatile、synchronized 和 final 三个关键字</li>
+<li>Happens-Before 规则</li>
+</ul>
+<h4 id="2-2-3-理解的第二个维度：可见性，有序性，原子性"><a href="#2-2-3-理解的第二个维度：可见性，有序性，原子性" class="headerlink" title="2.2.3 理解的第二个维度：可见性，有序性，原子性"></a>2.2.3 理解的第二个维度：可见性，有序性，原子性</h4><ul>
+<li><p>原子性：在 Java 中，对基本数据类型的变量的读取和赋值操作是原子性操作，即这些操作是不可被中断的，要么执行，要么不执行。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#分析以下哪些操作是原子性操作</span><br><span class="line">y = <span class="number">10</span>; <span class="comment">//直接将数值 10 赋值给 x，也就是说线程执行这个语句会直接将数值 10 写入到工作内存中，是原子性操作</span></span><br><span class="line">y = x; <span class="comment">//包含两个操作，它先去读取 x 的值，在将 x 的值写入工作内存，虽然读取 x 的值以及将 x 的值写入工作内存，这两个操作都是原子性操作，但是合起来就不是原子性操作了</span></span><br><span class="line">x++; <span class="comment">//x++包含 3 个操作：读取 x 值、进行加 1 操作，写入新的值。不是原子性操作</span></span><br><span class="line">x = x + <span class="number">1</span>; <span class="comment">//同上</span></span><br></pre></td></tr></table></figure>
 
-<hr>
-<h2 id="解决方法-2"><a href="#解决方法-2" class="headerlink" title="解决方法 2"></a>解决方法 2</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">##去掉 elasticsearch.yml 里的#注释</span><br><span class="line"></span><br><span class="line">#bootstrap.memory_lock: <span class="literal">true</span></span><br><span class="line">##配置，修改后</span><br><span class="line">bootstrap.memory_lock: <span class="literal">true</span></span><br><span class="line"></span><br><span class="line">##保存并重启es</span><br></pre></td></tr></table></figure>
+<p>也就是说，只有简单的读取、赋值才是原子操作。要实现大范围的原子性就的上锁来实现。</p>
+</li>
+<li><p>可见性：java 提供 volatile 关键字来保证可见性。当一个共享变量被 volatile 修饰时，它会保证修改的值立即被更新到主存，当有其他线程需要读取时，它会去内存中读取新值。而普通的共享变量不能保证可见性，因为普通变量被修改后，什么时候被写入主存是不确定的，当其他线程去读取时，此时内存中可能还是原来的旧值，因此无法保证可见性。加锁也能够保证可见性。</p>
+</li>
+<li><p>有序性：在 java 里面，可以通过 volatile 关键字来保证一定的“有序性”。另外可以通过 synchronized 和 Lock 来保证有序性，很显然，synchronized 和 Lock 保证每个时刻是有一个线程执行同步代码，相当于让线程顺序执行同步代码，自然就保证了有序性。当然 JVM 是通过 Happens-Before 规则来保证有序性的</p>
+</li>
+</ul>
+<h3 id="2-3-线程安全有哪些实现思路？"><a href="#2-3-线程安全有哪些实现思路？" class="headerlink" title="2.3 线程安全有哪些实现思路？"></a>2.3 线程安全有哪些实现思路？</h3><h4 id="2-3-1-互斥同步"><a href="#2-3-1-互斥同步" class="headerlink" title="2.3.1 互斥同步"></a>2.3.1 互斥同步</h4><p>synchronized 和 ReentrantLock</p>
+<h4 id="2-3-2-非阻塞同步"><a href="#2-3-2-非阻塞同步" class="headerlink" title="2.3.2 非阻塞同步"></a>2.3.2 非阻塞同步</h4><p>互斥同步最主要的问题就是线程阻塞和唤醒所带来的性能问题，因此这种同步也称为阻塞同步。互斥同步属于一种悲观的并发策略，总是认为只要不去做正确的同步措施，那就肯定会出现问题。无论共享数据是否会出现竞争，它都要进行加锁、用户态核心态转换、维护计数器和检查是否有被阻塞的线程需要唤醒等操作。</p>
+<ul>
+<li>CAS</li>
+<li>随着硬件指令集的发展，我们可以使用基于冲突检测的乐观并发策略：先进行操作，如果没有其他线程争用共享数据，那操作就成功了，否则采取补偿措施。这种乐观的并发策略的许多实现都不需要将线程阻塞，因此这种同步操作称为非阻塞同步。乐观锁需要操作和冲突检测这两步骤具备原子性，这里就不能再使用互斥同步来保证了，只能靠硬件来完成。硬件支持的原子性操作最典型的是：比较并交换。</li>
+<li>Atomiclnteger：JUC 包里面的整数原子类 Atomiclnteger，其中的 compareAndSet()和 getAndlncrement()等方法都使用了 Unsafe 类的 CAS 操作。</li>
+</ul>
+<h4 id="2-3-3-无同步方案"><a href="#2-3-3-无同步方案" class="headerlink" title="2.3.3 无同步方案"></a>2.3.3 无同步方案</h4><p>保证线程的安全，并不是一定就要进行同步。如果一个方法本来就不涉及共享数据，那它自然就无需任何同步措施去保证正确性。</p>
+<ul>
+<li>栈封闭：多个线程访问同一个方法中的局部变量时，不会出现线程安全问题，因为局部变量存储在虚拟机栈中，属于线程私有的。</li>
+<li>线程本地存储：如果有一段代码所需要的数据必须与其他代码共享，那就看看这些共享数据的代码是否能保证在同一个线程中执行。如果能保证，我们就可以把共享数据的可见范围限制在同一个线程之内，这样，无须同步也能保证线程之间不出现数据争用的问题。</li>
+</ul>
+<h4 id="2-3-4-如何理解并发和并行的区别？"><a href="#2-3-4-如何理解并发和并行的区别？" class="headerlink" title="2.3.4 如何理解并发和并行的区别？"></a>2.3.4 如何理解并发和并行的区别？</h4><ul>
+<li>并发是指一个处理器处理多个任务。</li>
+<li>并行是指多个处理器或者多核的处理器处理多个不同的任务。</li>
+</ul>
+<h4 id="2-3-5-线程有哪几种状态？分别说明从一种状态到另一种状态转变有哪些方式"><a href="#2-3-5-线程有哪几种状态？分别说明从一种状态到另一种状态转变有哪些方式" class="headerlink" title="2.3.5 线程有哪几种状态？分别说明从一种状态到另一种状态转变有哪些方式"></a>2.3.5 线程有哪几种状态？分别说明从一种状态到另一种状态转变有哪些方式</h4><ul>
+<li>new（新建）：创建后为启动</li>
+<li>可运行：可能在运行，也可能在等待 CPU 时间片，包含了操作系统线程状态中的 Runing 和 Ready。</li>
+<li>阻塞：等待获取一个排它锁，如果其线程释放了锁就会结束此状态。</li>
+<li>无限期等待：等待其他线程显式地唤醒，否则不会分配 CPU 时间片。</li>
+<li>限期等待：无需等待其它线程显式地唤醒，在一定时间之后会被系统自动唤醒。调用 Thread.sleep()方法使线程进入限期等待状态时，常常用“使一个线程睡眠”进行描述。调用 Object.wait()方法使线程进入限期等待或者无限期等待时，常常用“挂起一个线程”进行描述。</li>
+<li>死亡：可以时线程结束任务之后自己结束，或者产生了异常而结束。</li>
+</ul>
+<h4 id="2-3-6-通常线程有哪几种使用方式？"><a href="#2-3-6-通常线程有哪几种使用方式？" class="headerlink" title="2.3.6 通常线程有哪几种使用方式？"></a>2.3.6 通常线程有哪几种使用方式？</h4><p>有三种使用线程的方法：</p>
+<ul>
+<li>实现 Runnable 接口；</li>
+<li>实现 Callable 接口；</li>
+<li>继承 Thread 类；</li>
+</ul>
+<p>实现 Runnable 和 Callable 接口的类只能当做一个可以在线程中运行的任务，不是真正意义上的线程，因此最后还需要通过 Thread 来调用。可以说任务是通过线程驱动从而执行的。</p>
+<h4 id="2-3-7-基础线程机制有哪些？"><a href="#2-3-7-基础线程机制有哪些？" class="headerlink" title="2.3.7 基础线程机制有哪些？"></a>2.3.7 基础线程机制有哪些？</h4><ul>
+<li>Exceutor：管理多个异步任务的执行而无需程序员显式地管理线程的生命周期。这里的异步是指多个任务的执行互不干扰，不需要进行同步操作。</li>
+<li>Daemon：守护线程是程序运行时在后台提供服务的线程，不属于程序中不可或缺的部分。当所有非守护线程结束时，程序也就终止，同时会杀死所有守护线程。使用 setDaemon()方法将一个线程设置为守护线程。mian()属于非守护线程。</li>
+<li>sleep()：Tread.sleep(millisec)方法会休眠当前正在执行的线程，millisec单位为毫秒。</li>
+<li>yield()：对静态方法 Thread.yield()的调用周期声明了当前线程已经完成了生命周期中最重要的部分，可以切换给其他线程来执行。该方法只是对线程调度器的一个建议，而且也只是建议具有相同优先级的其它线程可以运行。</li>
+</ul>
+<h4 id="2-3-8-线程的中断方式有哪些？"><a href="#2-3-8-线程的中断方式有哪些？" class="headerlink" title="2.3.8 线程的中断方式有哪些？"></a>2.3.8 线程的中断方式有哪些？</h4><p>一个线程执行完毕之后会自动结束，如果在运行过程中发生异常也会提前结束。</p>
+<ul>
+<li>InterruptedException：通过调用一个线程的 interrupt（）来中断该线程，如果该线程初一阻塞、限期等待或者无限期等待状态，那么就会抛出 InterruptedException，从而提前结束该线程。但是不能中断 I&#x2F;O 阻塞和 synchronized 锁阻塞。</li>
+<li>interrupted()：如果一个线程的 run（）方法执行一个无限循环，并且没有执行 sleep（）等会抛出 InterruptedException 的操作，那么调用线程的 Interrupted()方法将无法使线程提前结束。但是调用 interrupt（）方法会设置线程的中断标记，此时调用 interrupt（）方法将会无法使线程提前结束。但是调用 interrupt（）方法来判读线程是否处于中断状态，从而提前结束线程。</li>
+<li>Executor 的中断操作：调用 Exceutor 的 shutdown（）方法会等线程都执行完毕之后再关闭，但是如果调用的是 shutdownNow（）方法，则相当于调用每个线程的 interrupt（）方法。</li>
+</ul>
+<h4 id="2-3-9-线程的互斥同步方式有哪些？如何比较和选择？"><a href="#2-3-9-线程的互斥同步方式有哪些？如何比较和选择？" class="headerlink" title="2.3.9 线程的互斥同步方式有哪些？如何比较和选择？"></a>2.3.9 线程的互斥同步方式有哪些？如何比较和选择？</h4><p>Java提供了两种锁机机制来控制多个线程对共享资源的互斥访问，第一个是 JVM 实现的 synchronized，而另一个是 JDK 实现的 ReentrantLock。</p>
+<ul>
+<li>锁的实现：synchronized 是 JVM 实现的，而 ReentranLock 是 JDK 实现的。</li>
+<li>性能：新版本 Java 对 synchronized 进行了很多优化，列如自旋转等，synchronized 与 ReentrantLock 大致相同。</li>
+<li>等待可中段：当持有锁的线程长期不释放锁的时候，正在等待的线程可以选择放弃等待，改为处理其他事情。ReentranLock 可中断，而 synchronized 不行。</li>
+<li>公平锁：公平锁是指多个线程在等待同一个锁时，必须按照申请锁的时间顺序来依次获得锁。synchronized中的锁是非公平的，ReentrantLock 默认情况下也是非公平锁的，但是也可以是公平的。</li>
+<li>锁绑定多个条件：一个 ReentrantLock 可以同时绑定多个 Condition 对象。</li>
+</ul>
+<h4 id="2-3-10-线程之间有哪些协作方式？"><a href="#2-3-10-线程之间有哪些协作方式？" class="headerlink" title="2.3.10 线程之间有哪些协作方式？"></a>2.3.10 线程之间有哪些协作方式？</h4><p>当多个线程可以一起工作去解决某个问题是，如果某些部分必须在其它部分之前完成，那么就需要对线程进行协调。</p>
+<ul>
+<li>join()：在线程中调用另一个线程的 join() 方法，会将当前线程挂起，而不是忙等待，直到目标线程结束。</li>
+<li>wait() notify() notifyAll()：调用 wait() 使得线程等待某个条件满足，线程在等待时会被挂起，当其他线程的运行使得这个条件满足时，其它线程会调用 notify() 或者 notifyAll() 来唤醒线程。它们属于 Object的一部分，而不属于 Thread。只能用在同步方法或者同步控制块中使用，否则会在运行时抛出 lllegalMonitorStateExeception。使用 wait() 挂起期间，线程会释放锁。因为，如果没有释放锁，那么其它线程就无法进入对象的同步或者同步控制块中，那么就无法执行 notify() 或者 notifyAll() 来唤醒挂起的线程，造成死锁。</li>
+<li>wait() 和 sleep()的区别：wait() 是 Object 的方法，而sleep()是 Thread 的静态方法。wait()会释放锁，sleep() 不会。</li>
+</ul>
 
       
     </div>
@@ -464,7 +539,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://ztboxs.github.io/posts/c48a5e72/" title="解决windows下elasticsearch默认占用内存过大问题">http://ztboxs.github.io/posts/c48a5e72/</a>
+    <a href="http://ztboxs.github.io/posts/48c3c2af/" title="Java面试篇-并发-并发基础">http://ztboxs.github.io/posts/48c3c2af/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>
@@ -479,7 +554,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag"><i class="fa fa-tag"></i> 中间件</a>
+            <a href="/tags/Java-%E5%9F%BA%E7%A1%80/" rel="tag"><i class="fa fa-tag"></i> Java 基础</a>
           
         </div>
       
@@ -507,8 +582,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/posts/80026efd/" rel="next" title="低成本创业-1">
-                <i class="fa fa-chevron-left"></i> 低成本创业-1
+              <a href="/posts/2effe69d/" rel="next" title="Java面试篇-集合">
+                <i class="fa fa-chevron-left"></i> Java面试篇-集合
               </a>
             
           </div>
@@ -516,10 +591,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/posts/67e1a025/" rel="prev" title="elasticsearch中DevTools的CRUD和常见规则语句">
-                elasticsearch中DevTools的CRUD和常见规则语句 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -690,7 +761,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95-1"><span class="nav-number">1.</span> <span class="nav-text">解决方法 1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95-2"><span class="nav-number">2.</span> <span class="nav-text">解决方法 2</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%B9%B6%E5%8F%91-%E5%B9%B6%E5%8F%91%E5%9F%BA%E7%A1%80"><span class="nav-number">1.</span> <span class="nav-text">2.并发-并发基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9A%84%E5%87%BA%E7%8E%B0%E6%98%AF%E8%A6%81%E8%A7%A3%E5%86%B3%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F%E6%9C%AC%E8%B4%A8%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">1.1.</span> <span class="nav-text">2.1多线程的出现是要解决什么问题？本质是什么？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2Java%E6%98%AF%E6%80%8E%E4%B9%88%E8%A7%A3%E5%86%B3%E5%B9%B6%E5%8F%91%E9%97%AE%E9%A2%98%E7%9A%84%EF%BC%9F"><span class="nav-number">1.2.</span> <span class="nav-text">2.2Java是怎么解决并发问题的？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-1-%E7%90%86%E8%A7%A3%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E7%BB%B4%E5%BA%A6%EF%BC%9A%E6%A0%B8%E5%BF%83%E7%9F%A5%E8%AF%86"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.2.1 理解的第一个维度：核心知识</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-3-%E7%90%86%E8%A7%A3%E7%9A%84%E7%AC%AC%E4%BA%8C%E4%B8%AA%E7%BB%B4%E5%BA%A6%EF%BC%9A%E5%8F%AF%E8%A7%81%E6%80%A7%EF%BC%8C%E6%9C%89%E5%BA%8F%E6%80%A7%EF%BC%8C%E5%8E%9F%E5%AD%90%E6%80%A7"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2.3 理解的第二个维度：可见性，有序性，原子性</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E6%9C%89%E5%93%AA%E4%BA%9B%E5%AE%9E%E7%8E%B0%E6%80%9D%E8%B7%AF%EF%BC%9F"><span class="nav-number">1.3.</span> <span class="nav-text">2.3 线程安全有哪些实现思路？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-1-%E4%BA%92%E6%96%A5%E5%90%8C%E6%AD%A5"><span class="nav-number">1.3.1.</span> <span class="nav-text">2.3.1 互斥同步</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-2-%E9%9D%9E%E9%98%BB%E5%A1%9E%E5%90%8C%E6%AD%A5"><span class="nav-number">1.3.2.</span> <span class="nav-text">2.3.2 非阻塞同步</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-3-%E6%97%A0%E5%90%8C%E6%AD%A5%E6%96%B9%E6%A1%88"><span class="nav-number">1.3.3.</span> <span class="nav-text">2.3.3 无同步方案</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-4-%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3%E5%B9%B6%E5%8F%91%E5%92%8C%E5%B9%B6%E8%A1%8C%E7%9A%84%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="nav-number">1.3.4.</span> <span class="nav-text">2.3.4 如何理解并发和并行的区别？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-5-%E7%BA%BF%E7%A8%8B%E6%9C%89%E5%93%AA%E5%87%A0%E7%A7%8D%E7%8A%B6%E6%80%81%EF%BC%9F%E5%88%86%E5%88%AB%E8%AF%B4%E6%98%8E%E4%BB%8E%E4%B8%80%E7%A7%8D%E7%8A%B6%E6%80%81%E5%88%B0%E5%8F%A6%E4%B8%80%E7%A7%8D%E7%8A%B6%E6%80%81%E8%BD%AC%E5%8F%98%E6%9C%89%E5%93%AA%E4%BA%9B%E6%96%B9%E5%BC%8F"><span class="nav-number">1.3.5.</span> <span class="nav-text">2.3.5 线程有哪几种状态？分别说明从一种状态到另一种状态转变有哪些方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-6-%E9%80%9A%E5%B8%B8%E7%BA%BF%E7%A8%8B%E6%9C%89%E5%93%AA%E5%87%A0%E7%A7%8D%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F%EF%BC%9F"><span class="nav-number">1.3.6.</span> <span class="nav-text">2.3.6 通常线程有哪几种使用方式？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-7-%E5%9F%BA%E7%A1%80%E7%BA%BF%E7%A8%8B%E6%9C%BA%E5%88%B6%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="nav-number">1.3.7.</span> <span class="nav-text">2.3.7 基础线程机制有哪些？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-8-%E7%BA%BF%E7%A8%8B%E7%9A%84%E4%B8%AD%E6%96%AD%E6%96%B9%E5%BC%8F%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="nav-number">1.3.8.</span> <span class="nav-text">2.3.8 线程的中断方式有哪些？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-9-%E7%BA%BF%E7%A8%8B%E7%9A%84%E4%BA%92%E6%96%A5%E5%90%8C%E6%AD%A5%E6%96%B9%E5%BC%8F%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F%E5%A6%82%E4%BD%95%E6%AF%94%E8%BE%83%E5%92%8C%E9%80%89%E6%8B%A9%EF%BC%9F"><span class="nav-number">1.3.9.</span> <span class="nav-text">2.3.9 线程的互斥同步方式有哪些？如何比较和选择？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-10-%E7%BA%BF%E7%A8%8B%E4%B9%8B%E9%97%B4%E6%9C%89%E5%93%AA%E4%BA%9B%E5%8D%8F%E4%BD%9C%E6%96%B9%E5%BC%8F%EF%BC%9F"><span class="nav-number">1.3.10.</span> <span class="nav-text">2.3.10 线程之间有哪些协作方式？</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
