@@ -1,26 +1,570 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Vue3+Ts+Vite的uniapp小程序项目中引入最新vant-weapp v1.11.2并且以后更新版本全部可用</title>
-    <url>/posts/4b60898c/</url>
-    <content><![CDATA[<h2 id="由于-vant-weapp-是针对微信小程序原生开发的使用在-uniapp-中并不能使用-npm-i-方式引入-vant-weapp，所以采用手动引入的方式"><a href="#由于-vant-weapp-是针对微信小程序原生开发的使用在-uniapp-中并不能使用-npm-i-方式引入-vant-weapp，所以采用手动引入的方式" class="headerlink" title="由于 vant-weapp 是针对微信小程序原生开发的使用在 uniapp 中并不能使用 npm i 方式引入 vant-weapp，所以采用手动引入的方式"></a>由于 vant-weapp 是针对微信小程序原生开发的使用在 uniapp 中并不能使用 npm i 方式引入 vant-weapp，所以采用手动引入的方式</h2><h2 id="1-下载vant-weapp包"><a href="#1-下载vant-weapp包" class="headerlink" title="1.下载vant-weapp包"></a>1.下载<a href="https://github.com/youzan/vant-weapp">vant-weapp</a>包</h2><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">//使用git下载</span></span><br><span class="line">git clone <span class="attr">https</span>:<span class="comment">//github.com/youzan/vant-weapp.git</span></span><br><span class="line"><span class="comment">//也可以直接下载zip文件</span></span><br></pre></td></tr></table></figure>
+    <title>Java面试篇-并发-并发关键字</title>
+    <url>/posts/67ead572/</url>
+    <content><![CDATA[<h2 id="1-并发关键字"><a href="#1-并发关键字" class="headerlink" title="1.并发关键字"></a>1.并发关键字</h2><ul>
+<li>synchronized</li>
+<li>volatile</li>
+<li>final</li>
+</ul>
+<h3 id="1-1-Synchronized-可以作用在哪里？"><a href="#1-1-Synchronized-可以作用在哪里？" class="headerlink" title="1.1 Synchronized 可以作用在哪里？"></a>1.1 Synchronized 可以作用在哪里？</h3><ul>
+<li>对象锁</li>
+<li>方法锁</li>
+<li>类锁</li>
+</ul>
+<h3 id="1-2-Synchronized-本质上是通过什么保证线程安全的？"><a href="#1-2-Synchronized-本质上是通过什么保证线程安全的？" class="headerlink" title="1.2 Synchronized 本质上是通过什么保证线程安全的？"></a>1.2 Synchronized 本质上是通过什么保证线程安全的？</h3><ul>
+<li>加锁和释放锁的原理：对有锁的 .class 文件反编译可以看到里面出下了 Motitorenter 和 Monitorexit 指令，会让对象在执行时，使其锁计数器加 1或者减 1。每一个对象在同一时间只于一个 monitor(锁)相关联，而一个 monitor 在同一时间只能被一个线程获得，一个对象在尝试获得与这个对象相关联的 monitor 锁的所有权的时候，monitorenter 指令会发生如下 3 个中情况之一：1.monitor 计数器为 0，意味着目前还没有获得，那个线程就会立刻获得然后把锁计数器+1，一旦+1，别的线程再想获取，就得等待；2.如果这个 monitor 已经拿到了这个锁的所有权，又重入了这把锁，那锁计数器就会累加，变成 2，并且随着重入的次数，会一直累加；3.这把锁已经被别的线程获取了，等待锁的释放，</li>
+<li>可重入原理：加锁次数计数器</li>
+<li>保证可见性原理：内存模型和 happens-before 规则</li>
+</ul>
+<h3 id="1-3-Synchronized使得同时有一个线程可以执行，性能比较差，有什么方法的提升？"><a href="#1-3-Synchronized使得同时有一个线程可以执行，性能比较差，有什么方法的提升？" class="headerlink" title="1.3 Synchronized使得同时有一个线程可以执行，性能比较差，有什么方法的提升？"></a>1.3 Synchronized使得同时有一个线程可以执行，性能比较差，有什么方法的提升？</h3><p>简单来说在JVM中monitorenter和monitorexit字节码依赖于底层的操作系统的Mutex Lock来实现的，但是由于使用Mutex Lock需要将当前线程挂起并从用户态切换到内核态来执行，这种切换的代价是非常昂贵的；然而在现实中的大部分情况下，同步方法是运行在单线程环境(无锁竞争环境)如果每次都调用Mutex Lock那么将严重的影响程序的性能。不过在jdk1.6中对锁的实现引入了大量的优化，如锁粗化(Lock Coarsening)、锁消除(Lock Elimination)、轻量级锁(Lightweight Locking)、偏向锁(Biased Locking)、适应性自旋(Adaptive Spinning)等技术来减少锁操作的开销。</p>
+<ul>
+<li>锁粗化：也就是减少不必要的紧连在一起的 unlock，lock 操作，将多个连续的锁扩展成一个范围更大的锁。</li>
+<li>锁消除：通过运行时 JIT 编译器的逃逸分析来消除一些没有在当前同步块以外被其他线程共享的数据的锁保护，通过逃逸分析也可以在线程本地 Stack 上进行对象空间的分配（同时还可以减少 Heap 上的垃圾搜集开销）</li>
+<li>轻量级锁：这种锁实现的背后基于这样一种假设，即在真实的情况下我们程序中的大部分同步代码一般处于无锁竞争状态（即单线程执行环境），在无锁竞争的情况下完全可以避免调用操作系统层面的重量级互斥锁，取而代之的是 monitorenter 和 monitorexit 中只需要一条 CAS 原子指令就可以完成锁的获取和释放。</li>
+<li>偏向锁：为了在无锁竞争的情况下避免在获取过程中执行不必要的 CAS 原子指令，因为 CAS 原子指令虽然相对于重量级锁来锁开销非常小但还是存在非常可观的本地延迟。</li>
+<li>适应性直旋；当线程在获取轻量级锁的过程中执行 CAS 操作时，在进入与 monitor 相关联的操作系统重量级锁前会进入忙等待然后再次尝试，当尝试一定的次数后如果仍然没有成功则调用与改 monitor 管理的 semaphore 进入到阻塞状态。</li>
+</ul>
+<h3 id="1-4-Synchronized-有什么样的缺陷？Java-Lock-是怎么弥补这些缺陷的？"><a href="#1-4-Synchronized-有什么样的缺陷？Java-Lock-是怎么弥补这些缺陷的？" class="headerlink" title="1.4 Synchronized 有什么样的缺陷？Java Lock 是怎么弥补这些缺陷的？"></a>1.4 Synchronized 有什么样的缺陷？Java Lock 是怎么弥补这些缺陷的？</h3><ul>
+<li>synchronized 的缺陷：1.效率低：锁的释放情况少，只有代码执行完毕或者异常结束才会释放锁；视图或取锁的时候不能设定超时，不能中断一个正在使用锁的线程，相对而言，Lock 可以中断和设置超时。2 不够灵活：加锁和释放的时机单一，每个锁仅有一个单一的条件，相对而言，读写锁更加灵活。3.无法知道是否成功获得锁：相对而言，Lock 可以拿到状态。</li>
+<li>Lock解决的问题：</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Lcok主要看其里面的四个方法:</span><br><span class="line"><span class="number">1.</span>lock():加锁</span><br><span class="line"><span class="number">2.</span>unlock():解锁</span><br><span class="line"><span class="number">3.</span>tryLock:尝试获取锁，返回一个 <span class="type">boolean</span> 值</span><br><span class="line"><span class="number">4.</span>tryLock(<span class="type">long</span>,TimeUtil):尝试获取锁，可以设置超时</span><br><span class="line"></span><br><span class="line">Synchronized只有锁只与一个条件(是否获取锁)相关联，不灵活，后来Condition与Lock的结合解决了这个问题。多线程竞争一个锁时，其余未得到锁的线程只能不停的尝试获得锁，而不能中断。高并发的情况下会导致性能下降。ReentrantLock的lockInterruptibly()方法可以优先考虑响应中断。 一个线程等待时间过长，它可以中断自己，然后ReentrantLock响应这个中断，不再让这个线程继续等待。有了这个机制，使用ReentrantLock时就不会像<span class="keyword">synchronized</span>那样产生死锁了</span><br></pre></td></tr></table></figure>
 
-<hr>
-<h2 id="2-在项目-src-文件里面创建wxcomponents将下载的-vant-weapp-文件打开将里面的-dist-文件复制粘贴到wxcomponents中并且重命名为-vant-这样更好识别"><a href="#2-在项目-src-文件里面创建wxcomponents将下载的-vant-weapp-文件打开将里面的-dist-文件复制粘贴到wxcomponents中并且重命名为-vant-这样更好识别" class="headerlink" title="2.在项目 src 文件里面创建wxcomponents将下载的 vant-weapp 文件打开将里面的 dist 文件复制粘贴到wxcomponents中并且重命名为 vant(这样更好识别)"></a>2.在项目 src 文件里面创建<code>wxcomponents</code>将下载的 vant-weapp 文件打开将里面的 dist 文件复制粘贴到<code>wxcomponents</code>中并且重命名为 vant(这样更好识别)</h2><hr>
-<h2 id="3-打开-app-vue-文件在里添加-import-wxcomponents-vant-common-index-wxss"><a href="#3-打开-app-vue-文件在里添加-import-wxcomponents-vant-common-index-wxss" class="headerlink" title="3.打开 app.vue 文件在&lt;style lang=&quot;scss&quot;&gt;里添加@import &#39;@/wxcomponents/vant/common/index.wxss&#39;"></a>3.打开 app.vue 文件在<code>&lt;style lang=&quot;scss&quot;&gt;</code>里添加<code>@import &#39;@/wxcomponents/vant/common/index.wxss&#39;</code></h2><figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&lt;style lang=<span class="string">&quot;scss&quot;</span>&gt;</span><br><span class="line">  <span class="comment">//1.注意如果没有在vite为vue3配置@路径，请使用 2 @import</span></span><br><span class="line">  <span class="string">&#x27;@/wxcomponents/vant/common/index.wxss&#x27;</span> <span class="comment">//2.未配置配置@路径 @import</span></span><br><span class="line">  <span class="string">&#x27;/wxcomponents/vant/common/index.wxss&#x27;</span> ...省略</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="1-5-Synchronized-和-Lock-的对比，和选择？"><a href="#1-5-Synchronized-和-Lock-的对比，和选择？" class="headerlink" title="1.5 Synchronized 和 Lock 的对比，和选择？"></a>1.5 Synchronized 和 Lock 的对比，和选择？</h3><ul>
+<li>存在层次上：synchronized：Java 的关键字，在 jvm 层面上，Lock 是一个接口</li>
+<li>锁的释放：synchronized：假设 A 线程获得锁，B 线程等待。如果 A 线程阻塞，B线程会一直等待。Lock：分情况而定，Lock 有多个获取的方式，大致就是可以获取尝试获得锁，线程可以不用一直等待（可以通过 tryLock 判断有没有锁）</li>
+<li>锁的释放：synchronized：在发生异常时候会自动释放占有的锁，因此不会出现死锁。Lock：发生异常时候，不会主动释放占有的锁，必须手动 unlock 来释放锁，可能引起死锁的发生。</li>
+<li>锁的状态：synchronized：无法判断。Lock：可以判断。</li>
+<li>锁的类型：synchronized：可重入 不可中断 非公平（谁抢谁执行，没有顺序，好像是地址离他近就抢得快）。Lock：可重入 可判读 可公平（两者皆可）</li>
+<li>性能：synchronized：少量同步。Lock：大量同步。Lock可以提高多个线程进行读操作的效率。（可以通过readwritelock实现读写分离） 在资源竞争不是很激烈的情况下，Synchronized的性能要优于ReetrantLock，但是在资源竞争很激烈的情况下，Synchronized的性能会下降几十倍，但是ReetrantLock的性能能维持常态；ReentrantLock提供了多样化的同步，比如有时间限制的同步，可以被Interrupt的同步（synchronized的同步是不能Interrupt的）等。在资源竞争不激烈的情形下，性能稍微比synchronized差点点。但是当同步非常激烈的时候，synchronized的性能一下子能下降好几十倍。而ReentrantLock确还能维持常态。</li>
+<li>调度：synchronized: 使用Object对象本身的wait 、notify、notifyAll调度机制。Lock: 可以使用Condition进行线程之间的调度。</li>
+<li>用法：synchronized: 在需要同步的对象中加入此控制，synchronized可以加在方法上，也可以加在特定代码块中，括号中表示需要锁的对象。Lock: 一般使用ReentrantLock类做为锁。在加锁和解锁处需要通过lock()和unlock()显示指出。所以一般会在finally块中写unlock()以防死锁。</li>
+<li>底层实现：synchronized: 底层使用指令码方式来控制锁的，映射成字节码指令就是增加来两个指令：monitorenter和monitorexit。当线程执行遇到monitorenter指令时会尝试获取内置锁，如果获取锁则锁计数器+1，如果没有获取锁则阻塞；当遇到monitorexit指令时锁计数器-1，如果计数器为0则释放锁。Lock: 底层是CAS乐观锁，依赖AbstractQueuedSynchronizer类，把所有的请求线程构成一个CLH队列。而对该队列的操作均通过Lock-Free（CAS）操作。</li>
+</ul>
+<h3 id="1-6-Synchronized-在使用时有何注意事项"><a href="#1-6-Synchronized-在使用时有何注意事项" class="headerlink" title="1.6 Synchronized 在使用时有何注意事项?"></a>1.6 Synchronized 在使用时有何注意事项?</h3><ul>
+<li>锁的对象不能为空，应为锁的信息都保存在对象头里。</li>
+<li>作用域不宜过大，影响程序执行的速度，控制范围过大，编写代码也容易出错</li>
+<li>避免死锁</li>
+<li>在能选择的情况下，即不要用 Lock 也不要用 Synchronized 关键字，用 java.concurrent 包中的各种各样的类，如果不用该包下的类，在满足业务的情况下，可以使用 synchronized 关键字，应为代码量少，避免出错。</li>
+</ul>
+<h3 id="1-7-Synchronized修饰的方法在抛出异常时-会释放锁吗-会！！！"><a href="#1-7-Synchronized修饰的方法在抛出异常时-会释放锁吗-会！！！" class="headerlink" title="1.7 Synchronized修饰的方法在抛出异常时,会释放锁吗? 会！！！"></a>1.7 Synchronized修饰的方法在抛出异常时,会释放锁吗? 会！！！</h3><h3 id="1-8-多个线程等待同一个Synchronized锁的时候，JVM如何选择下一个获取锁的线程-非公平，即抢占式"><a href="#1-8-多个线程等待同一个Synchronized锁的时候，JVM如何选择下一个获取锁的线程-非公平，即抢占式" class="headerlink" title="1.8 多个线程等待同一个Synchronized锁的时候，JVM如何选择下一个获取锁的线程? 非公平，即抢占式"></a>1.8 多个线程等待同一个Synchronized锁的时候，JVM如何选择下一个获取锁的线程? 非公平，即抢占式</h3><h3 id="1-9-synchronized是公平锁吗？"><a href="#1-9-synchronized是公平锁吗？" class="headerlink" title="1.9 synchronized是公平锁吗？"></a>1.9 synchronized是公平锁吗？</h3><p>synchronized实际上是非公平的，新来的线程有可能立即获得监视器，而在等待区中等候已久的线程可能再次等待，这样有利于提高性能，但是也可能会导致饥饿现象。</p>
+<h3 id="1-10-volatile-关键字的作用是什么？"><a href="#1-10-volatile-关键字的作用是什么？" class="headerlink" title="1.10 volatile 关键字的作用是什么？"></a>1.10 volatile 关键字的作用是什么？</h3><ul>
+<li>防重排序：我们从一个最经典的例子来分析重排序问题。大家应该都很熟悉单例模式的实现，而在并发环境下的单例实现方式，我们通常可以采用双重检查加锁(DCL)的方式来实现。其源码如下：</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Singleton</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">volatile</span> Singleton singleton;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 构造函数私有，禁止外部实例化</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">Singleton</span><span class="params">()</span> &#123;&#125;;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title function_">getInstance</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (singleton == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (singleton.class) &#123;</span><br><span class="line">                <span class="keyword">if</span> (singleton == <span class="literal">null</span>) &#123;</span><br><span class="line">                    singleton = <span class="keyword">new</span> <span class="title class_">Singleton</span>();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> singleton;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<hr>
-<h2 id="4-打开pages-json选择你是想全局还是局部引入"><a href="#4-打开pages-json选择你是想全局还是局部引入" class="headerlink" title="4.打开pages.json选择你是想全局还是局部引入"></a>4.打开<code>pages.json</code>选择你是想全局还是局部引入</h2><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">//1.全局引入在globalStyle中创建usingComponents里面放你想引入的样式，？怎么知道样式怎么引入！打开wxcomponents/vant,该文件下选你想要的</span></span><br><span class="line"><span class="string">&quot;globalStyle&quot;</span>: &#123;</span><br><span class="line"></span><br><span class="line">	...省略</span><br><span class="line"></span><br><span class="line">    <span class="string">&quot;usingComponents&quot;</span>: &#123;</span><br><span class="line">      <span class="string">&quot;van-button&quot;</span>: <span class="string">&quot;/wxcomponents/vant/button/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;van-cell&quot;</span>: <span class="string">&quot;/wxcomponents/vant/cell/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;van-cell-group&quot;</span>: <span class="string">&quot;/wxcomponents/vant/cell-group/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;van-icon&quot;</span>: <span class="string">&quot;/wxcomponents/vant/icon/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;van-image&quot;</span>: <span class="string">&quot;/wxcomponents/vant/image/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;van-row&quot;</span>: <span class="string">&quot;/wxcomponents/vant/row/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;van-col&quot;</span>: <span class="string">&quot;/wxcomponents/vant/col/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;van-popup&quot;</span>: <span class="string">&quot;/wxcomponents/vant/popup/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;van-toast&quot;</span>: <span class="string">&quot;/wxcomponents/vant/toast/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;van-card&quot;</span>: <span class="string">&quot;/wxcomponents/vant/card/index&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">//2.局部页面引入,以首页index引入&lt;van-button&gt;为例子</span></span><br><span class="line">    &#123;</span><br><span class="line">      <span class="string">&quot;path&quot;</span>: <span class="string">&quot;pages/index/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;style&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;navigationStyle&quot;</span>: <span class="string">&quot;custom&quot;</span>, <span class="comment">// 隐藏默认导航</span></span><br><span class="line">        <span class="string">&quot;navigationBarTextStyle&quot;</span>: <span class="string">&quot;white&quot;</span>,</span><br><span class="line">        <span class="string">&quot;navigationBarTitleText&quot;</span>: <span class="string">&quot;首页&quot;</span>,</span><br><span class="line">            <span class="string">&quot;usingComponents&quot;</span>: &#123;</span><br><span class="line">			      <span class="string">&quot;van-button&quot;</span>: <span class="string">&quot;/wxcomponents/vant/button/index&quot;</span>,</span><br><span class="line">			    &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<hr>
+<p>现在我们分析一下为什么要在变量singleton之间加上volatile关键字。要理解这个问题，先要了解对象的构造过程，实例化一个对象其实可以分为三个步骤：</p>
+<p>1.分配内存空间。</p>
+<p>2.初始化对象。</p>
+<p>3.将内存空间的地址赋值给对应的引用。</p>
+<p>但是由于操作系统可以对指令进行重排序，所以上面的过程也可能会变成如下过程：</p>
+<p>1.分配内存空间。</p>
+<p>2.将内存空间的地址赋值给对应的引用。</p>
+<p>3.初始化对象</p>
+<p>如果是这个流程，多线程环境下就可能将一个未初始化的对象引用暴露出来，从而导致不可预料的结果。因此，为了防止这个过程的重排序，我们需要将变量设置为volatile类型的变量。</p>
+<ul>
+<li>可见性：可见性问题主要指一个线程修改了共享变量值，而另一个线程却看不到。引起可见性问题的主要原因是每个线程拥有自己的一个高速缓存区——线程工作内存。volatile关键字能有效的解决这个问题，我们看下下面的例子，就可以知道其作用：<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestVolatile</span> &#123;</span><br><span class="line">  <span class="comment">//private static volatile boolean stop = false;</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">boolean</span> <span class="variable">stop</span> <span class="operator">=</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">// Thread-A</span></span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(<span class="string">&quot;Thread A&quot;</span>) &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">                <span class="keyword">while</span> (!stop) &#123;</span><br><span class="line">                &#125;</span><br><span class="line">                System.out.println(Thread.currentThread() + <span class="string">&quot; stopped&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;.start();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Thread-main</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            TimeUnit.SECONDS.sleep(<span class="number">1</span>);</span><br><span class="line">            System.out.println(Thread.currentThread() + <span class="string">&quot; after 1 seconds&quot;</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        stop = <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment">#没加volatile</span></span><br><span class="line">Thread[main,5,main] after 1 seconds</span><br><span class="line"><span class="comment">#加了volatile</span></span><br><span class="line">Thread[main,5,main] after 1 seconds</span><br><span class="line">Thread[Thread A,5,main] stopped</span><br></pre></td></tr></table></figure></li>
+<li>保证原子性:单次读&#x2F;写(volatile 不能保证完全的原子性，只能保证单次的读&#x2F;写操作具有原子性)</li>
+</ul>
+<h3 id="1-11-volatile-可以保证原子性吗？"><a href="#1-11-volatile-可以保证原子性吗？" class="headerlink" title="1.11 volatile 可以保证原子性吗？"></a>1.11 volatile 可以保证原子性吗？</h3><p>不能完全保证，只能保证单次读&#x2F;写操作具有原子性。</p>
+<h3 id="1-12-32位机器上共享的long和double变量的为什么要用volatile"><a href="#1-12-32位机器上共享的long和double变量的为什么要用volatile" class="headerlink" title="1.12 32位机器上共享的long和double变量的为什么要用volatile?"></a>1.12 32位机器上共享的long和double变量的为什么要用volatile?</h3><p>因为 long 和 double 两种数据类型操作可分为高于 32  位和低于 32 位两部分，因此不同的 long 和 double 类型读&#x2F;写操作可能不是原子的。因此，鼓励大家的共享的 long 和 double 类型设置 volatile类型，这样能够保证任何情况下对long 和 double 的单次读&#x2F;写操作都具有原子性。</p>
+<h3 id="1-13-volatile是如何实现可见性的？-内存屏障"><a href="#1-13-volatile是如何实现可见性的？-内存屏障" class="headerlink" title="1.13 volatile是如何实现可见性的？ 内存屏障"></a>1.13 volatile是如何实现可见性的？ 内存屏障</h3><h3 id="1-14-volatile-是如何实现有序性的？-happens-before-等"><a href="#1-14-volatile-是如何实现有序性的？-happens-before-等" class="headerlink" title="1.14 volatile 是如何实现有序性的？ happens-before 等"></a>1.14 volatile 是如何实现有序性的？ happens-before 等</h3><h3 id="1-15-说下-volatile-应用场景？"><a href="#1-15-说下-volatile-应用场景？" class="headerlink" title="1.15 说下 volatile 应用场景？"></a>1.15 说下 volatile 应用场景？</h3><p>使用 volatile 必须具备的条件：</p>
+<ul>
+<li>1.对变量的写操作不依赖于当前值</li>
+<li>2.改变量没有包含在具有其他变量的不变式中</li>
+<li>3.只有在状态真正独立于程序内其他内容时才能使用 volatile。<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//例子 1： 单例模式单例模式的一种实现方式，但很多人会忽略 volatile 关键字，因为没有该关键字，程序也可以很好的运行，只不过代码的稳定性总不是 100%，说不定在未来的某个时刻，隐藏的 bug 就出来了。</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Singleton</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> Singleton instance;</span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">Singleton</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title function_">getInstance</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (instance == <span class="literal">null</span>) &#123;</span><br><span class="line">            syschronized(Singleton.class) &#123;</span><br><span class="line">                <span class="keyword">if</span> (instance == <span class="literal">null</span>) &#123;</span><br><span class="line">                    instance = <span class="keyword">new</span> <span class="title class_">Singleton</span>();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//例子2： volatile bean在 volatile bean 模式中，JavaBean 的所有数据成员都是 volatile 类型的，并且 getter 和 setter 方法必须非常普通 —— 除了获取或设置相应的属性外，不能包含任何逻辑。此外，对于对象引用的数据成员，引用的对象必须是有效不可变的。(这将禁止具有数组值的属性，因为当数组引用被声明为 volatile 时，只有引用而不是数组本身具有 volatile 语义)。对于任何 volatile 变量，不变式或约束都不能包含 JavaBean 属性。@ThreadSafe</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Person</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> String firstName;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> String lastName;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="type">int</span> age;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getFirstName</span><span class="params">()</span> &#123; <span class="keyword">return</span> firstName; &#125;</span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getLastName</span><span class="params">()</span> &#123; <span class="keyword">return</span> lastName; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">getAge</span><span class="params">()</span> &#123; <span class="keyword">return</span> age; &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setFirstName</span><span class="params">(String firstName)</span> &#123; </span><br><span class="line">        <span class="built_in">this</span>.firstName = firstName;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setLastName</span><span class="params">(String lastName)</span> &#123; </span><br><span class="line">        <span class="built_in">this</span>.lastName = lastName;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setAge</span><span class="params">(<span class="type">int</span> age)</span> &#123; </span><br><span class="line">        <span class="built_in">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="1-16所有的final修饰的字段都是编译期常量吗"><a href="#1-16所有的final修饰的字段都是编译期常量吗" class="headerlink" title="1.16所有的final修饰的字段都是编译期常量吗?"></a>1.16所有的final修饰的字段都是编译期常量吗?</h3><p>不是</p>
+<h3 id="1-17如何理解private所修饰的方法是隐式的final"><a href="#1-17如何理解private所修饰的方法是隐式的final" class="headerlink" title="1.17如何理解private所修饰的方法是隐式的final?"></a>1.17如何理解private所修饰的方法是隐式的final?</h3><p>类中所有private方法都隐式地指定为final的，由于无法取用private方法，所以也就不能覆盖它。可以对private方法增添final关键字，但这样做并没有什么好处。看下下面的例子：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Base</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">test</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Son</span> <span class="keyword">extends</span> <span class="title class_">Base</span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">Son</span> <span class="variable">son</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Son</span>();</span><br><span class="line">        <span class="type">Base</span> <span class="variable">father</span> <span class="operator">=</span> son;</span><br><span class="line">        <span class="comment">//father.test();</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Base和Son都有方法test(),但是这并不是一种覆盖，因为private所修饰的方法是隐式的final，也就是无法被继承，所以更不用说是覆盖了，在Son中的test()方法不过是属于Son的新成员罢了，Son进行向上转型得到father，但是father.test()是不可执行的，因为Base中的test方法是private的，无法被访问到。# 说说final类型的类如何拓展?比如String是final类型，我们想写个MyString复用所有String中方法，同时增加一个新的toMyString()的方法，应该如何做?外观模式：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* <span class="doctag">@pdai</span></span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MyString</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String innerString;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ...init &amp; other methods</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 支持老的方法</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">length</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> innerString.length(); <span class="comment">// 通过innerString调用老的方法</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 添加新方法</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">toMyString</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="1-18final方法可以被重载吗"><a href="#1-18final方法可以被重载吗" class="headerlink" title="1.18final方法可以被重载吗?"></a>1.18final方法可以被重载吗?</h3><p>我们知道父类的final方法是不能够被子类重写的，那么final方法可以被重载吗? 答案是可以的，下面代码是正确的。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">FinalExampleParent</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title function_">test</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title function_">test</span><span class="params">(String str)</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="1-19父类的final方法能不能够被子类重写"><a href="#1-19父类的final方法能不能够被子类重写" class="headerlink" title="1.19父类的final方法能不能够被子类重写?"></a>1.19父类的final方法能不能够被子类重写?</h3><p>不可以</p>
+<h3 id="1-20说说基本类型的final域重排序规则"><a href="#1-20说说基本类型的final域重排序规则" class="headerlink" title="1.20说说基本类型的final域重排序规则?"></a>1.20说说基本类型的final域重排序规则?</h3><p>先看一段示例性的代码：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">FinalDemo</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> a;  <span class="comment">//普通域</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">int</span> b; <span class="comment">//final域</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> FinalDemo finalDemo;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">FinalDemo</span><span class="params">()</span> &#123;</span><br><span class="line">        a = <span class="number">1</span>; <span class="comment">// 1. 写普通域</span></span><br><span class="line">        b = <span class="number">2</span>; <span class="comment">// 2. 写final域</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">writer</span><span class="params">()</span> &#123;</span><br><span class="line">        finalDemo = <span class="keyword">new</span> <span class="title class_">FinalDemo</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">reader</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">FinalDemo</span> <span class="variable">demo</span> <span class="operator">=</span> finalDemo; <span class="comment">// 3.读对象引用</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">a</span> <span class="operator">=</span> demo.a;    <span class="comment">//4.读普通域</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">b</span> <span class="operator">=</span> demo.b;    <span class="comment">//5.读final域</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>假设线程A在执行writer()方法，线程B执行reader()方法。</p>
+<p>写final域重排序规则写final域的重排序规则禁止对final域的写重排序到构造函数之外，这个规则的实现主要包含了两个方面：</p>
+<ul>
+<li>JMM禁止编译器把final域的写重排序到构造函数之外；</li>
+<li>编译器会在final域写之后，构造函数return之前，插入一个storestore屏障。这个屏障可以禁止处理器把final域的写重排序到构造函数之外。</li>
+</ul>
+<p>我们再来分析writer方法，虽然只有一行代码，但实际上做了两件事情：</p>
+<ul>
+<li>构造了一个FinalDemo对象；</li>
+<li>把这个对象赋值给成员变量finalDemo。</li>
+</ul>
 ]]></content>
       <categories>
-        <category>前端</category>
+        <category>面试</category>
       </categories>
       <tags>
-        <tag>vue3</tag>
-        <tag>uniapp</tag>
-        <tag>小程序</tag>
+        <tag>Java 基础</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Java面试篇-并发-并发基础</title>
+    <url>/posts/48c3c2af/</url>
+    <content><![CDATA[<h2 id="2-并发-并发基础"><a href="#2-并发-并发基础" class="headerlink" title="2.并发-并发基础"></a>2.并发-并发基础</h2><h3 id="2-1多线程的出现是要解决什么问题？本质是什么？"><a href="#2-1多线程的出现是要解决什么问题？本质是什么？" class="headerlink" title="2.1多线程的出现是要解决什么问题？本质是什么？"></a>2.1多线程的出现是要解决什么问题？本质是什么？</h3><p>CPU、内存、I&#x2F;O 设备的速度是有极大差异的，为了合理利用 CPU 的高性能，平衡这三者的速度差异，计算机体系结构、操作系统、编程程序都做出了贡献，主要体现为：</p>
+<ul>
+<li>CPU 增加了缓存，以均衡与内存的速度差异；</li>
+<li>操作系统增加了进程、线程，以分时复用 CPU，进而均衡 CPU 与 I&#x2F;O 设备的速度差异；</li>
+<li>编译程序优化指令执行次序，使得缓存能够得到更加合理的利用。</li>
+</ul>
+<h3 id="2-2Java是怎么解决并发问题的？"><a href="#2-2Java是怎么解决并发问题的？" class="headerlink" title="2.2Java是怎么解决并发问题的？"></a>2.2Java是怎么解决并发问题的？</h3><h4 id="2-2-1-理解的第一个维度：核心知识"><a href="#2-2-1-理解的第一个维度：核心知识" class="headerlink" title="2.2.1 理解的第一个维度：核心知识"></a>2.2.1 理解的第一个维度：核心知识</h4><p>本质上可以理解为，java 内存模型规范了 JVM 如何提供按需禁用缓存和编译优化的方法。具体来说，这些方法包括：</p>
+<ul>
+<li>volatile、synchronized 和 final 三个关键字</li>
+<li>Happens-Before 规则</li>
+</ul>
+<h4 id="2-2-3-理解的第二个维度：可见性，有序性，原子性"><a href="#2-2-3-理解的第二个维度：可见性，有序性，原子性" class="headerlink" title="2.2.3 理解的第二个维度：可见性，有序性，原子性"></a>2.2.3 理解的第二个维度：可见性，有序性，原子性</h4><ul>
+<li><p>原子性：在 Java 中，对基本数据类型的变量的读取和赋值操作是原子性操作，即这些操作是不可被中断的，要么执行，要么不执行。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">#分析以下哪些操作是原子性操作</span><br><span class="line">y = <span class="number">10</span>; <span class="comment">//直接将数值 10 赋值给 x，也就是说线程执行这个语句会直接将数值 10 写入到工作内存中，是原子性操作</span></span><br><span class="line">y = x; <span class="comment">//包含两个操作，它先去读取 x 的值，在将 x 的值写入工作内存，虽然读取 x 的值以及将 x 的值写入工作内存，这两个操作都是原子性操作，但是合起来就不是原子性操作了</span></span><br><span class="line">x++; <span class="comment">//x++包含 3 个操作：读取 x 值、进行加 1 操作，写入新的值。不是原子性操作</span></span><br><span class="line">x = x + <span class="number">1</span>; <span class="comment">//同上</span></span><br></pre></td></tr></table></figure>
+
+<p>也就是说，只有简单的读取、赋值才是原子操作。要实现大范围的原子性就的上锁来实现。</p>
+</li>
+<li><p>可见性：java 提供 volatile 关键字来保证可见性。当一个共享变量被 volatile 修饰时，它会保证修改的值立即被更新到主存，当有其他线程需要读取时，它会去内存中读取新值。而普通的共享变量不能保证可见性，因为普通变量被修改后，什么时候被写入主存是不确定的，当其他线程去读取时，此时内存中可能还是原来的旧值，因此无法保证可见性。加锁也能够保证可见性。</p>
+</li>
+<li><p>有序性：在 java 里面，可以通过 volatile 关键字来保证一定的“有序性”。另外可以通过 synchronized 和 Lock 来保证有序性，很显然，synchronized 和 Lock 保证每个时刻是有一个线程执行同步代码，相当于让线程顺序执行同步代码，自然就保证了有序性。当然 JVM 是通过 Happens-Before 规则来保证有序性的</p>
+</li>
+</ul>
+<h3 id="2-3-线程安全有哪些实现思路？"><a href="#2-3-线程安全有哪些实现思路？" class="headerlink" title="2.3 线程安全有哪些实现思路？"></a>2.3 线程安全有哪些实现思路？</h3><h4 id="2-3-1-互斥同步"><a href="#2-3-1-互斥同步" class="headerlink" title="2.3.1 互斥同步"></a>2.3.1 互斥同步</h4><p>synchronized 和 ReentrantLock</p>
+<h4 id="2-3-2-非阻塞同步"><a href="#2-3-2-非阻塞同步" class="headerlink" title="2.3.2 非阻塞同步"></a>2.3.2 非阻塞同步</h4><p>互斥同步最主要的问题就是线程阻塞和唤醒所带来的性能问题，因此这种同步也称为阻塞同步。互斥同步属于一种悲观的并发策略，总是认为只要不去做正确的同步措施，那就肯定会出现问题。无论共享数据是否会出现竞争，它都要进行加锁、用户态核心态转换、维护计数器和检查是否有被阻塞的线程需要唤醒等操作。</p>
+<ul>
+<li>CAS</li>
+<li>随着硬件指令集的发展，我们可以使用基于冲突检测的乐观并发策略：先进行操作，如果没有其他线程争用共享数据，那操作就成功了，否则采取补偿措施。这种乐观的并发策略的许多实现都不需要将线程阻塞，因此这种同步操作称为非阻塞同步。乐观锁需要操作和冲突检测这两步骤具备原子性，这里就不能再使用互斥同步来保证了，只能靠硬件来完成。硬件支持的原子性操作最典型的是：比较并交换。</li>
+<li>Atomiclnteger：JUC 包里面的整数原子类 Atomiclnteger，其中的 compareAndSet()和 getAndlncrement()等方法都使用了 Unsafe 类的 CAS 操作。</li>
+</ul>
+<h4 id="2-3-3-无同步方案"><a href="#2-3-3-无同步方案" class="headerlink" title="2.3.3 无同步方案"></a>2.3.3 无同步方案</h4><p>保证线程的安全，并不是一定就要进行同步。如果一个方法本来就不涉及共享数据，那它自然就无需任何同步措施去保证正确性。</p>
+<ul>
+<li>栈封闭：多个线程访问同一个方法中的局部变量时，不会出现线程安全问题，因为局部变量存储在虚拟机栈中，属于线程私有的。</li>
+<li>线程本地存储：如果有一段代码所需要的数据必须与其他代码共享，那就看看这些共享数据的代码是否能保证在同一个线程中执行。如果能保证，我们就可以把共享数据的可见范围限制在同一个线程之内，这样，无须同步也能保证线程之间不出现数据争用的问题。</li>
+</ul>
+<h4 id="2-3-4-如何理解并发和并行的区别？"><a href="#2-3-4-如何理解并发和并行的区别？" class="headerlink" title="2.3.4 如何理解并发和并行的区别？"></a>2.3.4 如何理解并发和并行的区别？</h4><ul>
+<li>并发是指一个处理器处理多个任务。</li>
+<li>并行是指多个处理器或者多核的处理器处理多个不同的任务。</li>
+</ul>
+<h4 id="2-3-5-线程有哪几种状态？分别说明从一种状态到另一种状态转变有哪些方式"><a href="#2-3-5-线程有哪几种状态？分别说明从一种状态到另一种状态转变有哪些方式" class="headerlink" title="2.3.5 线程有哪几种状态？分别说明从一种状态到另一种状态转变有哪些方式"></a>2.3.5 线程有哪几种状态？分别说明从一种状态到另一种状态转变有哪些方式</h4><ul>
+<li>new（新建）：创建后为启动</li>
+<li>可运行：可能在运行，也可能在等待 CPU 时间片，包含了操作系统线程状态中的 Runing 和 Ready。</li>
+<li>阻塞：等待获取一个排它锁，如果其线程释放了锁就会结束此状态。</li>
+<li>无限期等待：等待其他线程显式地唤醒，否则不会分配 CPU 时间片。</li>
+<li>限期等待：无需等待其它线程显式地唤醒，在一定时间之后会被系统自动唤醒。调用 Thread.sleep()方法使线程进入限期等待状态时，常常用“使一个线程睡眠”进行描述。调用 Object.wait()方法使线程进入限期等待或者无限期等待时，常常用“挂起一个线程”进行描述。</li>
+<li>死亡：可以时线程结束任务之后自己结束，或者产生了异常而结束。</li>
+</ul>
+<h4 id="2-3-6-通常线程有哪几种使用方式？"><a href="#2-3-6-通常线程有哪几种使用方式？" class="headerlink" title="2.3.6 通常线程有哪几种使用方式？"></a>2.3.6 通常线程有哪几种使用方式？</h4><p>有三种使用线程的方法：</p>
+<ul>
+<li>实现 Runnable 接口；</li>
+<li>实现 Callable 接口；</li>
+<li>继承 Thread 类；</li>
+</ul>
+<p>实现 Runnable 和 Callable 接口的类只能当做一个可以在线程中运行的任务，不是真正意义上的线程，因此最后还需要通过 Thread 来调用。可以说任务是通过线程驱动从而执行的。</p>
+<h4 id="2-3-7-基础线程机制有哪些？"><a href="#2-3-7-基础线程机制有哪些？" class="headerlink" title="2.3.7 基础线程机制有哪些？"></a>2.3.7 基础线程机制有哪些？</h4><ul>
+<li>Exceutor：管理多个异步任务的执行而无需程序员显式地管理线程的生命周期。这里的异步是指多个任务的执行互不干扰，不需要进行同步操作。</li>
+<li>Daemon：守护线程是程序运行时在后台提供服务的线程，不属于程序中不可或缺的部分。当所有非守护线程结束时，程序也就终止，同时会杀死所有守护线程。使用 setDaemon()方法将一个线程设置为守护线程。mian()属于非守护线程。</li>
+<li>sleep()：Tread.sleep(millisec)方法会休眠当前正在执行的线程，millisec单位为毫秒。</li>
+<li>yield()：对静态方法 Thread.yield()的调用周期声明了当前线程已经完成了生命周期中最重要的部分，可以切换给其他线程来执行。该方法只是对线程调度器的一个建议，而且也只是建议具有相同优先级的其它线程可以运行。</li>
+</ul>
+<h4 id="2-3-8-线程的中断方式有哪些？"><a href="#2-3-8-线程的中断方式有哪些？" class="headerlink" title="2.3.8 线程的中断方式有哪些？"></a>2.3.8 线程的中断方式有哪些？</h4><p>一个线程执行完毕之后会自动结束，如果在运行过程中发生异常也会提前结束。</p>
+<ul>
+<li>InterruptedException：通过调用一个线程的 interrupt（）来中断该线程，如果该线程初一阻塞、限期等待或者无限期等待状态，那么就会抛出 InterruptedException，从而提前结束该线程。但是不能中断 I&#x2F;O 阻塞和 synchronized 锁阻塞。</li>
+<li>interrupted()：如果一个线程的 run（）方法执行一个无限循环，并且没有执行 sleep（）等会抛出 InterruptedException 的操作，那么调用线程的 Interrupted()方法将无法使线程提前结束。但是调用 interrupt（）方法会设置线程的中断标记，此时调用 interrupt（）方法将会无法使线程提前结束。但是调用 interrupt（）方法来判读线程是否处于中断状态，从而提前结束线程。</li>
+<li>Executor 的中断操作：调用 Exceutor 的 shutdown（）方法会等线程都执行完毕之后再关闭，但是如果调用的是 shutdownNow（）方法，则相当于调用每个线程的 interrupt（）方法。</li>
+</ul>
+<h4 id="2-3-9-线程的互斥同步方式有哪些？如何比较和选择？"><a href="#2-3-9-线程的互斥同步方式有哪些？如何比较和选择？" class="headerlink" title="2.3.9 线程的互斥同步方式有哪些？如何比较和选择？"></a>2.3.9 线程的互斥同步方式有哪些？如何比较和选择？</h4><p>Java提供了两种锁机机制来控制多个线程对共享资源的互斥访问，第一个是 JVM 实现的 synchronized，而另一个是 JDK 实现的 ReentrantLock。</p>
+<ul>
+<li>锁的实现：synchronized 是 JVM 实现的，而 ReentranLock 是 JDK 实现的。</li>
+<li>性能：新版本 Java 对 synchronized 进行了很多优化，列如自旋转等，synchronized 与 ReentrantLock 大致相同。</li>
+<li>等待可中段：当持有锁的线程长期不释放锁的时候，正在等待的线程可以选择放弃等待，改为处理其他事情。ReentranLock 可中断，而 synchronized 不行。</li>
+<li>公平锁：公平锁是指多个线程在等待同一个锁时，必须按照申请锁的时间顺序来依次获得锁。synchronized中的锁是非公平的，ReentrantLock 默认情况下也是非公平锁的，但是也可以是公平的。</li>
+<li>锁绑定多个条件：一个 ReentrantLock 可以同时绑定多个 Condition 对象。</li>
+</ul>
+<h4 id="2-3-10-线程之间有哪些协作方式？"><a href="#2-3-10-线程之间有哪些协作方式？" class="headerlink" title="2.3.10 线程之间有哪些协作方式？"></a>2.3.10 线程之间有哪些协作方式？</h4><p>当多个线程可以一起工作去解决某个问题是，如果某些部分必须在其它部分之前完成，那么就需要对线程进行协调。</p>
+<ul>
+<li>join()：在线程中调用另一个线程的 join() 方法，会将当前线程挂起，而不是忙等待，直到目标线程结束。</li>
+<li>wait() notify() notifyAll()：调用 wait() 使得线程等待某个条件满足，线程在等待时会被挂起，当其他线程的运行使得这个条件满足时，其它线程会调用 notify() 或者 notifyAll() 来唤醒线程。它们属于 Object的一部分，而不属于 Thread。只能用在同步方法或者同步控制块中使用，否则会在运行时抛出 lllegalMonitorStateExeception。使用 wait() 挂起期间，线程会释放锁。因为，如果没有释放锁，那么其它线程就无法进入对象的同步或者同步控制块中，那么就无法执行 notify() 或者 notifyAll() 来唤醒挂起的线程，造成死锁。</li>
+<li>wait() 和 sleep()的区别：wait() 是 Object 的方法，而sleep()是 Thread 的静态方法。wait()会释放锁，sleep() 不会。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>面试</category>
+      </categories>
+      <tags>
+        <tag>Java 基础</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Java面试篇-集合</title>
+    <url>/posts/2effe69d/</url>
+    <content><![CDATA[<h2 id="1-集合"><a href="#1-集合" class="headerlink" title="1.集合"></a>1.集合</h2><h3 id="1-1-Collection"><a href="#1-1-Collection" class="headerlink" title="1.1 Collection"></a>1.1 Collection</h3><h4 id="1-1-1-set：无序、不可重复的集合"><a href="#1-1-1-set：无序、不可重复的集合" class="headerlink" title="1.1.1 set：无序、不可重复的集合"></a>1.1.1 set：无序、不可重复的集合</h4><ul>
+<li>TreeSet：基于红黑树实现，支持有序性操作，列如根据一个范围查找元素的操作。</li>
+<li>HashSet：基于哈西表实现，支持快速查找，但不支持有序性操作。</li>
+<li>LinkedHashSet：具有 HashSet 的查找效率，且内部使用双向链表维护元素的插入顺序。</li>
+</ul>
+<h4 id="1-1-2-List：有序、重复的集合"><a href="#1-1-2-List：有序、重复的集合" class="headerlink" title="1.1.2 List：有序、重复的集合"></a>1.1.2 List：有序、重复的集合</h4><ul>
+<li>ArrayList：基于动态数组实现，支持随机访问。</li>
+<li>ArrayList底层？ 实现了 List 接口，是顺序容器，即元素存放的数据与放进去的顺序相同，允许放入 null 元素，底层通过数组实现。每个 ArrayList 都有一个容器，表示底层数组的实际大小，容器内存储元素的个数不能多于当前的容量。当添加元素且容量不足时会自动增大底层数组的大小.</li>
+<li>ArrayList 自动扩容？每当向数组添加元素时，都要去检查一下添加元素后的个数是否会超出当前数组的长度，超出就将数组扩容，以满足添加数据的需求。扩容通过 ensureCapcity 方法实现。</li>
+<li>ArrayList的Fail-Fast机制？ArrayList 也采用了快速失败的机制，通过记录 modCount 参数实现。</li>
+<li>Vector：和 ArrayList 类似，但它是线程安全的。</li>
+<li>LinkedList：基于双向链表实现，只能顺序访问，但是可以快速地在链表中间插入和删除元素，不仅如此，LinkedList 还可以用作栈、队列和双向队列.</li>
+</ul>
+<h4 id="1-1-3-Queue：一种队列集合实现"><a href="#1-1-3-Queue：一种队列集合实现" class="headerlink" title="1.1.3 Queue：一种队列集合实现"></a>1.1.3 Queue：一种队列集合实现</h4><ul>
+<li>PriorityQueue：基于堆结构实现，可以用它来实现优先队列.</li>
+</ul>
+<h3 id="1-2-Map：具有映射关系的集合"><a href="#1-2-Map：具有映射关系的集合" class="headerlink" title="1.2 Map：具有映射关系的集合"></a>1.2 Map：具有映射关系的集合</h3><ul>
+<li>TreeMap：基于红黑树实现。是一个有序的 key-value 集合，</li>
+<li>HashMap：1.7 基于哈希表实现，1.8 基于数组+链表+红黑树。存储的是 key-value 类型的数据，其中 key 值不允许重复，key 重复会覆盖，value 运行重复数据存储无序（这里的无序指的是插入顺序和取出顺序是不一致的 key 和 value 都允许为空，但是只能有一个空的 key）。加锁可以保证线程安全。</li>
+<li>HashTable：和 HashMap 类似（其实就是加锁了 synchronized 锁），但它是线程安全的，这意味着同一时刻多个线程可以同时写入 HashTable 并且不会导致数据不一致。它是遗留类，不应该去使用它。现在可以使用 ConcurrentHashMap 来支持线程安全，并且 ConurrentHashMap 的效率会更高。</li>
+<li>LinkedHashMap：使用双向链表来维护元素的顺序，顺序为插入顺序或者最近最少使用顺序。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>面试</category>
+      </categories>
+      <tags>
+        <tag>Java 基础</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>kafka学习笔记1</title>
+    <url>/posts/ab414b1a/</url>
+    <content><![CDATA[<h2 id="1-Kafka-是什么"><a href="#1-Kafka-是什么" class="headerlink" title="1.Kafka 是什么?"></a>1.Kafka 是什么?</h2><p><strong>Kafka</strong>是 Apache 开源的一款基于<strong>zookeeper</strong>协调的分布式消息系统，具有高吞吐率、高性能、实时、高可靠等特点，可实时处理流式数据。它最初由 LinkedIn 公司开发，使用<strong>Scala</strong>语言编写。</p>
+<p><strong>Kafka</strong>历经数年的发展，从最初纯粹的消息引擎，到近几年开始在流处理平台生态圈发力，多个组织或公司发布了各种不同特性的产品。</p>
+<h2 id="2-Kafka-能干嘛"><a href="#2-Kafka-能干嘛" class="headerlink" title="2.Kafka 能干嘛?"></a>2.Kafka 能干嘛?</h2><p><strong>Kafka 特点</strong></p>
+<ul>
+<li>高吞吐量、低延迟：即使是非常普通的硬件 Kafka 也可以支持每秒数百万的消息，它的延迟最低只有几毫秒</li>
+<li>持久性：支持消息持久化，即使数 TB 级别的消息也能够保持长时间的稳定性能。</li>
+<li>可靠性：支持数据备份防止丢失</li>
+<li>容错性：支持通过 Kafka 服务器和消费机集群来分区消息，允许集群中的节点失败（若分区副本数量为 n，则允许 n-1 个节点失败）</li>
+<li>高并发：单机可支持数千个客户端同时读写，支持在线水平扩展。可无缝对接 hadoop、strom、spark 等，支持 Hadoop 并行数据加载</li>
+</ul>
+<h2 id="3-Kafka-常用于？"><a href="#3-Kafka-常用于？" class="headerlink" title="3.Kafka 常用于？"></a>3.Kafka 常用于？</h2><table>
+<thead>
+<tr>
+<th>ID</th>
+<th>设计目标</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>日志收集</td>
+<td>一个公司可以用 Kafka 可以收集各种服务的 Log，通过 Kafka 以统一接口服务的方式开放给各种 Consumer</td>
+</tr>
+<tr>
+<td>2</td>
+<td>消息系统</td>
+<td>解耦生产者和消费者、缓存消息等</td>
+</tr>
+<tr>
+<td>3</td>
+<td>用户活动跟踪</td>
+<td>用来记录 web 用户或者 APP 用户的各种活动，如网页搜索、搜索、点击，用户数据收集然后进行用户行为分析。</td>
+</tr>
+<tr>
+<td>4</td>
+<td>运营指标</td>
+<td>Kafka 也经常用来记录运营监控数据。包括收集各种分布式应用的数据，生产各种操作的集中反馈，比如报警和报告</td>
+</tr>
+<tr>
+<td>5</td>
+<td>流式处理</td>
+<td>比如 Spark Streaming 和 Storm</td>
+</tr>
+</tbody></table>
+<h2 id="4-Kafka-集群机制"><a href="#4-Kafka-集群机制" class="headerlink" title="4.Kafka 集群机制"></a>4.Kafka 集群机制</h2><ul>
+<li>Kafka 是天然支持集群的，哪怕是一个节点实际上也是集群模式</li>
+<li>Kafka 集群依赖于 Zookeeper 进行协调，并且在早期的 Kafka 版本中很多数据都是存放在 Zookeeper 的</li>
+<li>Kafka 节点只要注册到同一个 Zookeeper 上就代表它们是同一个集群的</li>
+<li>Kafka 通过 brokerId 来区分集群中的不同节点</li>
+</ul>
+<h2 id="5-Kafka-基础架构和术语名词"><a href="#5-Kafka-基础架构和术语名词" class="headerlink" title="5.Kafka 基础架构和术语名词"></a>5.Kafka 基础架构和术语名词</h2><p><img src="/kafka%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/1728636455352.png" alt="1728636455352"></p>
+<table>
+<thead>
+<tr>
+<th><strong>核心组件</strong></th>
+<th><strong>概念</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong><font color=red>Producer</font></strong></td>
+<td><strong>生产者，可以向 Broker topic 发布消息的客户端</strong></td>
+</tr>
+<tr>
+<td><strong><font color=red>Consumer</font></strong></td>
+<td><strong>消费者，从 Broker topic 订阅取消息的客户端</strong></td>
+</tr>
+<tr>
+<td><strong><font color=red>Broker</font></strong></td>
+<td><strong>Broker 是一个 kafka 实例，简单说就是一台 kafka 服务器，kafkaCluster 表示集群。</strong></td>
+</tr>
+<tr>
+<td><strong><font color=red>Topic</font></strong></td>
+<td><strong>主题,Kafka 将消息分门别类，每一类的消息称之为一个主题。可以理解为一个队列，生产者和消费者面向的都是一个 topic</strong></td>
+</tr>
+<tr>
+<td><strong><font color=red>Partition</font></strong></td>
+<td><strong>Topic 的分区，每个 Topic 可以有多个分区，同一个 Topic 在不同分区的数据是不重复的，每个 Partition 是一个有序的队列。分区作用是做负载，提高 kafka 的吞吐量。每个 partition 都由一系列有序的、不可变的消息组成，这些消息被连续的追加到 partition 中。partition 中的每个消息都有一个连续递增的序列号叫做 offset，偏移量 offset 在每个分区中是唯一的。</strong></td>
+</tr>
+<tr>
+<td><strong>Offset</strong></td>
+<td><strong>生产者 Offset：消息写入的时候，每一个分区都有一个 offset，这个 offset 就是生产者的 offset，同时也是这个分区的最新最大的 offset。 消费者 Offset：某个分区的 offset 情况。例如：生产者写入的 offset 是最新值是 10，当一个 Consumer 开始消费时，从 0 消费，一直消费到了 5，消费者的 offset 为 5。</strong></td>
+</tr>
+<tr>
+<td><strong>Replication</strong></td>
+<td><strong>Partition(分区)的副本。每个分区可以有多个 Replication，由一个 Leader 和若干个 Follower 组成。Leader 负责接收生产者 push 的消息和消费者 poll 消费消息。Follower 会实时从自己的 Leader 中同步数据保持同步。Leader 故障时,某个 Follower 会上位为新的 Leader。保证高可用</strong></td>
+</tr>
+<tr>
+<td><strong>Message</strong></td>
+<td><strong>kafka 集群存储的消息是以 topic 为类别记录的，每个消息（也叫记录 record）是由</strong></td>
+</tr>
+<tr>
+<td><strong><font color=red>ConsumerGroup(CG)</font></strong></td>
+<td><strong>消费者组，由多个 Consumer 组成，每个 ConsumerGroup 中可以有多个 consumer，每个 consumer 属于一个 ConsumerGroup。同一个 Topic 下的某一个分区只能被某个消费者组内的同一个消费者所消费，但可以被多个 consumer group 消费</strong></td>
+</tr>
+<tr>
+<td><strong>In-sync Replicas（ISR）</strong></td>
+<td><strong>（ISR）已同步副本：表示存活且副本都已和 Leader 同步的的 broker 集合，是 Leader 所有 replicas 副本的子集。如果某个副本节点宕机，该副本就会从 ISR 集合中剔除。</strong></td>
+</tr>
+</tbody></table>
+<p><strong>Kafka 中的 Broker、Topic、Consumer 都会注册到 zookeeper</strong></p>
+<h2 id="6-Events-Streams-Topics"><a href="#6-Events-Streams-Topics" class="headerlink" title="6.Events, Streams, Topics"></a><strong>6.Events, Streams, Topics</strong></h2><table>
+<thead>
+<tr>
+<th align="left"><strong>Event</strong></th>
+<th><strong>Event</strong>（事件），代表过去发生的一个事实(比如下了一个购物订单)。简单理解就是一条消息、一条记录，Event 是不可变的，但是很活跃，经常从一个地方流向另一个地方。</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Stream</strong></td>
+<td>事件流表示运动中的相关事件</td>
+</tr>
+<tr>
+<td align="left"><strong>Topic</strong></td>
+<td>当一个事件流进入 Kafka 之后，它就成为了一个 <strong>Topic</strong> 主题。所以，Topic 就是具体的事件流，也可以理解为一个 Topic 就是一个静止的 Stream。Topic 把相关的 Event 组织在一起，并且保存。一个 Topic 就像数据库中的一张表。</td>
+</tr>
+</tbody></table>
+<p><img src="/kafka%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/1728636757271.png" alt="1728636757271"></p>
+<h2 id="7-Partition-分区"><a href="#7-Partition-分区" class="headerlink" title="7.Partition 分区"></a><strong>7.Partition 分区</strong></h2><p><strong>Kafka 中 Topic 被分成多个 Partition 分区。Topic 是一个<font color=red>逻辑概念</font>，Partition 是最小的存储单元，掌握着一个 Topic 的部分数据。</strong></p>
+<p><img src="/kafka%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/1728636789696.png" alt="1728636789696"></p>
+<p><strong>每个 Partition 都是一个单独的 log 文件，每条记录都以追加的形式写入。</strong></p>
+<p><img src="/kafka%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/1728636808605.png" alt="1728636808605"></p>
+<h2 id="8-Offsets（偏移量）和消息的顺序"><a href="#8-Offsets（偏移量）和消息的顺序" class="headerlink" title="8.Offsets（偏移量）和消息的顺序"></a><strong>8.Offsets（偏移量）和消息的顺序</strong></h2><p><strong>Partition 中的每条记录都会被分配一个唯一的序号，称为 <strong>Offset</strong>（偏移量）。Offset 是一个递增的、不可变的数字，由 Kafka 自动维护。当一条记录写入 Partition 的时候，它就被追加到 log 文件的末尾，并被分配一个序号，作为 Offset。</strong></p>
+<p><img src="/kafka%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/1728636828326.png" alt="1728636828326"></p>
+<p><strong>如上图，这个 Topic 有 3 个 Partition 分区，向 Topic 发送消息的时候，实际上是被写入某一个 Partition，并赋予 Offset。消息的顺序性需要注意，一个 Topic 如果有多个 Partition 的话，那么从 Topic 这个层面来看，消息是无序的。但单独看 Partition 的话，Partition 内部消息是有序的。所以，一个 Partition 内部消息有序，一个 Topic 跨 Partition 是无序的。如果强制要求 Topic 整体有序，就只能让 Topic 只有一个 Partition。</strong></p>
+<p>更进一步，如何指定写入到那个分区？</p>
+<p><img src="/kafka%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/1728636842231.png" alt="1728636842231"></p>
+<h2 id="9-Partition-为-Kafka-提供了扩展能力"><a href="#9-Partition-为-Kafka-提供了扩展能力" class="headerlink" title="9. Partition 为 Kafka 提供了扩展能力"></a><strong>9. Partition 为 Kafka 提供了扩展能力</strong></h2><p><strong>一个 Kafka 集群由多个 Broker（就是 Server） 构成，每个 Broker 中含有集群的部分数据。Kafka 把 Topic 的多个 Partition 分布在多个 Broker 中。</strong></p>
+<p><img src="/kafka%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/1728636854878.png" alt="1728636854878"></p>
+<table>
+<thead>
+<tr>
+<th>扩容方便</th>
+<th>如果把 Topic 的所有 Partition 都放在一个 Broker 上，那么这个 Topic 的可扩展性就大大降低了，会受限于这个 Broker 的 IO 能力。把 Partition 分散开之后，Topic 就可以水平扩展</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>防止单点故障</td>
+<td>一个 Topic 可以被多个 Consumer 并行消费。如果 Topic 的所有 Partition 都在一个 Broker，那么支持的 Consumer 数量就有限，而分散之后，可以支持更多的 Consumer。</td>
+</tr>
+<tr>
+<td>高并发</td>
+<td>一个 Consumer 可以有多个实例，Partition 分布在多个 Broker 的话，Consumer 的多个实例就可以连接不同的 Broker，大大提升了消息处理能力。</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>中间件</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>elasticsearch中DevTools的CRUD和常见规则语句</title>
+    <url>/posts/67e1a025/</url>
+    <content><![CDATA[<h2 id="本文章全程使用-elasticsearch-的-DLS-语法"><a href="#本文章全程使用-elasticsearch-的-DLS-语法" class="headerlink" title="本文章全程使用 elasticsearch 的 DLS 语法"></a>本文章全程使用 elasticsearch 的 DLS 语法</h2><h3 id="一-常见-CRUD-语句"><a href="#一-常见-CRUD-语句" class="headerlink" title="一.常见 CRUD 语句"></a>一.常见 CRUD 语句</h3><h3 id="1-创建（索引文档）"><a href="#1-创建（索引文档）" class="headerlink" title="1. 创建（索引文档）"></a>1. <strong>创建（索引文档）</strong></h3><p>在创建文档时，你可以包含元数据和字段来定义安全级别：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">POST /&lt;index&gt;/_doc</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;user_id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;1234&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;security_level&quot;</span><span class="punctuation">:</span> <span class="string">&quot;internal&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;这是一个内部文档。&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-读取（带有-DLS-的搜索）"><a href="#2-读取（带有-DLS-的搜索）" class="headerlink" title="2. 读取（带有 DLS 的搜索）"></a>2. <strong>读取（带有 DLS 的搜索）</strong></h3><p>为了读取带有 DLS 的文档，你可以在角色中配置 DLS 查询。例如，拥有“内部”角色的用户只能查看标记为 <code>security_level: internal</code> 的文档。</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">GET /&lt;index&gt;/_search</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;query&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;bool&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;must&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;term&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;security_level&quot;</span><span class="punctuation">:</span> <span class="string">&quot;internal&quot;</span></span><br><span class="line">          <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>还可以在 Elasticsearch 的角色定义中应用 DLS。以下是一个带有 DLS 的角色定义示例：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">PUT /_security/role/internal_user</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;indices&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;names&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span> <span class="string">&quot;&lt;index&gt;&quot;</span> <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;privileges&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span> <span class="string">&quot;read&quot;</span> <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;query&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;term&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;security_level&quot;</span><span class="punctuation">:</span> <span class="string">&quot;internal&quot;</span> <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-更新（修改文档）"><a href="#3-更新（修改文档）" class="headerlink" title="3. 更新（修改文档）"></a>3. <strong>更新（修改文档）</strong></h3><p>如果用户有访问权限，可以使用文档 ID 来更新特定字段，同时保持对 <code>security_level</code> 的访问控制。</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">POST /&lt;index&gt;/_update/&lt;document_id&gt;</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;doc&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;更新后的内部文档内容。&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-删除（删除文档）"><a href="#4-删除（删除文档）" class="headerlink" title="4. 删除（删除文档）"></a>4. <strong>删除（删除文档）</strong></h3><p>对于删除操作，确保用户具有适当的角色，并且查询应用了正确的 <code>security_level</code>。</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">DELETE /&lt;index&gt;/_doc/&lt;document_id&gt;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="2-常见搜索规则"><a href="#2-常见搜索规则" class="headerlink" title="2.常见搜索规则"></a>2.常见搜索规则</h2><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">##修改数据</span><br><span class="line">POST post/_doc/<span class="number">1</span></span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;title&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ZT&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;desc&quot;</span><span class="punctuation">:</span> <span class="string">&quot;zt的描述&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;age&quot;</span><span class="punctuation">:</span> <span class="number">22</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line">##根据_id查询数据</span><br><span class="line"></span><br><span class="line">GET post/_doc/<span class="number">1</span>c1FFJIBLxkM6xpy_qpH</span><br><span class="line"></span><br><span class="line">##查询所有</span><br><span class="line">GET post/_search</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;query&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;match_all&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line">##删除</span><br><span class="line">DELETE /post</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">##查看索引结构</span><br><span class="line">GET post/_mapping</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">## 使用SQL查询</span><br><span class="line">POST /_sql?format=txt</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;query&quot;</span><span class="punctuation">:</span> <span class="string">&quot;SELECT * FROM post WHERE title LIKE &#x27;%ZT%&#x27; &quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line">##空格分词器</span><br><span class="line">POST _analyze</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;analyzer&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ik_max_word&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="string">&quot;你好欢迎来到ecs&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line">##建索引，初始化分词和搜索规则</span><br><span class="line">PUT post_v1</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;aliases&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;post&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;mappings&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;properties&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;title&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;text&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;analyzer&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ik_max_word&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;search_analyzer&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ik_smart&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;fields&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;keyword&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;keyword&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;ignore_above&quot;</span><span class="punctuation">:</span> <span class="number">256</span></span><br><span class="line">          <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;text&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;analyzer&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ik_max_word&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;search_analyzer&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ik_smart&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;fields&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;keyword&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;keyword&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;ignore_above&quot;</span><span class="punctuation">:</span> <span class="number">256</span></span><br><span class="line">          <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;tags&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;keyword&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;userId&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;keyword&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;createTime&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;date&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;updateTime&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;date&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;isDelete&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;keyword&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line">##查询java段新增的数据</span><br><span class="line">GET post/_search</span><br><span class="line"></span><br><span class="line">##查询---match(模糊查询)---term(精确查询)---regexp(正则表达式查询)</span><br><span class="line">GET post_v1/_search</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;query&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;bool&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;must&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span><span class="attr">&quot;term&quot;</span><span class="punctuation">:</span><span class="punctuation">&#123;</span> <span class="attr">&quot;tags&quot;</span><span class="punctuation">:</span> <span class="string">&quot;c++&quot;</span> <span class="punctuation">&#125;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="punctuation">&#123;</span><span class="attr">&quot;match&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;知识优加&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>中间件</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>解决windows下elasticsearch默认占用内存过大问题</title>
+    <url>/posts/c48a5e72/</url>
+    <content><![CDATA[<h2 id="解决方法-1"><a href="#解决方法-1" class="headerlink" title="解决方法 1"></a>解决方法 1</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">##<span class="number">1.</span>修改jvm.options文件 目录为 es/config/jvm.options</span><br><span class="line"></span><br><span class="line">##<span class="number">2.</span>使用文本编译器打开jvm.options</span><br><span class="line">##<span class="number">3.</span>找到 IMPORTANT: JVM heap size</span><br><span class="line">## IMPORTANT: JVM heap size</span><br><span class="line">##<span class="number">4.</span>去掉  -Xms4g 前面的 ## 注释</span><br><span class="line">## -Xms4g</span><br><span class="line">## -Xmx4g</span><br><span class="line">##修改后</span><br><span class="line">-Xms4g #JVM启动时的初始堆内存大小为4GB，具体大小可以按自己需求设置</span><br><span class="line">-Xmx4g #JVM可以使用的最大堆内存大小为4GB，具体大小可以按自己需求设置</span><br><span class="line"></span><br><span class="line">##保存并重启 es</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="解决方法-2"><a href="#解决方法-2" class="headerlink" title="解决方法 2"></a>解决方法 2</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">##去掉 elasticsearch.yml 里的#注释</span><br><span class="line"></span><br><span class="line">#bootstrap.memory_lock: <span class="literal">true</span></span><br><span class="line">##配置，修改后</span><br><span class="line">bootstrap.memory_lock: <span class="literal">true</span></span><br><span class="line"></span><br><span class="line">##保存并重启es</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>中间件</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>低成本创业-1</title>
+    <url>/posts/80026efd/</url>
+    <content><![CDATA[<h2 id="为什么要低成本创业"><a href="#为什么要低成本创业" class="headerlink" title="为什么要低成本创业"></a>为什么要低成本创业</h2><p><strong>创业者找 VC 商量能不能投资我?VC 一看，你这个项目有点早，用户需求和解决方案都没验证，你再跑一跑再找我</strong></p>
+<p>一般创始人都觉得自己很委屈：因为钱不够，无法验证业务；没法验证业务，就更拿不到钱了，这就陷入了一个更大的死循环。</p>
+<p>复盘一下业务方案，往往发现多数的效率都很低，”常常做的冗余不堪，甚至很多人还在用着 20 多年前”软件工程”里的老方法，用最原始的方法创业。</p>
+<p><strong>比如下面两个例子：</strong></p>
+<ul>
+<li><p>两个创始人验证同一个项目，比如都做 1 对 N 的线上编程小班课。第一个创业者，可能用了 300 万和 1 年多的时间，一直打磨产品和开发还没正式上线，一个订单都没拿到。</p>
+</li>
+<li><p>而另一个团队，同样 300 万，1 年时间已经尝试了 5 个产品模式，每个方案质量都很高，不断试错，不断转型，最后能让一个项目跑出来，成功融了一大笔钱。</p>
+</li>
+</ul>
+<h3 id="验证一个-idea-可行性，需要-300-万？30-万？3-万？"><a href="#验证一个-idea-可行性，需要-300-万？30-万？3-万？" class="headerlink" title="验证一个 idea 可行性，需要 300 万？30 万？3 万？"></a>验证一个 idea 可行性，需要 300 万？30 万？3 万？</h3><p>大家看，验证同一个 idea，不同人操盘，可能是 300 万和 30 万的区别，甚至有的人，花 3 万块钱就能验证</p>
+<p><strong>预热思考</strong></p>
+<p><strong>第一个题目是个案例设计题。</strong></p>
+<p>国外共享滑板项目很火，你可以理解为是一种新的摩拜单车，只是把自行车换成了电动滑板。国外这个项目最近融了一大笔钱，你觉得国内一定也能做，所以想立刻创业。</p>
+<p>好，问题来了:如果你有 300 万启动资金，你打算怎么启动这个项目?进一步说，如果你只有 10 万，想验证一下这个项目，可以搞定吗?</p>
+<p>这个题目非常有意思，很考验大家的验证能力，你可以想一想，你会怎么做?</p>
+<p><strong>第二个思考题是业务复盘题。</strong></p>
+<p>大家要思考:你现在的业务模式跑通了吗?如果是，你都验证了哪些部分?如果还没有，那还差哪些没有验证?下一步打算如何验证它，你有没有一些方法，可以大幅降低你验证的成本?</p>
+<p><strong>希望大家停下来认真想想，带着问题学习，听完这节课，相信你对这两个问题，会有一个全新的理解。</strong></p>
+<p><strong>低成本创业内容的三个重点：</strong></p>
+<ul>
+<li>解读浪费</li>
+<li>理解原则</li>
+<li>实操方法</li>
+</ul>
+<p>后面的内容将会继续补充…</p>
+]]></content>
+      <categories>
+        <category>MBA</category>
+      </categories>
+      <tags>
+        <tag>创业</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>力扣周记-24-9-7</title>
+    <url>/posts/ed39242/</url>
+    <content><![CDATA[<h2 id="258-各位相加"><a href="#258-各位相加" class="headerlink" title="258. 各位相加"></a><a href="https://leetcode.cn/problems/add-digits/">258. 各位相加</a></h2><p>给定一个非负整数 <code>num</code>，反复将各个位上的数字相加，直到结果为一位数。返回这个结果。</p>
+<p><strong>示例 1:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入: num = 38</span><br><span class="line">输出: 2</span><br><span class="line">解释: 各位相加的过程为：</span><br><span class="line">38 --&gt; 3 + 8 --&gt; 11</span><br><span class="line">11 --&gt; 1 + 1 --&gt; 2</span><br><span class="line">由于 2 是一位数，所以返回 2。</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 2:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入: num = 0</span><br><span class="line">输出: 0</span><br></pre></td></tr></table></figure>
+
+<p><strong>提示：</strong></p>
+<ul>
+<li><code>0 &lt;= num &lt;= 231 - 1</code></li>
+</ul>
+<p><strong>进阶：</strong>你可以不使用循环或者递归，在 <code>O(1)</code> 时间复杂度内解决这个问题吗？</p>
+<h3 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h3><ol>
+<li>能够被 9 整除的整数，各位上的数字加起来也必然能被 9 整除，所以，连续累加起来，最终必然就是 9。<ul>
+<li><code> 81 - 8 + 1 - 9、99 — 9 + 9 - 18 - 1 + 8 - 9 即 X%9 == 0 return 9</code></li>
+</ul>
+</li>
+<li>不能被 9 整除的整数，各位上的数字加起来，结果对 9 取模，和初始数对 9 取摸，是一样的，所以，连续累加起来，最终必然就是初始数对 9 取摸。<ul>
+<li><code>37 - 3 + 7 - 10 - 1 + 0 - 1  即 x%9 != 0 return x%9</code></li>
+</ul>
+</li>
+</ol>
+<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"># <span class="number">1.</span>没简化</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">addDigits</span><span class="params">(<span class="type">int</span> num)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(num &lt; <span class="number">9</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> num;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (num % <span class="number">9</span> == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">9</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> num % <span class="number">9</span>;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"># <span class="number">2.</span>简化</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">addDigits</span><span class="params">(<span class="type">int</span> num)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> (num - <span class="number">1</span>) % <span class="number">9</span> + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="1281-整数的各位积和之差"><a href="#1281-整数的各位积和之差" class="headerlink" title="1281. 整数的各位积和之差"></a><a href="https://leetcode.cn/problems/subtract-the-product-and-sum-of-digits-of-an-integer/">1281. 整数的各位积和之差</a></h2><p>给你一个整数 <code>n</code>，请你帮忙计算并返回该整数「各位数字之积」与「各位数字之和」的差。</p>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 234</span><br><span class="line">输出：15</span><br><span class="line">解释：</span><br><span class="line">各位数之积 = 2 * 3 * 4 = 24</span><br><span class="line">各位数之和 = 2 + 3 + 4 = 9</span><br><span class="line">结果 = 24 - 9 = 15</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 2：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 4421</span><br><span class="line">输出：21</span><br><span class="line">解释：</span><br><span class="line">各位数之积 = 4 * 4 * 2 * 1 = 32</span><br><span class="line">各位数之和 = 4 + 4 + 2 + 1 = 11</span><br><span class="line">结果 = 32 - 11 = 21</span><br></pre></td></tr></table></figure>
+
+<p><strong>提示：</strong></p>
+<ul>
+<li><code>1 &lt;= n &lt;= 10^5</code></li>
+</ul>
+<h3 id="解题思路-1"><a href="#解题思路-1" class="headerlink" title="解题思路"></a>解题思路</h3><p>我们只需要依次取出数字 n 中的各位数字，并计算各个数字的乘积 amass 以及数字和 add，最后返回 amass−add 即可。</p>
+<p>我们可以依次取出 n 的最低位来得到 n 的各位数字：</p>
+<p>通过「取模」操作 n%10 得到此时 n 的最低位。<br>通过「整除」操作 n&#x3D;⌊ n&#x2F;10 ⌋ 来去掉当前 n 的最低位。</p>
+<h3 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a>代码</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">    public int subtractProductAndSum(int n) &#123;</span><br><span class="line">        int amass=1,add=0;</span><br><span class="line">        while (n != 0) &#123;</span><br><span class="line">            int l = n % 10;</span><br><span class="line">            amass *= l;</span><br><span class="line">            add += l;</span><br><span class="line">            n /= 10;</span><br><span class="line">        &#125;</span><br><span class="line">        return amass - add;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="231-2-的幂"><a href="#231-2-的幂" class="headerlink" title="231. 2 的幂"></a><a href="https://leetcode.cn/problems/power-of-two/">231. 2 的幂</a></h3><p>给你一个整数 <code>n</code>，请你判断该整数是否是 2 的幂次方。如果是，返回 <code>true</code> ；否则，返回 <code>false</code> 。</p>
+<p>如果存在一个整数 <code>x</code> 使得 <code>n == 2x</code> ，则认为 <code>n</code> 是 2 的幂次方。</p>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 1</span><br><span class="line">输出：true</span><br><span class="line">解释：20 = 1</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 2：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 16</span><br><span class="line">输出：true</span><br><span class="line">解释：24 = 16</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 3：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 3</span><br><span class="line">输出：false</span><br></pre></td></tr></table></figure>
+
+<p><strong>提示：</strong></p>
+<ul>
+<li><code>-231 &lt;= n &lt;= 231 - 1</code></li>
+</ul>
+<p><strong>进阶：</strong>你能够不使用循环&#x2F;递归解决此问题吗？</p>
+<h3 id="解题思路-2"><a href="#解题思路-2" class="headerlink" title="解题思路"></a>解题思路</h3><p>若 n&#x3D;2^x</p>
+<p>且 x 为自然数（即 n 为 2 的幂），则一定满足以下条件：</p>
+<p>恒有 n &amp; (n - 1) &#x3D;&#x3D; 0，这是因为：</p>
+<ul>
+<li><p>n 二进制最高位为 1，其余所有位为 0；</p>
+</li>
+<li><p>n−1 二进制最高位为 0，其余所有位为 1；</p>
+</li>
+</ul>
+<p>一定满足 n &gt; 0。<br>因此，通过 n &gt; 0 且 n &amp; (n - 1) &#x3D;&#x3D; 0 即可判定是否满足 n&#x3D;2^x。</p>
+<h3 id="代码-2"><a href="#代码-2" class="headerlink" title="代码"></a>代码</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isPowerOfTwo</span><span class="params">(<span class="type">int</span> n)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span>  n &gt; <span class="number">0</span> &amp;&amp; (n &amp; (n - <span class="number">1</span>)) == <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="326-3-的幂"><a href="#326-3-的幂" class="headerlink" title="326. 3 的幂"></a><a href="https://leetcode.cn/problems/power-of-three/">326. 3 的幂</a></h3><p>给定一个整数，写一个函数来判断它是否是 3 的幂次方。如果是，返回 <code>true</code> ；否则，返回 <code>false</code> 。</p>
+<p>整数 <code>n</code> 是 3 的幂次方需满足：存在整数 <code>x</code> 使得 <code>n == 3x</code></p>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 27</span><br><span class="line">输出：true</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 2：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 0</span><br><span class="line">输出：false</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 3：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 9</span><br><span class="line">输出：true</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 4：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 45</span><br><span class="line">输出：false</span><br></pre></td></tr></table></figure>
+
+<p><strong>提示：</strong></p>
+<ul>
+<li><code>-231 &lt;= n &lt;= 231 - 1</code></li>
+</ul>
+<p><strong>进阶：</strong>你能不使用循环或者递归来完成本题吗？</p>
+<h3 id="解题思路-3"><a href="#解题思路-3" class="headerlink" title="解题思路"></a>解题思路</h3><p>做法是将 <em>n</em> 对 3 进行试除，直到 <em>n</em> 不再与 3 呈倍数关系，最后判断 <em>n</em> 是否为 30&#x3D;1 即可。</p>
+<h3 id="代码-3"><a href="#代码-3" class="headerlink" title="代码"></a>代码</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isPowerOfThree</span><span class="params">(<span class="type">int</span> n)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (n &lt;= <span class="number">0</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">while</span> (n % <span class="number">3</span> == <span class="number">0</span>) &#123;</span><br><span class="line">          n /= <span class="number">3</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> n == <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>力扣周记</tag>
       </tags>
   </entry>
   <entry>
@@ -48,6 +592,29 @@
       </categories>
       <tags>
         <tag>web项目</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Vue3+Ts+Vite的uniapp小程序项目中引入最新vant-weapp v1.11.2并且以后更新版本全部可用</title>
+    <url>/posts/4b60898c/</url>
+    <content><![CDATA[<h2 id="由于-vant-weapp-是针对微信小程序原生开发的使用在-uniapp-中并不能使用-npm-i-方式引入-vant-weapp，所以采用手动引入的方式"><a href="#由于-vant-weapp-是针对微信小程序原生开发的使用在-uniapp-中并不能使用-npm-i-方式引入-vant-weapp，所以采用手动引入的方式" class="headerlink" title="由于 vant-weapp 是针对微信小程序原生开发的使用在 uniapp 中并不能使用 npm i 方式引入 vant-weapp，所以采用手动引入的方式"></a>由于 vant-weapp 是针对微信小程序原生开发的使用在 uniapp 中并不能使用 npm i 方式引入 vant-weapp，所以采用手动引入的方式</h2><h2 id="1-下载vant-weapp包"><a href="#1-下载vant-weapp包" class="headerlink" title="1.下载vant-weapp包"></a>1.下载<a href="https://github.com/youzan/vant-weapp">vant-weapp</a>包</h2><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">//使用git下载</span></span><br><span class="line">git clone <span class="attr">https</span>:<span class="comment">//github.com/youzan/vant-weapp.git</span></span><br><span class="line"><span class="comment">//也可以直接下载zip文件</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="2-在项目-src-文件里面创建wxcomponents将下载的-vant-weapp-文件打开将里面的-dist-文件复制粘贴到wxcomponents中并且重命名为-vant-这样更好识别"><a href="#2-在项目-src-文件里面创建wxcomponents将下载的-vant-weapp-文件打开将里面的-dist-文件复制粘贴到wxcomponents中并且重命名为-vant-这样更好识别" class="headerlink" title="2.在项目 src 文件里面创建wxcomponents将下载的 vant-weapp 文件打开将里面的 dist 文件复制粘贴到wxcomponents中并且重命名为 vant(这样更好识别)"></a>2.在项目 src 文件里面创建<code>wxcomponents</code>将下载的 vant-weapp 文件打开将里面的 dist 文件复制粘贴到<code>wxcomponents</code>中并且重命名为 vant(这样更好识别)</h2><hr>
+<h2 id="3-打开-app-vue-文件在里添加-import-wxcomponents-vant-common-index-wxss"><a href="#3-打开-app-vue-文件在里添加-import-wxcomponents-vant-common-index-wxss" class="headerlink" title="3.打开 app.vue 文件在&lt;style lang=&quot;scss&quot;&gt;里添加@import &#39;@/wxcomponents/vant/common/index.wxss&#39;"></a>3.打开 app.vue 文件在<code>&lt;style lang=&quot;scss&quot;&gt;</code>里添加<code>@import &#39;@/wxcomponents/vant/common/index.wxss&#39;</code></h2><figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&lt;style lang=<span class="string">&quot;scss&quot;</span>&gt;</span><br><span class="line">  <span class="comment">//1.注意如果没有在vite为vue3配置@路径，请使用 2 @import</span></span><br><span class="line">  <span class="string">&#x27;@/wxcomponents/vant/common/index.wxss&#x27;</span> <span class="comment">//2.未配置配置@路径 @import</span></span><br><span class="line">  <span class="string">&#x27;/wxcomponents/vant/common/index.wxss&#x27;</span> ...省略</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="4-打开pages-json选择你是想全局还是局部引入"><a href="#4-打开pages-json选择你是想全局还是局部引入" class="headerlink" title="4.打开pages.json选择你是想全局还是局部引入"></a>4.打开<code>pages.json</code>选择你是想全局还是局部引入</h2><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">//1.全局引入在globalStyle中创建usingComponents里面放你想引入的样式，？怎么知道样式怎么引入！打开wxcomponents/vant,该文件下选你想要的</span></span><br><span class="line"><span class="string">&quot;globalStyle&quot;</span>: &#123;</span><br><span class="line"></span><br><span class="line">	...省略</span><br><span class="line"></span><br><span class="line">    <span class="string">&quot;usingComponents&quot;</span>: &#123;</span><br><span class="line">      <span class="string">&quot;van-button&quot;</span>: <span class="string">&quot;/wxcomponents/vant/button/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;van-cell&quot;</span>: <span class="string">&quot;/wxcomponents/vant/cell/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;van-cell-group&quot;</span>: <span class="string">&quot;/wxcomponents/vant/cell-group/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;van-icon&quot;</span>: <span class="string">&quot;/wxcomponents/vant/icon/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;van-image&quot;</span>: <span class="string">&quot;/wxcomponents/vant/image/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;van-row&quot;</span>: <span class="string">&quot;/wxcomponents/vant/row/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;van-col&quot;</span>: <span class="string">&quot;/wxcomponents/vant/col/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;van-popup&quot;</span>: <span class="string">&quot;/wxcomponents/vant/popup/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;van-toast&quot;</span>: <span class="string">&quot;/wxcomponents/vant/toast/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;van-card&quot;</span>: <span class="string">&quot;/wxcomponents/vant/card/index&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">//2.局部页面引入,以首页index引入&lt;van-button&gt;为例子</span></span><br><span class="line">    &#123;</span><br><span class="line">      <span class="string">&quot;path&quot;</span>: <span class="string">&quot;pages/index/index&quot;</span>,</span><br><span class="line">      <span class="string">&quot;style&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;navigationStyle&quot;</span>: <span class="string">&quot;custom&quot;</span>, <span class="comment">// 隐藏默认导航</span></span><br><span class="line">        <span class="string">&quot;navigationBarTextStyle&quot;</span>: <span class="string">&quot;white&quot;</span>,</span><br><span class="line">        <span class="string">&quot;navigationBarTitleText&quot;</span>: <span class="string">&quot;首页&quot;</span>,</span><br><span class="line">            <span class="string">&quot;usingComponents&quot;</span>: &#123;</span><br><span class="line">			      <span class="string">&quot;van-button&quot;</span>: <span class="string">&quot;/wxcomponents/vant/button/index&quot;</span>,</span><br><span class="line">			    &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>vue3</tag>
+        <tag>uniapp</tag>
+        <tag>小程序</tag>
       </tags>
   </entry>
   <entry>
@@ -662,467 +1229,6 @@
       </categories>
       <tags>
         <tag>Java框架</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>力扣周记-24-9-7</title>
-    <url>/posts/ed39242/</url>
-    <content><![CDATA[<h2 id="258-各位相加"><a href="#258-各位相加" class="headerlink" title="258. 各位相加"></a><a href="https://leetcode.cn/problems/add-digits/">258. 各位相加</a></h2><p>给定一个非负整数 <code>num</code>，反复将各个位上的数字相加，直到结果为一位数。返回这个结果。</p>
-<p><strong>示例 1:</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入: num = 38</span><br><span class="line">输出: 2</span><br><span class="line">解释: 各位相加的过程为：</span><br><span class="line">38 --&gt; 3 + 8 --&gt; 11</span><br><span class="line">11 --&gt; 1 + 1 --&gt; 2</span><br><span class="line">由于 2 是一位数，所以返回 2。</span><br></pre></td></tr></table></figure>
-
-<p><strong>示例 2:</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入: num = 0</span><br><span class="line">输出: 0</span><br></pre></td></tr></table></figure>
-
-<p><strong>提示：</strong></p>
-<ul>
-<li><code>0 &lt;= num &lt;= 231 - 1</code></li>
-</ul>
-<p><strong>进阶：</strong>你可以不使用循环或者递归，在 <code>O(1)</code> 时间复杂度内解决这个问题吗？</p>
-<h3 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h3><ol>
-<li>能够被 9 整除的整数，各位上的数字加起来也必然能被 9 整除，所以，连续累加起来，最终必然就是 9。<ul>
-<li><code> 81 - 8 + 1 - 9、99 — 9 + 9 - 18 - 1 + 8 - 9 即 X%9 == 0 return 9</code></li>
-</ul>
-</li>
-<li>不能被 9 整除的整数，各位上的数字加起来，结果对 9 取模，和初始数对 9 取摸，是一样的，所以，连续累加起来，最终必然就是初始数对 9 取摸。<ul>
-<li><code>37 - 3 + 7 - 10 - 1 + 0 - 1  即 x%9 != 0 return x%9</code></li>
-</ul>
-</li>
-</ol>
-<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"># <span class="number">1.</span>没简化</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">addDigits</span><span class="params">(<span class="type">int</span> num)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(num &lt; <span class="number">9</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> num;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (num % <span class="number">9</span> == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">9</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> num % <span class="number">9</span>;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"># <span class="number">2.</span>简化</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">addDigits</span><span class="params">(<span class="type">int</span> num)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> (num - <span class="number">1</span>) % <span class="number">9</span> + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h2 id="1281-整数的各位积和之差"><a href="#1281-整数的各位积和之差" class="headerlink" title="1281. 整数的各位积和之差"></a><a href="https://leetcode.cn/problems/subtract-the-product-and-sum-of-digits-of-an-integer/">1281. 整数的各位积和之差</a></h2><p>给你一个整数 <code>n</code>，请你帮忙计算并返回该整数「各位数字之积」与「各位数字之和」的差。</p>
-<p><strong>示例 1：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 234</span><br><span class="line">输出：15</span><br><span class="line">解释：</span><br><span class="line">各位数之积 = 2 * 3 * 4 = 24</span><br><span class="line">各位数之和 = 2 + 3 + 4 = 9</span><br><span class="line">结果 = 24 - 9 = 15</span><br></pre></td></tr></table></figure>
-
-<p><strong>示例 2：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 4421</span><br><span class="line">输出：21</span><br><span class="line">解释：</span><br><span class="line">各位数之积 = 4 * 4 * 2 * 1 = 32</span><br><span class="line">各位数之和 = 4 + 4 + 2 + 1 = 11</span><br><span class="line">结果 = 32 - 11 = 21</span><br></pre></td></tr></table></figure>
-
-<p><strong>提示：</strong></p>
-<ul>
-<li><code>1 &lt;= n &lt;= 10^5</code></li>
-</ul>
-<h3 id="解题思路-1"><a href="#解题思路-1" class="headerlink" title="解题思路"></a>解题思路</h3><p>我们只需要依次取出数字 n 中的各位数字，并计算各个数字的乘积 amass 以及数字和 add，最后返回 amass−add 即可。</p>
-<p>我们可以依次取出 n 的最低位来得到 n 的各位数字：</p>
-<p>通过「取模」操作 n%10 得到此时 n 的最低位。<br>通过「整除」操作 n&#x3D;⌊ n&#x2F;10 ⌋ 来去掉当前 n 的最低位。</p>
-<h3 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a>代码</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">    public int subtractProductAndSum(int n) &#123;</span><br><span class="line">        int amass=1,add=0;</span><br><span class="line">        while (n != 0) &#123;</span><br><span class="line">            int l = n % 10;</span><br><span class="line">            amass *= l;</span><br><span class="line">            add += l;</span><br><span class="line">            n /= 10;</span><br><span class="line">        &#125;</span><br><span class="line">        return amass - add;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h3 id="231-2-的幂"><a href="#231-2-的幂" class="headerlink" title="231. 2 的幂"></a><a href="https://leetcode.cn/problems/power-of-two/">231. 2 的幂</a></h3><p>给你一个整数 <code>n</code>，请你判断该整数是否是 2 的幂次方。如果是，返回 <code>true</code> ；否则，返回 <code>false</code> 。</p>
-<p>如果存在一个整数 <code>x</code> 使得 <code>n == 2x</code> ，则认为 <code>n</code> 是 2 的幂次方。</p>
-<p><strong>示例 1：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 1</span><br><span class="line">输出：true</span><br><span class="line">解释：20 = 1</span><br></pre></td></tr></table></figure>
-
-<p><strong>示例 2：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 16</span><br><span class="line">输出：true</span><br><span class="line">解释：24 = 16</span><br></pre></td></tr></table></figure>
-
-<p><strong>示例 3：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 3</span><br><span class="line">输出：false</span><br></pre></td></tr></table></figure>
-
-<p><strong>提示：</strong></p>
-<ul>
-<li><code>-231 &lt;= n &lt;= 231 - 1</code></li>
-</ul>
-<p><strong>进阶：</strong>你能够不使用循环&#x2F;递归解决此问题吗？</p>
-<h3 id="解题思路-2"><a href="#解题思路-2" class="headerlink" title="解题思路"></a>解题思路</h3><p>若 n&#x3D;2^x</p>
-<p>且 x 为自然数（即 n 为 2 的幂），则一定满足以下条件：</p>
-<p>恒有 n &amp; (n - 1) &#x3D;&#x3D; 0，这是因为：</p>
-<ul>
-<li><p>n 二进制最高位为 1，其余所有位为 0；</p>
-</li>
-<li><p>n−1 二进制最高位为 0，其余所有位为 1；</p>
-</li>
-</ul>
-<p>一定满足 n &gt; 0。<br>因此，通过 n &gt; 0 且 n &amp; (n - 1) &#x3D;&#x3D; 0 即可判定是否满足 n&#x3D;2^x。</p>
-<h3 id="代码-2"><a href="#代码-2" class="headerlink" title="代码"></a>代码</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isPowerOfTwo</span><span class="params">(<span class="type">int</span> n)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span>  n &gt; <span class="number">0</span> &amp;&amp; (n &amp; (n - <span class="number">1</span>)) == <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h3 id="326-3-的幂"><a href="#326-3-的幂" class="headerlink" title="326. 3 的幂"></a><a href="https://leetcode.cn/problems/power-of-three/">326. 3 的幂</a></h3><p>给定一个整数，写一个函数来判断它是否是 3 的幂次方。如果是，返回 <code>true</code> ；否则，返回 <code>false</code> 。</p>
-<p>整数 <code>n</code> 是 3 的幂次方需满足：存在整数 <code>x</code> 使得 <code>n == 3x</code></p>
-<p><strong>示例 1：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 27</span><br><span class="line">输出：true</span><br></pre></td></tr></table></figure>
-
-<p><strong>示例 2：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 0</span><br><span class="line">输出：false</span><br></pre></td></tr></table></figure>
-
-<p><strong>示例 3：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 9</span><br><span class="line">输出：true</span><br></pre></td></tr></table></figure>
-
-<p><strong>示例 4：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：n = 45</span><br><span class="line">输出：false</span><br></pre></td></tr></table></figure>
-
-<p><strong>提示：</strong></p>
-<ul>
-<li><code>-231 &lt;= n &lt;= 231 - 1</code></li>
-</ul>
-<p><strong>进阶：</strong>你能不使用循环或者递归来完成本题吗？</p>
-<h3 id="解题思路-3"><a href="#解题思路-3" class="headerlink" title="解题思路"></a>解题思路</h3><p>做法是将 <em>n</em> 对 3 进行试除，直到 <em>n</em> 不再与 3 呈倍数关系，最后判断 <em>n</em> 是否为 30&#x3D;1 即可。</p>
-<h3 id="代码-3"><a href="#代码-3" class="headerlink" title="代码"></a>代码</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isPowerOfThree</span><span class="params">(<span class="type">int</span> n)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (n &lt;= <span class="number">0</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">while</span> (n % <span class="number">3</span> == <span class="number">0</span>) &#123;</span><br><span class="line">          n /= <span class="number">3</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> n == <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>算法</category>
-      </categories>
-      <tags>
-        <tag>力扣周记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>低成本创业-1</title>
-    <url>/posts/80026efd/</url>
-    <content><![CDATA[<h2 id="为什么要低成本创业"><a href="#为什么要低成本创业" class="headerlink" title="为什么要低成本创业"></a>为什么要低成本创业</h2><p><strong>创业者找 VC 商量能不能投资我?VC 一看，你这个项目有点早，用户需求和解决方案都没验证，你再跑一跑再找我</strong></p>
-<p>一般创始人都觉得自己很委屈：因为钱不够，无法验证业务；没法验证业务，就更拿不到钱了，这就陷入了一个更大的死循环。</p>
-<p>复盘一下业务方案，往往发现多数的效率都很低，”常常做的冗余不堪，甚至很多人还在用着 20 多年前”软件工程”里的老方法，用最原始的方法创业。</p>
-<p><strong>比如下面两个例子：</strong></p>
-<ul>
-<li><p>两个创始人验证同一个项目，比如都做 1 对 N 的线上编程小班课。第一个创业者，可能用了 300 万和 1 年多的时间，一直打磨产品和开发还没正式上线，一个订单都没拿到。</p>
-</li>
-<li><p>而另一个团队，同样 300 万，1 年时间已经尝试了 5 个产品模式，每个方案质量都很高，不断试错，不断转型，最后能让一个项目跑出来，成功融了一大笔钱。</p>
-</li>
-</ul>
-<h3 id="验证一个-idea-可行性，需要-300-万？30-万？3-万？"><a href="#验证一个-idea-可行性，需要-300-万？30-万？3-万？" class="headerlink" title="验证一个 idea 可行性，需要 300 万？30 万？3 万？"></a>验证一个 idea 可行性，需要 300 万？30 万？3 万？</h3><p>大家看，验证同一个 idea，不同人操盘，可能是 300 万和 30 万的区别，甚至有的人，花 3 万块钱就能验证</p>
-<p><strong>预热思考</strong></p>
-<p><strong>第一个题目是个案例设计题。</strong></p>
-<p>国外共享滑板项目很火，你可以理解为是一种新的摩拜单车，只是把自行车换成了电动滑板。国外这个项目最近融了一大笔钱，你觉得国内一定也能做，所以想立刻创业。</p>
-<p>好，问题来了:如果你有 300 万启动资金，你打算怎么启动这个项目?进一步说，如果你只有 10 万，想验证一下这个项目，可以搞定吗?</p>
-<p>这个题目非常有意思，很考验大家的验证能力，你可以想一想，你会怎么做?</p>
-<p><strong>第二个思考题是业务复盘题。</strong></p>
-<p>大家要思考:你现在的业务模式跑通了吗?如果是，你都验证了哪些部分?如果还没有，那还差哪些没有验证?下一步打算如何验证它，你有没有一些方法，可以大幅降低你验证的成本?</p>
-<p><strong>希望大家停下来认真想想，带着问题学习，听完这节课，相信你对这两个问题，会有一个全新的理解。</strong></p>
-<p><strong>低成本创业内容的三个重点：</strong></p>
-<ul>
-<li>解读浪费</li>
-<li>理解原则</li>
-<li>实操方法</li>
-</ul>
-<p>后面的内容将会继续补充…</p>
-]]></content>
-      <categories>
-        <category>MBA</category>
-      </categories>
-      <tags>
-        <tag>创业</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>解决windows下elasticsearch默认占用内存过大问题</title>
-    <url>/posts/c48a5e72/</url>
-    <content><![CDATA[<h2 id="解决方法-1"><a href="#解决方法-1" class="headerlink" title="解决方法 1"></a>解决方法 1</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">##<span class="number">1.</span>修改jvm.options文件 目录为 es/config/jvm.options</span><br><span class="line"></span><br><span class="line">##<span class="number">2.</span>使用文本编译器打开jvm.options</span><br><span class="line">##<span class="number">3.</span>找到 IMPORTANT: JVM heap size</span><br><span class="line">## IMPORTANT: JVM heap size</span><br><span class="line">##<span class="number">4.</span>去掉  -Xms4g 前面的 ## 注释</span><br><span class="line">## -Xms4g</span><br><span class="line">## -Xmx4g</span><br><span class="line">##修改后</span><br><span class="line">-Xms4g #JVM启动时的初始堆内存大小为4GB，具体大小可以按自己需求设置</span><br><span class="line">-Xmx4g #JVM可以使用的最大堆内存大小为4GB，具体大小可以按自己需求设置</span><br><span class="line"></span><br><span class="line">##保存并重启 es</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h2 id="解决方法-2"><a href="#解决方法-2" class="headerlink" title="解决方法 2"></a>解决方法 2</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">##去掉 elasticsearch.yml 里的#注释</span><br><span class="line"></span><br><span class="line">#bootstrap.memory_lock: <span class="literal">true</span></span><br><span class="line">##配置，修改后</span><br><span class="line">bootstrap.memory_lock: <span class="literal">true</span></span><br><span class="line"></span><br><span class="line">##保存并重启es</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>笔记</category>
-      </categories>
-      <tags>
-        <tag>中间件</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>elasticsearch中DevTools的CRUD和常见规则语句</title>
-    <url>/posts/67e1a025/</url>
-    <content><![CDATA[<h2 id="本文章全程使用-elasticsearch-的-DLS-语法"><a href="#本文章全程使用-elasticsearch-的-DLS-语法" class="headerlink" title="本文章全程使用 elasticsearch 的 DLS 语法"></a>本文章全程使用 elasticsearch 的 DLS 语法</h2><h3 id="一-常见-CRUD-语句"><a href="#一-常见-CRUD-语句" class="headerlink" title="一.常见 CRUD 语句"></a>一.常见 CRUD 语句</h3><h3 id="1-创建（索引文档）"><a href="#1-创建（索引文档）" class="headerlink" title="1. 创建（索引文档）"></a>1. <strong>创建（索引文档）</strong></h3><p>在创建文档时，你可以包含元数据和字段来定义安全级别：</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">POST /&lt;index&gt;/_doc</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;user_id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;1234&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;security_level&quot;</span><span class="punctuation">:</span> <span class="string">&quot;internal&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;这是一个内部文档。&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="2-读取（带有-DLS-的搜索）"><a href="#2-读取（带有-DLS-的搜索）" class="headerlink" title="2. 读取（带有 DLS 的搜索）"></a>2. <strong>读取（带有 DLS 的搜索）</strong></h3><p>为了读取带有 DLS 的文档，你可以在角色中配置 DLS 查询。例如，拥有“内部”角色的用户只能查看标记为 <code>security_level: internal</code> 的文档。</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">GET /&lt;index&gt;/_search</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;query&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;bool&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;must&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;term&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;security_level&quot;</span><span class="punctuation">:</span> <span class="string">&quot;internal&quot;</span></span><br><span class="line">          <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>还可以在 Elasticsearch 的角色定义中应用 DLS。以下是一个带有 DLS 的角色定义示例：</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">PUT /_security/role/internal_user</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;indices&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;names&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span> <span class="string">&quot;&lt;index&gt;&quot;</span> <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;privileges&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span> <span class="string">&quot;read&quot;</span> <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;query&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;term&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="attr">&quot;security_level&quot;</span><span class="punctuation">:</span> <span class="string">&quot;internal&quot;</span> <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h3 id="3-更新（修改文档）"><a href="#3-更新（修改文档）" class="headerlink" title="3. 更新（修改文档）"></a>3. <strong>更新（修改文档）</strong></h3><p>如果用户有访问权限，可以使用文档 ID 来更新特定字段，同时保持对 <code>security_level</code> 的访问控制。</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">POST /&lt;index&gt;/_update/&lt;document_id&gt;</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;doc&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;更新后的内部文档内容。&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h3 id="4-删除（删除文档）"><a href="#4-删除（删除文档）" class="headerlink" title="4. 删除（删除文档）"></a>4. <strong>删除（删除文档）</strong></h3><p>对于删除操作，确保用户具有适当的角色，并且查询应用了正确的 <code>security_level</code>。</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">DELETE /&lt;index&gt;/_doc/&lt;document_id&gt;</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h2 id="2-常见搜索规则"><a href="#2-常见搜索规则" class="headerlink" title="2.常见搜索规则"></a>2.常见搜索规则</h2><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">##修改数据</span><br><span class="line">POST post/_doc/<span class="number">1</span></span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;title&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ZT&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;desc&quot;</span><span class="punctuation">:</span> <span class="string">&quot;zt的描述&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;age&quot;</span><span class="punctuation">:</span> <span class="number">22</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line">##根据_id查询数据</span><br><span class="line"></span><br><span class="line">GET post/_doc/<span class="number">1</span>c1FFJIBLxkM6xpy_qpH</span><br><span class="line"></span><br><span class="line">##查询所有</span><br><span class="line">GET post/_search</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;query&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;match_all&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line">##删除</span><br><span class="line">DELETE /post</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">##查看索引结构</span><br><span class="line">GET post/_mapping</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">## 使用SQL查询</span><br><span class="line">POST /_sql?format=txt</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;query&quot;</span><span class="punctuation">:</span> <span class="string">&quot;SELECT * FROM post WHERE title LIKE &#x27;%ZT%&#x27; &quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line">##空格分词器</span><br><span class="line">POST _analyze</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;analyzer&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ik_max_word&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="string">&quot;你好欢迎来到ecs&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line">##建索引，初始化分词和搜索规则</span><br><span class="line">PUT post_v1</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;aliases&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;post&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;mappings&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;properties&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;title&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;text&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;analyzer&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ik_max_word&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;search_analyzer&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ik_smart&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;fields&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;keyword&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;keyword&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;ignore_above&quot;</span><span class="punctuation">:</span> <span class="number">256</span></span><br><span class="line">          <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;text&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;analyzer&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ik_max_word&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;search_analyzer&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ik_smart&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;fields&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;keyword&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;keyword&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;ignore_above&quot;</span><span class="punctuation">:</span> <span class="number">256</span></span><br><span class="line">          <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;tags&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;keyword&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;userId&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;keyword&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;createTime&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;date&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;updateTime&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;date&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;isDelete&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;keyword&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line">##查询java段新增的数据</span><br><span class="line">GET post/_search</span><br><span class="line"></span><br><span class="line">##查询---match(模糊查询)---term(精确查询)---regexp(正则表达式查询)</span><br><span class="line">GET post_v1/_search</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;query&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;bool&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;must&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span><span class="attr">&quot;term&quot;</span><span class="punctuation">:</span><span class="punctuation">&#123;</span> <span class="attr">&quot;tags&quot;</span><span class="punctuation">:</span> <span class="string">&quot;c++&quot;</span> <span class="punctuation">&#125;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="punctuation">&#123;</span><span class="attr">&quot;match&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;知识优加&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">&#125;</span></span><br><span class="line">      <span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>笔记</category>
-      </categories>
-      <tags>
-        <tag>中间件</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>kafka学习笔记1</title>
-    <url>/posts/ab414b1a/</url>
-    <content><![CDATA[<h2 id="1-Kafka-是什么"><a href="#1-Kafka-是什么" class="headerlink" title="1.Kafka 是什么?"></a>1.Kafka 是什么?</h2><p><strong>Kafka</strong>是 Apache 开源的一款基于<strong>zookeeper</strong>协调的分布式消息系统，具有高吞吐率、高性能、实时、高可靠等特点，可实时处理流式数据。它最初由 LinkedIn 公司开发，使用<strong>Scala</strong>语言编写。</p>
-<p><strong>Kafka</strong>历经数年的发展，从最初纯粹的消息引擎，到近几年开始在流处理平台生态圈发力，多个组织或公司发布了各种不同特性的产品。</p>
-<h2 id="2-Kafka-能干嘛"><a href="#2-Kafka-能干嘛" class="headerlink" title="2.Kafka 能干嘛?"></a>2.Kafka 能干嘛?</h2><p><strong>Kafka 特点</strong></p>
-<ul>
-<li>高吞吐量、低延迟：即使是非常普通的硬件 Kafka 也可以支持每秒数百万的消息，它的延迟最低只有几毫秒</li>
-<li>持久性：支持消息持久化，即使数 TB 级别的消息也能够保持长时间的稳定性能。</li>
-<li>可靠性：支持数据备份防止丢失</li>
-<li>容错性：支持通过 Kafka 服务器和消费机集群来分区消息，允许集群中的节点失败（若分区副本数量为 n，则允许 n-1 个节点失败）</li>
-<li>高并发：单机可支持数千个客户端同时读写，支持在线水平扩展。可无缝对接 hadoop、strom、spark 等，支持 Hadoop 并行数据加载</li>
-</ul>
-<h2 id="3-Kafka-常用于？"><a href="#3-Kafka-常用于？" class="headerlink" title="3.Kafka 常用于？"></a>3.Kafka 常用于？</h2><table>
-<thead>
-<tr>
-<th>ID</th>
-<th>设计目标</th>
-<th>功能</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>1</td>
-<td>日志收集</td>
-<td>一个公司可以用 Kafka 可以收集各种服务的 Log，通过 Kafka 以统一接口服务的方式开放给各种 Consumer</td>
-</tr>
-<tr>
-<td>2</td>
-<td>消息系统</td>
-<td>解耦生产者和消费者、缓存消息等</td>
-</tr>
-<tr>
-<td>3</td>
-<td>用户活动跟踪</td>
-<td>用来记录 web 用户或者 APP 用户的各种活动，如网页搜索、搜索、点击，用户数据收集然后进行用户行为分析。</td>
-</tr>
-<tr>
-<td>4</td>
-<td>运营指标</td>
-<td>Kafka 也经常用来记录运营监控数据。包括收集各种分布式应用的数据，生产各种操作的集中反馈，比如报警和报告</td>
-</tr>
-<tr>
-<td>5</td>
-<td>流式处理</td>
-<td>比如 Spark Streaming 和 Storm</td>
-</tr>
-</tbody></table>
-<h2 id="4-Kafka-集群机制"><a href="#4-Kafka-集群机制" class="headerlink" title="4.Kafka 集群机制"></a>4.Kafka 集群机制</h2><ul>
-<li>Kafka 是天然支持集群的，哪怕是一个节点实际上也是集群模式</li>
-<li>Kafka 集群依赖于 Zookeeper 进行协调，并且在早期的 Kafka 版本中很多数据都是存放在 Zookeeper 的</li>
-<li>Kafka 节点只要注册到同一个 Zookeeper 上就代表它们是同一个集群的</li>
-<li>Kafka 通过 brokerId 来区分集群中的不同节点</li>
-</ul>
-<h2 id="5-Kafka-基础架构和术语名词"><a href="#5-Kafka-基础架构和术语名词" class="headerlink" title="5.Kafka 基础架构和术语名词"></a>5.Kafka 基础架构和术语名词</h2><p><img src="/kafka%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/1728636455352.png" alt="1728636455352"></p>
-<table>
-<thead>
-<tr>
-<th><strong>核心组件</strong></th>
-<th><strong>概念</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong><font color=red>Producer</font></strong></td>
-<td><strong>生产者，可以向 Broker topic 发布消息的客户端</strong></td>
-</tr>
-<tr>
-<td><strong><font color=red>Consumer</font></strong></td>
-<td><strong>消费者，从 Broker topic 订阅取消息的客户端</strong></td>
-</tr>
-<tr>
-<td><strong><font color=red>Broker</font></strong></td>
-<td><strong>Broker 是一个 kafka 实例，简单说就是一台 kafka 服务器，kafkaCluster 表示集群。</strong></td>
-</tr>
-<tr>
-<td><strong><font color=red>Topic</font></strong></td>
-<td><strong>主题,Kafka 将消息分门别类，每一类的消息称之为一个主题。可以理解为一个队列，生产者和消费者面向的都是一个 topic</strong></td>
-</tr>
-<tr>
-<td><strong><font color=red>Partition</font></strong></td>
-<td><strong>Topic 的分区，每个 Topic 可以有多个分区，同一个 Topic 在不同分区的数据是不重复的，每个 Partition 是一个有序的队列。分区作用是做负载，提高 kafka 的吞吐量。每个 partition 都由一系列有序的、不可变的消息组成，这些消息被连续的追加到 partition 中。partition 中的每个消息都有一个连续递增的序列号叫做 offset，偏移量 offset 在每个分区中是唯一的。</strong></td>
-</tr>
-<tr>
-<td><strong>Offset</strong></td>
-<td><strong>生产者 Offset：消息写入的时候，每一个分区都有一个 offset，这个 offset 就是生产者的 offset，同时也是这个分区的最新最大的 offset。 消费者 Offset：某个分区的 offset 情况。例如：生产者写入的 offset 是最新值是 10，当一个 Consumer 开始消费时，从 0 消费，一直消费到了 5，消费者的 offset 为 5。</strong></td>
-</tr>
-<tr>
-<td><strong>Replication</strong></td>
-<td><strong>Partition(分区)的副本。每个分区可以有多个 Replication，由一个 Leader 和若干个 Follower 组成。Leader 负责接收生产者 push 的消息和消费者 poll 消费消息。Follower 会实时从自己的 Leader 中同步数据保持同步。Leader 故障时,某个 Follower 会上位为新的 Leader。保证高可用</strong></td>
-</tr>
-<tr>
-<td><strong>Message</strong></td>
-<td><strong>kafka 集群存储的消息是以 topic 为类别记录的，每个消息（也叫记录 record）是由</strong></td>
-</tr>
-<tr>
-<td><strong><font color=red>ConsumerGroup(CG)</font></strong></td>
-<td><strong>消费者组，由多个 Consumer 组成，每个 ConsumerGroup 中可以有多个 consumer，每个 consumer 属于一个 ConsumerGroup。同一个 Topic 下的某一个分区只能被某个消费者组内的同一个消费者所消费，但可以被多个 consumer group 消费</strong></td>
-</tr>
-<tr>
-<td><strong>In-sync Replicas（ISR）</strong></td>
-<td><strong>（ISR）已同步副本：表示存活且副本都已和 Leader 同步的的 broker 集合，是 Leader 所有 replicas 副本的子集。如果某个副本节点宕机，该副本就会从 ISR 集合中剔除。</strong></td>
-</tr>
-</tbody></table>
-<p><strong>Kafka 中的 Broker、Topic、Consumer 都会注册到 zookeeper</strong></p>
-<h2 id="6-Events-Streams-Topics"><a href="#6-Events-Streams-Topics" class="headerlink" title="6.Events, Streams, Topics"></a><strong>6.Events, Streams, Topics</strong></h2><table>
-<thead>
-<tr>
-<th align="left"><strong>Event</strong></th>
-<th><strong>Event</strong>（事件），代表过去发生的一个事实(比如下了一个购物订单)。简单理解就是一条消息、一条记录，Event 是不可变的，但是很活跃，经常从一个地方流向另一个地方。</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left"><strong>Stream</strong></td>
-<td>事件流表示运动中的相关事件</td>
-</tr>
-<tr>
-<td align="left"><strong>Topic</strong></td>
-<td>当一个事件流进入 Kafka 之后，它就成为了一个 <strong>Topic</strong> 主题。所以，Topic 就是具体的事件流，也可以理解为一个 Topic 就是一个静止的 Stream。Topic 把相关的 Event 组织在一起，并且保存。一个 Topic 就像数据库中的一张表。</td>
-</tr>
-</tbody></table>
-<p><img src="/kafka%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/1728636757271.png" alt="1728636757271"></p>
-<h2 id="7-Partition-分区"><a href="#7-Partition-分区" class="headerlink" title="7.Partition 分区"></a><strong>7.Partition 分区</strong></h2><p><strong>Kafka 中 Topic 被分成多个 Partition 分区。Topic 是一个<font color=red>逻辑概念</font>，Partition 是最小的存储单元，掌握着一个 Topic 的部分数据。</strong></p>
-<p><img src="/kafka%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/1728636789696.png" alt="1728636789696"></p>
-<p><strong>每个 Partition 都是一个单独的 log 文件，每条记录都以追加的形式写入。</strong></p>
-<p><img src="/kafka%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/1728636808605.png" alt="1728636808605"></p>
-<h2 id="8-Offsets（偏移量）和消息的顺序"><a href="#8-Offsets（偏移量）和消息的顺序" class="headerlink" title="8.Offsets（偏移量）和消息的顺序"></a><strong>8.Offsets（偏移量）和消息的顺序</strong></h2><p><strong>Partition 中的每条记录都会被分配一个唯一的序号，称为 <strong>Offset</strong>（偏移量）。Offset 是一个递增的、不可变的数字，由 Kafka 自动维护。当一条记录写入 Partition 的时候，它就被追加到 log 文件的末尾，并被分配一个序号，作为 Offset。</strong></p>
-<p><img src="/kafka%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/1728636828326.png" alt="1728636828326"></p>
-<p><strong>如上图，这个 Topic 有 3 个 Partition 分区，向 Topic 发送消息的时候，实际上是被写入某一个 Partition，并赋予 Offset。消息的顺序性需要注意，一个 Topic 如果有多个 Partition 的话，那么从 Topic 这个层面来看，消息是无序的。但单独看 Partition 的话，Partition 内部消息是有序的。所以，一个 Partition 内部消息有序，一个 Topic 跨 Partition 是无序的。如果强制要求 Topic 整体有序，就只能让 Topic 只有一个 Partition。</strong></p>
-<p>更进一步，如何指定写入到那个分区？</p>
-<p><img src="/kafka%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/1728636842231.png" alt="1728636842231"></p>
-<h2 id="9-Partition-为-Kafka-提供了扩展能力"><a href="#9-Partition-为-Kafka-提供了扩展能力" class="headerlink" title="9. Partition 为 Kafka 提供了扩展能力"></a><strong>9. Partition 为 Kafka 提供了扩展能力</strong></h2><p><strong>一个 Kafka 集群由多个 Broker（就是 Server） 构成，每个 Broker 中含有集群的部分数据。Kafka 把 Topic 的多个 Partition 分布在多个 Broker 中。</strong></p>
-<p><img src="/kafka%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/1728636854878.png" alt="1728636854878"></p>
-<table>
-<thead>
-<tr>
-<th>扩容方便</th>
-<th>如果把 Topic 的所有 Partition 都放在一个 Broker 上，那么这个 Topic 的可扩展性就大大降低了，会受限于这个 Broker 的 IO 能力。把 Partition 分散开之后，Topic 就可以水平扩展</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>防止单点故障</td>
-<td>一个 Topic 可以被多个 Consumer 并行消费。如果 Topic 的所有 Partition 都在一个 Broker，那么支持的 Consumer 数量就有限，而分散之后，可以支持更多的 Consumer。</td>
-</tr>
-<tr>
-<td>高并发</td>
-<td>一个 Consumer 可以有多个实例，Partition 分布在多个 Broker 的话，Consumer 的多个实例就可以连接不同的 Broker，大大提升了消息处理能力。</td>
-</tr>
-</tbody></table>
-]]></content>
-      <categories>
-        <category>笔记</category>
-      </categories>
-      <tags>
-        <tag>中间件</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Java面试篇-集合</title>
-    <url>/posts/2effe69d/</url>
-    <content><![CDATA[<h2 id="1-集合"><a href="#1-集合" class="headerlink" title="1.集合"></a>1.集合</h2><h3 id="1-1-Collection"><a href="#1-1-Collection" class="headerlink" title="1.1 Collection"></a>1.1 Collection</h3><h4 id="1-1-1-set：无序、不可重复的集合"><a href="#1-1-1-set：无序、不可重复的集合" class="headerlink" title="1.1.1 set：无序、不可重复的集合"></a>1.1.1 set：无序、不可重复的集合</h4><ul>
-<li>TreeSet：基于红黑树实现，支持有序性操作，列如根据一个范围查找元素的操作。</li>
-<li>HashSet：基于哈西表实现，支持快速查找，但不支持有序性操作。</li>
-<li>LinkedHashSet：具有 HashSet 的查找效率，且内部使用双向链表维护元素的插入顺序。</li>
-</ul>
-<h4 id="1-1-2-List：有序、重复的集合"><a href="#1-1-2-List：有序、重复的集合" class="headerlink" title="1.1.2 List：有序、重复的集合"></a>1.1.2 List：有序、重复的集合</h4><ul>
-<li>ArrayList：基于动态数组实现，支持随机访问。</li>
-<li>ArrayList底层？ 实现了 List 接口，是顺序容器，即元素存放的数据与放进去的顺序相同，允许放入 null 元素，底层通过数组实现。每个 ArrayList 都有一个容器，表示底层数组的实际大小，容器内存储元素的个数不能多于当前的容量。当添加元素且容量不足时会自动增大底层数组的大小.</li>
-<li>ArrayList 自动扩容？每当向数组添加元素时，都要去检查一下添加元素后的个数是否会超出当前数组的长度，超出就将数组扩容，以满足添加数据的需求。扩容通过 ensureCapcity 方法实现。</li>
-<li>ArrayList的Fail-Fast机制？ArrayList 也采用了快速失败的机制，通过记录 modCount 参数实现。</li>
-<li>Vector：和 ArrayList 类似，但它是线程安全的。</li>
-<li>LinkedList：基于双向链表实现，只能顺序访问，但是可以快速地在链表中间插入和删除元素，不仅如此，LinkedList 还可以用作栈、队列和双向队列.</li>
-</ul>
-<h4 id="1-1-3-Queue：一种队列集合实现"><a href="#1-1-3-Queue：一种队列集合实现" class="headerlink" title="1.1.3 Queue：一种队列集合实现"></a>1.1.3 Queue：一种队列集合实现</h4><ul>
-<li>PriorityQueue：基于堆结构实现，可以用它来实现优先队列.</li>
-</ul>
-<h3 id="1-2-Map：具有映射关系的集合"><a href="#1-2-Map：具有映射关系的集合" class="headerlink" title="1.2 Map：具有映射关系的集合"></a>1.2 Map：具有映射关系的集合</h3><ul>
-<li>TreeMap：基于红黑树实现。是一个有序的 key-value 集合，</li>
-<li>HashMap：1.7 基于哈希表实现，1.8 基于数组+链表+红黑树。存储的是 key-value 类型的数据，其中 key 值不允许重复，key 重复会覆盖，value 运行重复数据存储无序（这里的无序指的是插入顺序和取出顺序是不一致的 key 和 value 都允许为空，但是只能有一个空的 key）。加锁可以保证线程安全。</li>
-<li>HashTable：和 HashMap 类似（其实就是加锁了 synchronized 锁），但它是线程安全的，这意味着同一时刻多个线程可以同时写入 HashTable 并且不会导致数据不一致。它是遗留类，不应该去使用它。现在可以使用 ConcurrentHashMap 来支持线程安全，并且 ConurrentHashMap 的效率会更高。</li>
-<li>LinkedHashMap：使用双向链表来维护元素的顺序，顺序为插入顺序或者最近最少使用顺序。</li>
-</ul>
-]]></content>
-      <categories>
-        <category>面试</category>
-      </categories>
-      <tags>
-        <tag>Java 基础</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Java面试篇-并发-并发基础</title>
-    <url>/posts/48c3c2af/</url>
-    <content><![CDATA[<h2 id="2-并发-并发基础"><a href="#2-并发-并发基础" class="headerlink" title="2.并发-并发基础"></a>2.并发-并发基础</h2><h3 id="2-1多线程的出现是要解决什么问题？本质是什么？"><a href="#2-1多线程的出现是要解决什么问题？本质是什么？" class="headerlink" title="2.1多线程的出现是要解决什么问题？本质是什么？"></a>2.1多线程的出现是要解决什么问题？本质是什么？</h3><p>CPU、内存、I&#x2F;O 设备的速度是有极大差异的，为了合理利用 CPU 的高性能，平衡这三者的速度差异，计算机体系结构、操作系统、编程程序都做出了贡献，主要体现为：</p>
-<ul>
-<li>CPU 增加了缓存，以均衡与内存的速度差异；</li>
-<li>操作系统增加了进程、线程，以分时复用 CPU，进而均衡 CPU 与 I&#x2F;O 设备的速度差异；</li>
-<li>编译程序优化指令执行次序，使得缓存能够得到更加合理的利用。</li>
-</ul>
-<h3 id="2-2Java是怎么解决并发问题的？"><a href="#2-2Java是怎么解决并发问题的？" class="headerlink" title="2.2Java是怎么解决并发问题的？"></a>2.2Java是怎么解决并发问题的？</h3><h4 id="2-2-1-理解的第一个维度：核心知识"><a href="#2-2-1-理解的第一个维度：核心知识" class="headerlink" title="2.2.1 理解的第一个维度：核心知识"></a>2.2.1 理解的第一个维度：核心知识</h4><p>本质上可以理解为，java 内存模型规范了 JVM 如何提供按需禁用缓存和编译优化的方法。具体来说，这些方法包括：</p>
-<ul>
-<li>volatile、synchronized 和 final 三个关键字</li>
-<li>Happens-Before 规则</li>
-</ul>
-<h4 id="2-2-3-理解的第二个维度：可见性，有序性，原子性"><a href="#2-2-3-理解的第二个维度：可见性，有序性，原子性" class="headerlink" title="2.2.3 理解的第二个维度：可见性，有序性，原子性"></a>2.2.3 理解的第二个维度：可见性，有序性，原子性</h4><ul>
-<li><p>原子性：在 Java 中，对基本数据类型的变量的读取和赋值操作是原子性操作，即这些操作是不可被中断的，要么执行，要么不执行。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">#分析以下哪些操作是原子性操作</span><br><span class="line">y = <span class="number">10</span>; <span class="comment">//直接将数值 10 赋值给 x，也就是说线程执行这个语句会直接将数值 10 写入到工作内存中，是原子性操作</span></span><br><span class="line">y = x; <span class="comment">//包含两个操作，它先去读取 x 的值，在将 x 的值写入工作内存，虽然读取 x 的值以及将 x 的值写入工作内存，这两个操作都是原子性操作，但是合起来就不是原子性操作了</span></span><br><span class="line">x++; <span class="comment">//x++包含 3 个操作：读取 x 值、进行加 1 操作，写入新的值。不是原子性操作</span></span><br><span class="line">x = x + <span class="number">1</span>; <span class="comment">//同上</span></span><br></pre></td></tr></table></figure>
-
-<p>也就是说，只有简单的读取、赋值才是原子操作。要实现大范围的原子性就的上锁来实现。</p>
-</li>
-<li><p>可见性：java 提供 volatile 关键字来保证可见性。当一个共享变量被 volatile 修饰时，它会保证修改的值立即被更新到主存，当有其他线程需要读取时，它会去内存中读取新值。而普通的共享变量不能保证可见性，因为普通变量被修改后，什么时候被写入主存是不确定的，当其他线程去读取时，此时内存中可能还是原来的旧值，因此无法保证可见性。加锁也能够保证可见性。</p>
-</li>
-<li><p>有序性：在 java 里面，可以通过 volatile 关键字来保证一定的“有序性”。另外可以通过 synchronized 和 Lock 来保证有序性，很显然，synchronized 和 Lock 保证每个时刻是有一个线程执行同步代码，相当于让线程顺序执行同步代码，自然就保证了有序性。当然 JVM 是通过 Happens-Before 规则来保证有序性的</p>
-</li>
-</ul>
-<h3 id="2-3-线程安全有哪些实现思路？"><a href="#2-3-线程安全有哪些实现思路？" class="headerlink" title="2.3 线程安全有哪些实现思路？"></a>2.3 线程安全有哪些实现思路？</h3><h4 id="2-3-1-互斥同步"><a href="#2-3-1-互斥同步" class="headerlink" title="2.3.1 互斥同步"></a>2.3.1 互斥同步</h4><p>synchronized 和 ReentrantLock</p>
-<h4 id="2-3-2-非阻塞同步"><a href="#2-3-2-非阻塞同步" class="headerlink" title="2.3.2 非阻塞同步"></a>2.3.2 非阻塞同步</h4><p>互斥同步最主要的问题就是线程阻塞和唤醒所带来的性能问题，因此这种同步也称为阻塞同步。互斥同步属于一种悲观的并发策略，总是认为只要不去做正确的同步措施，那就肯定会出现问题。无论共享数据是否会出现竞争，它都要进行加锁、用户态核心态转换、维护计数器和检查是否有被阻塞的线程需要唤醒等操作。</p>
-<ul>
-<li>CAS</li>
-<li>随着硬件指令集的发展，我们可以使用基于冲突检测的乐观并发策略：先进行操作，如果没有其他线程争用共享数据，那操作就成功了，否则采取补偿措施。这种乐观的并发策略的许多实现都不需要将线程阻塞，因此这种同步操作称为非阻塞同步。乐观锁需要操作和冲突检测这两步骤具备原子性，这里就不能再使用互斥同步来保证了，只能靠硬件来完成。硬件支持的原子性操作最典型的是：比较并交换。</li>
-<li>Atomiclnteger：JUC 包里面的整数原子类 Atomiclnteger，其中的 compareAndSet()和 getAndlncrement()等方法都使用了 Unsafe 类的 CAS 操作。</li>
-</ul>
-<h4 id="2-3-3-无同步方案"><a href="#2-3-3-无同步方案" class="headerlink" title="2.3.3 无同步方案"></a>2.3.3 无同步方案</h4><p>保证线程的安全，并不是一定就要进行同步。如果一个方法本来就不涉及共享数据，那它自然就无需任何同步措施去保证正确性。</p>
-<ul>
-<li>栈封闭：多个线程访问同一个方法中的局部变量时，不会出现线程安全问题，因为局部变量存储在虚拟机栈中，属于线程私有的。</li>
-<li>线程本地存储：如果有一段代码所需要的数据必须与其他代码共享，那就看看这些共享数据的代码是否能保证在同一个线程中执行。如果能保证，我们就可以把共享数据的可见范围限制在同一个线程之内，这样，无须同步也能保证线程之间不出现数据争用的问题。</li>
-</ul>
-<h4 id="2-3-4-如何理解并发和并行的区别？"><a href="#2-3-4-如何理解并发和并行的区别？" class="headerlink" title="2.3.4 如何理解并发和并行的区别？"></a>2.3.4 如何理解并发和并行的区别？</h4><ul>
-<li>并发是指一个处理器处理多个任务。</li>
-<li>并行是指多个处理器或者多核的处理器处理多个不同的任务。</li>
-</ul>
-<h4 id="2-3-5-线程有哪几种状态？分别说明从一种状态到另一种状态转变有哪些方式"><a href="#2-3-5-线程有哪几种状态？分别说明从一种状态到另一种状态转变有哪些方式" class="headerlink" title="2.3.5 线程有哪几种状态？分别说明从一种状态到另一种状态转变有哪些方式"></a>2.3.5 线程有哪几种状态？分别说明从一种状态到另一种状态转变有哪些方式</h4><ul>
-<li>new（新建）：创建后为启动</li>
-<li>可运行：可能在运行，也可能在等待 CPU 时间片，包含了操作系统线程状态中的 Runing 和 Ready。</li>
-<li>阻塞：等待获取一个排它锁，如果其线程释放了锁就会结束此状态。</li>
-<li>无限期等待：等待其他线程显式地唤醒，否则不会分配 CPU 时间片。</li>
-<li>限期等待：无需等待其它线程显式地唤醒，在一定时间之后会被系统自动唤醒。调用 Thread.sleep()方法使线程进入限期等待状态时，常常用“使一个线程睡眠”进行描述。调用 Object.wait()方法使线程进入限期等待或者无限期等待时，常常用“挂起一个线程”进行描述。</li>
-<li>死亡：可以时线程结束任务之后自己结束，或者产生了异常而结束。</li>
-</ul>
-<h4 id="2-3-6-通常线程有哪几种使用方式？"><a href="#2-3-6-通常线程有哪几种使用方式？" class="headerlink" title="2.3.6 通常线程有哪几种使用方式？"></a>2.3.6 通常线程有哪几种使用方式？</h4><p>有三种使用线程的方法：</p>
-<ul>
-<li>实现 Runnable 接口；</li>
-<li>实现 Callable 接口；</li>
-<li>继承 Thread 类；</li>
-</ul>
-<p>实现 Runnable 和 Callable 接口的类只能当做一个可以在线程中运行的任务，不是真正意义上的线程，因此最后还需要通过 Thread 来调用。可以说任务是通过线程驱动从而执行的。</p>
-<h4 id="2-3-7-基础线程机制有哪些？"><a href="#2-3-7-基础线程机制有哪些？" class="headerlink" title="2.3.7 基础线程机制有哪些？"></a>2.3.7 基础线程机制有哪些？</h4><ul>
-<li>Exceutor：管理多个异步任务的执行而无需程序员显式地管理线程的生命周期。这里的异步是指多个任务的执行互不干扰，不需要进行同步操作。</li>
-<li>Daemon：守护线程是程序运行时在后台提供服务的线程，不属于程序中不可或缺的部分。当所有非守护线程结束时，程序也就终止，同时会杀死所有守护线程。使用 setDaemon()方法将一个线程设置为守护线程。mian()属于非守护线程。</li>
-<li>sleep()：Tread.sleep(millisec)方法会休眠当前正在执行的线程，millisec单位为毫秒。</li>
-<li>yield()：对静态方法 Thread.yield()的调用周期声明了当前线程已经完成了生命周期中最重要的部分，可以切换给其他线程来执行。该方法只是对线程调度器的一个建议，而且也只是建议具有相同优先级的其它线程可以运行。</li>
-</ul>
-<h4 id="2-3-8-线程的中断方式有哪些？"><a href="#2-3-8-线程的中断方式有哪些？" class="headerlink" title="2.3.8 线程的中断方式有哪些？"></a>2.3.8 线程的中断方式有哪些？</h4><p>一个线程执行完毕之后会自动结束，如果在运行过程中发生异常也会提前结束。</p>
-<ul>
-<li>InterruptedException：通过调用一个线程的 interrupt（）来中断该线程，如果该线程初一阻塞、限期等待或者无限期等待状态，那么就会抛出 InterruptedException，从而提前结束该线程。但是不能中断 I&#x2F;O 阻塞和 synchronized 锁阻塞。</li>
-<li>interrupted()：如果一个线程的 run（）方法执行一个无限循环，并且没有执行 sleep（）等会抛出 InterruptedException 的操作，那么调用线程的 Interrupted()方法将无法使线程提前结束。但是调用 interrupt（）方法会设置线程的中断标记，此时调用 interrupt（）方法将会无法使线程提前结束。但是调用 interrupt（）方法来判读线程是否处于中断状态，从而提前结束线程。</li>
-<li>Executor 的中断操作：调用 Exceutor 的 shutdown（）方法会等线程都执行完毕之后再关闭，但是如果调用的是 shutdownNow（）方法，则相当于调用每个线程的 interrupt（）方法。</li>
-</ul>
-<h4 id="2-3-9-线程的互斥同步方式有哪些？如何比较和选择？"><a href="#2-3-9-线程的互斥同步方式有哪些？如何比较和选择？" class="headerlink" title="2.3.9 线程的互斥同步方式有哪些？如何比较和选择？"></a>2.3.9 线程的互斥同步方式有哪些？如何比较和选择？</h4><p>Java提供了两种锁机机制来控制多个线程对共享资源的互斥访问，第一个是 JVM 实现的 synchronized，而另一个是 JDK 实现的 ReentrantLock。</p>
-<ul>
-<li>锁的实现：synchronized 是 JVM 实现的，而 ReentranLock 是 JDK 实现的。</li>
-<li>性能：新版本 Java 对 synchronized 进行了很多优化，列如自旋转等，synchronized 与 ReentrantLock 大致相同。</li>
-<li>等待可中段：当持有锁的线程长期不释放锁的时候，正在等待的线程可以选择放弃等待，改为处理其他事情。ReentranLock 可中断，而 synchronized 不行。</li>
-<li>公平锁：公平锁是指多个线程在等待同一个锁时，必须按照申请锁的时间顺序来依次获得锁。synchronized中的锁是非公平的，ReentrantLock 默认情况下也是非公平锁的，但是也可以是公平的。</li>
-<li>锁绑定多个条件：一个 ReentrantLock 可以同时绑定多个 Condition 对象。</li>
-</ul>
-<h4 id="2-3-10-线程之间有哪些协作方式？"><a href="#2-3-10-线程之间有哪些协作方式？" class="headerlink" title="2.3.10 线程之间有哪些协作方式？"></a>2.3.10 线程之间有哪些协作方式？</h4><p>当多个线程可以一起工作去解决某个问题是，如果某些部分必须在其它部分之前完成，那么就需要对线程进行协调。</p>
-<ul>
-<li>join()：在线程中调用另一个线程的 join() 方法，会将当前线程挂起，而不是忙等待，直到目标线程结束。</li>
-<li>wait() notify() notifyAll()：调用 wait() 使得线程等待某个条件满足，线程在等待时会被挂起，当其他线程的运行使得这个条件满足时，其它线程会调用 notify() 或者 notifyAll() 来唤醒线程。它们属于 Object的一部分，而不属于 Thread。只能用在同步方法或者同步控制块中使用，否则会在运行时抛出 lllegalMonitorStateExeception。使用 wait() 挂起期间，线程会释放锁。因为，如果没有释放锁，那么其它线程就无法进入对象的同步或者同步控制块中，那么就无法执行 notify() 或者 notifyAll() 来唤醒挂起的线程，造成死锁。</li>
-<li>wait() 和 sleep()的区别：wait() 是 Object 的方法，而sleep()是 Thread 的静态方法。wait()会释放锁，sleep() 不会。</li>
-</ul>
-]]></content>
-      <categories>
-        <category>面试</category>
-      </categories>
-      <tags>
-        <tag>Java 基础</tag>
       </tags>
   </entry>
 </search>
