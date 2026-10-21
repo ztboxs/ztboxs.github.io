@@ -3,6 +3,7 @@ import { useRef } from "react"
 
 import { revealMotion } from "@/components/magic/reveal"
 import { Section } from "@/components/site/section"
+import { scenes } from "@/content/art"
 import { timeline } from "@/content/site"
 
 // The castle's journey: a golden path draws itself as the visitor scrolls.
@@ -19,9 +20,9 @@ export function Timeline() {
       id="timeline"
       title="经历时间线"
       kicker="the road so far"
-      tone="night"
+      scene={scenes.dusk}
     >
-      <div className="mx-auto max-w-3xl px-5 md:px-8">
+      <div className="relative z-10 mx-auto max-w-3xl px-5 md:px-8">
         <div className="relative">
           <svg
             aria-hidden
@@ -65,7 +66,7 @@ export function Timeline() {
                   transition={{ type: "spring", stiffness: 300, damping: 14 }}
                 />
                 <div className="rounded-2xl bg-paper/92 p-5 shadow-[0_16px_36px_-22px_rgb(40_20_60/0.7)] ring-1 ring-paper-edge backdrop-blur md:p-6">
-                  <p className="font-fell text-lg text-door-timeline">
+                  <p className="font-fell text-lg text-[#7a5aa6]">
                     {entry.period}
                   </p>
                   <h3 className="mt-1 text-xl font-bold tracking-wide">

@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Draft art generated for the site (only curated copies go to public/)
+.asset-drafts

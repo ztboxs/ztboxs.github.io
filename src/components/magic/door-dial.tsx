@@ -12,42 +12,31 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { sections } from "@/content/site"
+import { art } from "@/content/art"
+import { doors, sections } from "@/content/site"
+import { cn } from "@/lib/utils"
 import { useActiveSection, useSiteStore } from "@/stores/site-store"
 
-const SEGMENT = 360 / sections.length
-const OUTER = 50
-const INNER = 22
-
-function wedge(index: number) {
-  const toPoint = (angle: number, radius: number) => {
-    const rad = ((angle - 90) * Math.PI) / 180
-    return `${(Math.cos(rad) * radius).toFixed(2)} ${(Math.sin(rad) * radius).toFixed(2)}`
-  }
-  const start = index * SEGMENT + 1.5
-  const end = (index + 1) * SEGMENT - 1.5
-  return [
-    `M${toPoint(start, INNER)}`,
-    `L${toPoint(start, OUTER)}`,
-    `A${OUTER} ${OUTER} 0 0 1 ${toPoint(end, OUTER)}`,
-    `L${toPoint(end, INNER)}`,
-    `A${INNER} ${INNER} 0 0 0 ${toPoint(start, INNER)}`,
-    "Z",
-  ].join(" ")
-}
+// Each quadrant of the dial image, matching the door's angle in `doors`.
+const quadrants = {
+  45: "top-0 right-0 rounded-tr-full",
+  135: "right-0 bottom-0 rounded-br-full",
+  225: "bottom-0 left-0 rounded-bl-full",
+  315: "top-0 left-0 rounded-tl-full",
+} as const
 
 // The castle door's colour dial. Turning it to a colour opens the door onto
-// that part of the site.
+// that place.
 export function DoorDial() {
   const active = useActiveSection()
   const navTarget = useSiteStore((state) => state.navTarget)
   const setNavTarget = useSiteStore((state) => state.setNavTarget)
   const doorLink = useDoorLink()
-  const activeIndex = sections.findIndex((section) => section.id === active)
-  const activeSection = sections[activeIndex]
+  const activeSection = sections.find((section) => section.id === active)!
+  const activeDoor = doors.find((door) => door.id === activeSection.door)
 
   // Keep turning the short way round instead of unwinding past 360°.
-  const target = -(activeIndex * SEGMENT + SEGMENT / 2)
+  const target = activeDoor ? -activeDoor.angle : 0
   const [rotation, setRotation] = useState(target)
   const [lastTarget, setLastTarget] = useState(target)
   if (lastTarget !== target) {
@@ -80,53 +69,46 @@ export function DoorDial() {
       data-tucked={tucked}
       className="fixed right-3 bottom-3 z-40 flex items-end gap-3 transition-transform duration-500 ease-out focus-within:translate-y-0! max-xl:data-[tucked=true]:translate-y-[140%] md:right-auto md:bottom-6 md:left-6"
     >
-      <div className="relative size-20 drop-shadow-[0_6px_18px_rgb(30_30_60/0.35)] md:size-32">
-        <svg viewBox="-60 -60 120 120" className="size-full">
-          <circle r="58" fill="#c9a35a" stroke="#6e5530" strokeWidth="2" />
-          <circle r="54" fill="#2f2a33" />
-          <motion.g
-            animate={{ rotate: rotation }}
-            transition={{ type: "spring", stiffness: 70, damping: 14 }}
-          >
-            {sections.map((section, index) => (
-              <Tooltip key={section.id}>
-                <TooltipTrigger
-                  render={
-                    <a
-                      {...doorLink(section.id)}
-                      aria-label={`${section.door}之门，前往${section.label}`}
-                      aria-current={section.id === active ? "true" : undefined}
-                      className="cursor-pointer outline-none [&:focus-visible>path]:stroke-[#fff3c4] [&:focus-visible>path]:stroke-[3]"
-                    />
-                  }
-                >
-                  <path
-                    d={wedge(index)}
-                    fill={section.color}
-                    stroke="#1d1a22"
-                    strokeWidth="1"
-                    className="transition-[filter] duration-200 hover:brightness-125"
+      <div className="relative size-20 md:size-32">
+        <span
+          aria-hidden
+          className="absolute -top-2 left-1/2 z-10 h-3 w-4 -translate-x-1/2 bg-[#e9c46a] drop-shadow-[0_1px_1px_rgb(0_0_0/0.5)] [clip-path:polygon(0_0,100%_0,50%_100%)]"
+        />
+        <motion.div
+          className="relative size-full rounded-full drop-shadow-[0_8px_18px_rgb(20_20_40/0.45)]"
+          animate={{ rotate: rotation }}
+          transition={{ type: "spring", stiffness: 60, damping: 13 }}
+        >
+          <img
+            src={art.dial.src}
+            alt=""
+            draggable={false}
+            className="size-full select-none"
+          />
+          {doors.map((door) => (
+            <Tooltip key={door.id}>
+              <TooltipTrigger
+                render={
+                  <a
+                    {...doorLink(door.target)}
+                    aria-label={`${door.name}之门，前往${sections.find((section) => section.id === door.target)?.label}`}
+                    aria-current={
+                      door.id === activeDoor?.id ? "true" : undefined
+                    }
+                    className={cn(
+                      "absolute size-1/2 transition-colors outline-none hover:bg-white/15 focus-visible:bg-white/25",
+                      quadrants[door.angle]
+                    )}
                   />
-                </TooltipTrigger>
-                <TooltipContent side="top">
-                  {section.door} · {section.label}
-                </TooltipContent>
-              </Tooltip>
-            ))}
-          </motion.g>
-          <circle r="20" fill="#d8b46a" stroke="#6e5530" strokeWidth="2" />
-          <circle r="14" fill="#b38b46" />
-          <path
-            d="M0 -6 a4 4 0 1 1 0.1 0 Z M-2 -2 h4 l1.5 9 h-7 Z"
-            fill="#3a2d1c"
-          />
-          <path
-            d="M0 -59 l-6 -8 h12 Z"
-            fill="#fff3c4"
-            stroke="#6e5530"
-            strokeWidth="1.5"
-          />
-        </svg>
+                }
+              />
+              <TooltipContent side="top">
+                {door.name} ·{" "}
+                {sections.find((section) => section.id === door.target)?.label}
+              </TooltipContent>
+            </Tooltip>
+          ))}
+        </motion.div>
       </div>
       <div className="mb-2 hidden flex-col md:flex">
         <AnimatePresence mode="wait">
@@ -136,9 +118,16 @@ export function DoorDial() {
             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             exit={{ opacity: 0, y: -6, filter: "blur(4px)" }}
             transition={{ duration: 0.3 }}
-            className="rounded-full bg-paper/90 px-3 py-1 text-sm text-ink shadow-sm ring-1 ring-paper-edge backdrop-blur"
+            className="inline-flex items-center gap-2 rounded-full bg-paper/90 px-3 py-1 text-sm text-ink shadow-sm ring-1 ring-paper-edge backdrop-blur"
           >
-            {activeSection.door} · {activeSection.label}
+            {activeDoor && (
+              <span
+                className="size-2.5 rounded-full ring-2 ring-black/10"
+                style={{ backgroundColor: activeDoor.color }}
+              />
+            )}
+            {activeDoor ? `${activeDoor.name} · ` : ""}
+            {activeSection.label}
           </motion.span>
         </AnimatePresence>
       </div>

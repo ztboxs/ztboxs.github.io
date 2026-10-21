@@ -1,7 +1,7 @@
 import { motion, useAnimate, useReducedMotion } from "motion/react"
 import { useEffect } from "react"
 
-import { sections } from "@/content/site"
+import { doors, sections } from "@/content/site"
 import { useSiteStore } from "@/stores/site-store"
 
 const sparks = Array.from({ length: 18 }, (_, i) => {
@@ -18,7 +18,8 @@ export function DoorPortal() {
   const closeDoor = useSiteStore((state) => state.closeDoor)
   const reduceMotion = useReducedMotion()
   const [scope, animate] = useAnimate<HTMLDivElement>()
-  const door = sections.find((section) => section.id === doorTarget)
+  const section = sections.find((candidate) => candidate.id === doorTarget)
+  const door = doors.find((candidate) => candidate.id === section?.door)
 
   useEffect(() => {
     if (!doorTarget) return
@@ -55,7 +56,8 @@ export function DoorPortal() {
     }
   }, [doorTarget, origin, reduceMotion, animate, scope, closeDoor])
 
-  if (!door || reduceMotion) return null
+  if (!section || reduceMotion) return null
+  const color = door?.color ?? "var(--door-harbor)"
 
   return (
     <div
@@ -64,7 +66,7 @@ export function DoorPortal() {
       className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden"
       style={
         {
-          "--door": door.color,
+          "--door": color,
           clipPath: `circle(0px at ${origin.x}px ${origin.y}px)`,
           background: `radial-gradient(circle at ${origin.x}px ${origin.y}px, #fff6d8 0%, var(--door) 45%, color-mix(in oklch, var(--door) 60%, #0b1030) 100%)`,
         } as React.CSSProperties
@@ -95,7 +97,8 @@ export function DoorPortal() {
           the door opens
         </span>
         <span className="text-3xl font-bold tracking-widest md:text-5xl">
-          {door.door} · {door.label}
+          {door ? `${door.name}之门 · ` : ""}
+          {section.label}
         </span>
       </motion.div>
     </div>

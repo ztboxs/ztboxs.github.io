@@ -19,12 +19,10 @@
   --color-ink: var(--ink);
   --color-gold: var(--gold);
   --color-ember: var(--ember);
-  --color-door-home: var(--door-home);
-  --color-door-projects: var(--door-projects);
-  --color-door-explorations: var(--door-explorations);
-  --color-door-about: var(--door-about);
-  --color-door-timeline: var(--door-timeline);
-  --color-door-contact: var(--door-contact);
+  --color-door-harbor: var(--door-harbor);
+  --color-door-hearth: var(--door-hearth);
+  --color-door-meadow: var(--door-meadow);
+  --color-door-night: var(--door-night);
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
@@ -60,12 +58,11 @@
   --gold: oklch(0.8 0.13 80);
   --ember: oklch(0.72 0.17 50);
 
-  --door-home: oklch(0.7 0.1 235);
-  --door-projects: oklch(0.56 0.15 35);
-  --door-explorations: oklch(0.6 0.11 135);
-  --door-about: oklch(0.72 0.15 65);
-  --door-timeline: oklch(0.55 0.11 300);
-  --door-contact: oklch(0.36 0.08 270);
+  /* The four colours of the castle door's dial. */
+  --door-harbor: oklch(0.55 0.13 250);
+  --door-hearth: oklch(0.55 0.17 30);
+  --door-meadow: oklch(0.56 0.12 140);
+  --door-night: oklch(0.3 0.04 275);
 
   --background: oklch(0.9 0.04 225);
   --foreground: var(--ink);
@@ -127,5 +124,6 @@
 }
 
 @utility paper-grain {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .28 0 0 0 0 .2 0 0 0 .5 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-image: url("/art/paper.webp");
+  background-size: 384px;
 }

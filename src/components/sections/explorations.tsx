@@ -4,12 +4,18 @@ import { Reveal } from "@/components/magic/reveal"
 import { MediaFrame } from "@/components/site/media-frame"
 import { Section } from "@/components/site/section"
 import { Badge } from "@/components/ui/badge"
+import { scenes } from "@/content/art"
 import { explorations } from "@/content/site"
 
 export function Explorations() {
   return (
-    <Section id="explorations" title="其他经历与探索" kicker="the open fields">
-      <div className="mx-auto grid max-w-5xl items-start gap-8 px-5 md:grid-cols-2 md:px-8">
+    <Section
+      id="explorations"
+      title="其他经历与探索"
+      kicker="the open fields"
+      scene={scenes.flowerField}
+    >
+      <div className="relative z-10 mx-auto grid max-w-5xl items-start gap-8 px-5 md:grid-cols-2 md:px-8">
         {explorations.map((item, index) => (
           <Reveal key={item.id} delay={index * 0.12}>
             <article
@@ -17,7 +23,7 @@ export function Explorations() {
               className="relative flex h-full flex-col gap-4 overflow-hidden rounded-3xl bg-paper p-6 shadow-[0_20px_50px_-26px_rgb(30_50_40/0.5)] ring-1 ring-paper-edge md:p-8"
             >
               <div className="pointer-events-none absolute inset-0 paper-grain opacity-25 mix-blend-multiply" />
-              <div className="absolute inset-x-0 top-0 h-1.5 bg-door-explorations/80" />
+              <div className="absolute inset-x-0 top-0 h-1.5 bg-door-meadow/80" />
               <header className="relative flex flex-col gap-1.5">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <h3
@@ -28,7 +34,7 @@ export function Explorations() {
                   </h3>
                   <Badge
                     variant="outline"
-                    className="h-6 rounded-full border-door-explorations/45 bg-door-explorations/10 px-2.5 text-[oklch(0.42_0.09_140)]"
+                    className="h-6 rounded-full border-door-meadow/45 bg-door-meadow/10 px-2.5 text-[oklch(0.42_0.09_140)]"
                   >
                     {item.status}
                   </Badge>

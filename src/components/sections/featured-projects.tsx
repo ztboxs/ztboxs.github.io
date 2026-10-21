@@ -23,13 +23,19 @@ import {
   type DetailBlock,
   type FeaturedProject,
 } from "@/content/site"
+import { scenes } from "@/content/art"
 
 const tilts = [-3, 2.5, -1.5]
 
 export function FeaturedProjects() {
   return (
-    <Section id="projects" title="精选项目" kicker="three rooms">
-      <div className="mx-auto flex max-w-5xl flex-col gap-14 px-5 md:px-8">
+    <Section
+      id="projects"
+      title="精选项目"
+      kicker="over the rooftops"
+      scene={scenes.rooftops}
+    >
+      <div className="relative z-10 mx-auto flex max-w-5xl flex-col gap-14 px-5 md:px-8">
         {featuredProjects.map((project, index) => (
           <Reveal key={project.id}>
             <ProjectPage project={project} index={index} />
@@ -55,7 +61,7 @@ function ProjectPage({
       className="relative overflow-hidden rounded-3xl bg-paper text-card-foreground shadow-[0_24px_60px_-28px_rgb(30_40_70/0.55)] ring-1 ring-paper-edge"
     >
       <div className="pointer-events-none absolute inset-0 paper-grain opacity-25 mix-blend-multiply" />
-      <div className="absolute inset-y-0 left-0 w-1.5 bg-door-projects/80" />
+      <div className="absolute inset-y-0 left-0 w-1.5 bg-door-harbor/80" />
       <motion.div
         aria-hidden
         className="pointer-events-none absolute inset-y-0 -left-1/2 w-1/2 bg-linear-to-r from-transparent via-gold/35 to-transparent"
@@ -66,7 +72,7 @@ function ProjectPage({
       <div className="relative grid gap-8 p-6 md:grid-cols-[1fr_15rem] md:gap-10 md:p-10">
         <div className="flex min-w-0 flex-col gap-5">
           <header className="flex flex-col gap-2">
-            <span className="font-fell text-sm text-door-projects italic">
+            <span className="font-fell text-sm text-door-harbor italic">
               No. {String(index + 1).padStart(2, "0")}
             </span>
             <h3
@@ -101,7 +107,7 @@ function ProjectPage({
               <Badge
                 key={stage}
                 variant="outline"
-                className="h-6 rounded-full border-door-projects/40 bg-door-projects/8 px-2.5 text-door-projects"
+                className="h-6 rounded-full border-door-harbor/40 bg-door-harbor/8 px-2.5 text-door-harbor"
               >
                 {stage}
               </Badge>
@@ -167,8 +173,8 @@ function ProjectPage({
 function DetailSection({ block }: { block: DetailBlock }) {
   return (
     <section className="flex flex-col gap-2.5">
-      <h4 className="flex items-center gap-2 text-sm font-bold tracking-widest text-door-projects">
-        <span className="h-px w-5 bg-door-projects/60" />
+      <h4 className="flex items-center gap-2 text-sm font-bold tracking-widest text-door-harbor">
+        <span className="h-px w-5 bg-door-harbor/60" />
         {block.title}
       </h4>
       {block.kind === "list" && (

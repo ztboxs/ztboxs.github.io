@@ -9,34 +9,52 @@ export const profile = {
   github: "https://github.com/ztboxs",
 }
 
-export const sections = [
-  { id: "home", label: "首页", door: "晴空", color: "var(--door-home)" },
+// The castle door's dial has four colours; each opens onto one place.
+export const doors = [
   {
-    id: "projects",
-    label: "精选项目",
-    door: "红砖",
-    color: "var(--door-projects)",
+    id: "harbor",
+    name: "港口",
+    color: "var(--door-harbor)",
+    target: "projects",
+    angle: 45,
   },
   {
-    id: "explorations",
-    label: "其他经历",
-    door: "原野",
-    color: "var(--door-explorations)",
-  },
-  { id: "about", label: "关于我", door: "炉火", color: "var(--door-about)" },
-  {
-    id: "timeline",
-    label: "经历时间线",
-    door: "暮色",
-    color: "var(--door-timeline)",
+    id: "hearth",
+    name: "炉火",
+    color: "var(--door-hearth)",
+    target: "about",
+    angle: 135,
   },
   {
-    id: "contact",
-    label: "联系与合作",
-    door: "星夜",
-    color: "var(--door-contact)",
+    id: "meadow",
+    name: "原野",
+    color: "var(--door-meadow)",
+    target: "explorations",
+    angle: 225,
+  },
+  {
+    id: "night",
+    name: "星夜",
+    color: "var(--door-night)",
+    target: "contact",
+    angle: 315,
   },
 ] as const
+
+export type DoorId = (typeof doors)[number]["id"]
+
+export const sections = [
+  { id: "home", label: "首页", door: null },
+  { id: "projects", label: "精选项目", door: "harbor" },
+  { id: "explorations", label: "其他经历", door: "meadow" },
+  { id: "about", label: "关于我", door: "hearth" },
+  { id: "timeline", label: "经历时间线", door: "night" },
+  { id: "contact", label: "联系与合作", door: "night" },
+] as const satisfies readonly {
+  id: string
+  label: string
+  door: DoorId | null
+}[]
 
 export type SectionId = (typeof sections)[number]["id"]
 
