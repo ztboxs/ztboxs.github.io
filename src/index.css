@@ -1,0 +1,131 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "lxgw-wenkai-screen-webfont/lxgwwenkaigbscreen.css";
+@import "@fontsource/im-fell-english/400.css";
+@import "@fontsource/im-fell-english/400-italic.css";
+
+/* Night-time scopes (the contact section) opt in with the .dark class. */
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans:
+    "LXGW WenKai Screen", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+    sans-serif;
+  --font-heading: var(--font-sans);
+  --font-fell: "IM Fell English", "Iowan Old Style", Georgia, serif;
+  --color-paper: var(--paper);
+  --color-paper-edge: var(--paper-edge);
+  --color-ink: var(--ink);
+  --color-gold: var(--gold);
+  --color-ember: var(--ember);
+  --color-door-home: var(--door-home);
+  --color-door-projects: var(--door-projects);
+  --color-door-explorations: var(--door-explorations);
+  --color-door-about: var(--door-about);
+  --color-door-timeline: var(--door-timeline);
+  --color-door-contact: var(--door-contact);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+/* Storybook daylight: paper pages, ink text, brass and ember accents. */
+:root {
+  --paper: oklch(0.975 0.018 88);
+  --paper-edge: oklch(0.88 0.04 80);
+  --ink: oklch(0.29 0.045 260);
+  --gold: oklch(0.8 0.13 80);
+  --ember: oklch(0.72 0.17 50);
+
+  --door-home: oklch(0.7 0.1 235);
+  --door-projects: oklch(0.56 0.15 35);
+  --door-explorations: oklch(0.6 0.11 135);
+  --door-about: oklch(0.72 0.15 65);
+  --door-timeline: oklch(0.55 0.11 300);
+  --door-contact: oklch(0.36 0.08 270);
+
+  --background: oklch(0.9 0.04 225);
+  --foreground: var(--ink);
+  --card: var(--paper);
+  --card-foreground: var(--ink);
+  --popover: var(--paper);
+  --popover-foreground: var(--ink);
+  --primary: oklch(0.36 0.07 255);
+  --primary-foreground: oklch(0.97 0.02 85);
+  --secondary: oklch(0.93 0.035 82);
+  --secondary-foreground: var(--ink);
+  --muted: oklch(0.94 0.025 85);
+  --muted-foreground: oklch(0.47 0.035 260);
+  --accent: oklch(0.92 0.06 85);
+  --accent-foreground: var(--ink);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.86 0.04 82);
+  --input: oklch(0.86 0.04 82);
+  --ring: var(--gold);
+  --radius: 0.875rem;
+}
+
+.dark {
+  --paper: oklch(0.27 0.05 270 / 70%);
+  --paper-edge: oklch(1 0 0 / 14%);
+  --background: oklch(0.2 0.05 270);
+  --foreground: oklch(0.95 0.025 85);
+  --card: var(--paper);
+  --card-foreground: oklch(0.95 0.025 85);
+  --popover: oklch(0.27 0.05 270);
+  --popover-foreground: oklch(0.95 0.025 85);
+  --primary: oklch(0.85 0.12 80);
+  --primary-foreground: oklch(0.22 0.05 270);
+  --secondary: oklch(1 0 0 / 10%);
+  --secondary-foreground: oklch(0.95 0.025 85);
+  --muted: oklch(1 0 0 / 8%);
+  --muted-foreground: oklch(0.8 0.03 270);
+  --accent: oklch(1 0 0 / 12%);
+  --accent-foreground: oklch(0.95 0.025 85);
+  --border: oklch(1 0 0 / 14%);
+  --input: oklch(1 0 0 / 18%);
+  --ring: var(--gold);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans;
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  ::selection {
+    background: color-mix(in oklch, var(--gold) 55%, transparent);
+  }
+}
+
+@utility paper-grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .28 0 0 0 0 .2 0 0 0 .5 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
