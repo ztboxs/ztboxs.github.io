@@ -89,6 +89,20 @@ function Castle({ progress }: Pick<SceneProps, "progress">) {
   )
 }
 
+function Backdrop() {
+  const texture = useTexture(art.landscape.src, (loaded) => {
+    loaded.colorSpace = THREE.SRGBColorSpace
+  })
+  const aspect = art.landscape.width / art.landscape.height
+  const height = 30
+  return (
+    <mesh position={[0, 1.5, -26]}>
+      <planeGeometry args={[height * aspect, height]} />
+      <meshBasicMaterial map={texture} toneMapped={false} />
+    </mesh>
+  )
+}
+
 function SkyClouds() {
   const compact = useCompact()
   return (
@@ -201,6 +215,7 @@ export default function HeroScene({
     >
       <hemisphereLight args={["#ffffff", "#e3ecd6", 2.6]} />
       <directionalLight position={[6, 9, 6]} intensity={2.4} color="#fff6e6" />
+      <Backdrop />
       <SkyClouds />
       <Castle progress={progress} />
       <CameraRig progress={progress} />

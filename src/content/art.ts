@@ -1,11 +1,12 @@
 // Every image the site shows, with its real pixel size. All of them are fan
 // art painted in the style of Howl's Moving Castle; the site shows no film
-// stills.
+// stills. The landscape is the hero's backdrop, the only full-bleed painting.
 
 export type Art = { src: string; width: number; height: number }
 
 export const art = {
   castle: { src: "/art/castle.webp", width: 1000, height: 1161 },
+  landscape: { src: "/art/landscape.webp", width: 1672, height: 941 },
   calcifer: { src: "/art/calcifer.webp", width: 640, height: 585 },
   dial: { src: "/art/door-dial.webp", width: 512, height: 512 },
   paper: { src: "/art/paper.webp", width: 512, height: 512 },

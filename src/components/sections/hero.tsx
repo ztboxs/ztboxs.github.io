@@ -173,11 +173,16 @@ export function Hero() {
   )
 }
 
-// The same composition as the 3D scene, as a plain image. Shown while the
+// The same composition as the 3D scene, as plain images. Shown while the
 // scene loads, without WebGL, and for visitors who prefer reduced motion.
 function StaticScene() {
   return (
     <div aria-hidden className="absolute inset-0">
+      <img
+        src={art.landscape.src}
+        alt=""
+        className="absolute inset-0 size-full object-cover"
+      />
       <img
         src={art.castle.src}
         alt=""
