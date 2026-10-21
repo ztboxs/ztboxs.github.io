@@ -1,7 +1,8 @@
-import { motion, useInView, useScroll, useTransform } from "motion/react"
+import { motion, useInView } from "motion/react"
 import { useEffect, useRef } from "react"
 
-import type { Scene } from "@/content/art"
+import { Ornament } from "@/components/magic/ornament"
+import type { Art } from "@/content/art"
 import { doors, sections, type SectionId } from "@/content/site"
 import { cn } from "@/lib/utils"
 import { useSiteStore } from "@/stores/site-store"
@@ -10,8 +11,8 @@ type SectionProps = {
   id: SectionId
   title?: string
   kicker?: string
-  // The view through the door: a film still shown as a wide banner.
-  scene?: Scene
+  // A small painted keepsake that sits beside the heading.
+  ornament?: Art
   className?: string
   children: React.ReactNode
 }
@@ -20,7 +21,7 @@ export function Section({
   id,
   title,
   kicker,
-  scene,
+  ornament,
   className,
   children,
 }: SectionProps) {
@@ -51,12 +52,14 @@ export function Section({
       }
     >
       {title && (
-        <SceneBanner
+        <SectionHeading
           id={id}
           title={title}
           kicker={kicker}
-          scene={scene}
+          ornament={ornament}
           doorName={door?.name}
+          // The night door is nearly black, so its sections underline in gold.
+          night={door?.id === "night"}
         />
       )}
       {children}
@@ -64,73 +67,71 @@ export function Section({
   )
 }
 
-function SceneBanner({
+function SectionHeading({
   id,
   title,
   kicker,
-  scene,
+  ornament,
   doorName,
+  night,
 }: {
   id: string
   title: string
   kicker?: string
-  scene?: Scene
+  ornament?: Art
   doorName?: string
+  night: boolean
 }) {
-  const ref = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  })
-  // A slow push-in with parallax, as if the door were swinging open.
-  const scale = useTransform(scrollYProgress, [0, 1], [1.18, 1.02])
-  const y = useTransform(scrollYProgress, [0, 1], ["-8%", "8%"])
-
   return (
-    <div className="mx-auto mb-[-5rem] max-w-6xl px-3 md:mb-[-7rem] md:px-6">
+    <div className="relative z-10 mx-auto mb-10 flex max-w-5xl items-end justify-between gap-4 px-5 md:mb-14 md:px-8">
       <motion.div
-        ref={ref}
-        className="relative h-[46svh] min-h-72 overflow-hidden rounded-[2rem] shadow-[0_30px_80px_-30px_rgb(20_25_50/0.6)] ring-1 ring-white/30 md:h-[62svh] md:rounded-[2.5rem]"
-        initial={{
-          clipPath: "inset(18% 22% 18% 22% round 2.5rem)",
-          opacity: 0.4,
-        }}
-        whileInView={{
-          clipPath: "inset(0% 0% 0% 0% round 2.5rem)",
-          opacity: 1,
-        }}
-        viewport={{ once: true, amount: 0.3 }}
-        transition={{ duration: 1.3, ease: [0.65, 0, 0.35, 1] }}
+        className="flex min-w-0 flex-col gap-3"
+        initial={{ opacity: 0, y: 16, filter: "blur(8px)" }}
+        whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+        viewport={{ once: true, amount: 0.6 }}
+        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
       >
-        {scene && (
-          <motion.img
-            src={scene.src}
-            alt={scene.alt}
-            loading="lazy"
-            decoding="async"
-            className="absolute inset-0 size-full object-cover"
-            style={{ scale, y, objectPosition: scene.position }}
-          />
+        {doorName && (
+          <span className="inline-flex w-fit items-center gap-2 rounded-full bg-paper/70 px-3 py-1 text-xs text-foreground/85 ring-1 ring-paper-edge backdrop-blur-md">
+            <span className="size-2.5 rounded-full bg-(--door) ring-2 ring-white/50" />
+            {doorName}之门
+            {kicker && (
+              <span className="font-fell italic opacity-75">· {kicker}</span>
+            )}
+          </span>
         )}
-        <div className="absolute inset-0 bg-linear-to-t from-[rgb(14_18_38/0.82)] via-[rgb(14_18_38/0.15)] to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 flex flex-col items-start gap-3 p-6 pb-28 md:p-12 md:pb-36">
-          {doorName && (
-            <span className="inline-flex items-center gap-2 rounded-full bg-black/30 px-3 py-1 text-xs text-white/90 ring-1 ring-white/25 backdrop-blur-md">
-              <span className="size-2.5 rounded-full bg-(--door) ring-2 ring-white/40" />
-              {doorName}之门
-              {kicker && (
-                <span className="font-fell italic opacity-80">· {kicker}</span>
-              )}
-            </span>
-          )}
-          <h2
-            id={`${id}-title`}
-            className="text-3xl font-bold tracking-wide text-balance text-[#fffaf0] [text-shadow:0_2px_24px_rgb(0_0_0/0.45)] md:text-5xl"
-          >
-            {title}
-          </h2>
-        </div>
+        <h2
+          id={`${id}-title`}
+          className="text-4xl font-bold tracking-wide text-balance [text-shadow:0_0_28px_var(--background)] md:text-6xl"
+        >
+          {title}
+        </h2>
+        {/* A brush stroke drawn under the title once it comes into view. */}
+        <svg
+          aria-hidden
+          viewBox="0 0 220 14"
+          className="h-3 w-36 overflow-visible md:w-52"
+        >
+          <motion.path
+            d="M3 9 C 40 2, 72 13, 110 7 S 182 3, 217 8"
+            fill="none"
+            strokeWidth="3.5"
+            strokeLinecap="round"
+            className={night ? "stroke-gold" : "stroke-(--door)"}
+            initial={{ pathLength: 0 }}
+            whileInView={{ pathLength: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1.2, delay: 0.35, ease: "easeInOut" }}
+          />
+        </svg>
       </motion.div>
+      {ornament && (
+        <Ornament
+          art={ornament}
+          delay={0.2}
+          className="-mb-3 w-24 shrink-0 sm:w-32 md:w-44"
+        />
+      )}
     </div>
   )
 }

@@ -6,7 +6,8 @@ import {
 } from "motion/react"
 
 // The page travels through one day: morning, noon, golden hour, dusk, night.
-const stops = [0, 0.3, 0.55, 0.75, 0.92]
+// Night falls just before the timeline, the first of the two night sections.
+const stops = [0, 0.3, 0.55, 0.68, 0.78]
 const skyTop = ["#79b4e4", "#6aa5dc", "#8fa8d2", "#5a4b80", "#0f1733"]
 const skyBottom = ["#e4efe9", "#dcebf2", "#f4d8ae", "#ee9c74", "#242e5a"]
 
@@ -22,7 +23,7 @@ export function SkyBackdrop() {
   const top = useTransform(scrollYProgress, stops, skyTop)
   const bottom = useTransform(scrollYProgress, stops, skyBottom)
   const background = useMotionTemplate`linear-gradient(to bottom, ${top}, ${bottom})`
-  const starOpacity = useTransform(scrollYProgress, [0.68, 0.88], [0, 1])
+  const starOpacity = useTransform(scrollYProgress, [0.64, 0.78], [0, 1])
 
   return (
     <motion.div

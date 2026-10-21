@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Calcifer } from "@/components/magic/calcifer"
 import { Reveal, revealMotion } from "@/components/magic/reveal"
 import { Section } from "@/components/site/section"
-import { scenes } from "@/content/art"
+import { ornaments } from "@/content/art"
 import { about, collaboration, workMethods } from "@/content/site"
 
 const numerals = ["壹", "贰", "叁", "肆"]
@@ -18,7 +18,7 @@ export function About() {
       id="about"
       title="关于我"
       kicker="by the hearth"
-      scene={scenes.hearth}
+      ornament={ornaments.teacup}
     >
       <div className="relative z-10 mx-auto flex max-w-5xl flex-col gap-16 px-5 md:px-8">
         <Reveal>

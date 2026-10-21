@@ -3,7 +3,7 @@ import { useRef } from "react"
 
 import { revealMotion } from "@/components/magic/reveal"
 import { Section } from "@/components/site/section"
-import { scenes } from "@/content/art"
+import { ornaments } from "@/content/art"
 import { timeline } from "@/content/site"
 
 // The castle's journey: a golden path draws itself as the visitor scrolls.
@@ -20,7 +20,8 @@ export function Timeline() {
       id="timeline"
       title="经历时间线"
       kicker="the road so far"
-      scene={scenes.dusk}
+      ornament={ornaments.hat}
+      className="dark text-foreground"
     >
       <div className="relative z-10 mx-auto max-w-3xl px-5 md:px-8">
         <div className="relative">
@@ -65,14 +66,14 @@ export function Timeline() {
                   viewport={{ margin: "0px 0px -40% 0px" }}
                   transition={{ type: "spring", stiffness: 300, damping: 14 }}
                 />
-                <div className="rounded-2xl bg-paper/92 p-5 shadow-[0_16px_36px_-22px_rgb(40_20_60/0.7)] ring-1 ring-paper-edge backdrop-blur md:p-6">
-                  <p className="font-fell text-lg text-[#7a5aa6]">
-                    {entry.period}
-                  </p>
+                <div className="rounded-2xl bg-paper p-5 shadow-[0_16px_36px_-22px_rgb(5_8_25/0.8)] ring-1 ring-paper-edge backdrop-blur md:p-6">
+                  <p className="font-fell text-lg text-gold">{entry.period}</p>
                   <h3 className="mt-1 text-xl font-bold tracking-wide">
                     {entry.title}
                   </h3>
-                  <p className="mt-1 leading-7 text-ink/80">{entry.note}</p>
+                  <p className="mt-1 leading-7 text-muted-foreground">
+                    {entry.note}
+                  </p>
                 </div>
               </motion.li>
             ))}

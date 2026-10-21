@@ -23,7 +23,7 @@ import {
   type DetailBlock,
   type FeaturedProject,
 } from "@/content/site"
-import { scenes } from "@/content/art"
+import { ornaments } from "@/content/art"
 
 const tilts = [-3, 2.5, -1.5]
 
@@ -32,8 +32,8 @@ export function FeaturedProjects() {
     <Section
       id="projects"
       title="精选项目"
-      kicker="over the rooftops"
-      scene={scenes.rooftops}
+      kicker="from the harbour"
+      ornament={ornaments.sailboat}
     >
       <div className="relative z-10 mx-auto flex max-w-5xl flex-col gap-14 px-5 md:px-8">
         {featuredProjects.map((project, index) => (

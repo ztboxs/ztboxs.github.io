@@ -10,10 +10,11 @@ import { AnimatePresence, motion } from "motion/react"
 import { useState } from "react"
 
 import { FallingStars } from "@/components/magic/falling-stars"
+import { Ornament } from "@/components/magic/ornament"
 import { Reveal } from "@/components/magic/reveal"
 import { Section } from "@/components/site/section"
 import { Button } from "@/components/ui/button"
-import { credits, scenes } from "@/content/art"
+import { credits, ornaments } from "@/content/art"
 import { contact, profile } from "@/content/site"
 
 const burst = Array.from({ length: 10 }, (_, i) => {
@@ -27,12 +28,17 @@ export function Contact() {
       id="contact"
       title={contact.title}
       kicker="under the stars"
-      scene={scenes.starfall}
+      ornament={ornaments.fallingStar}
       className="dark pb-40 text-foreground md:pb-48"
     >
       <FallingStars />
       <div className="relative z-10 mx-auto max-w-5xl px-5 md:px-8">
-        <Reveal>
+        <Reveal className="relative">
+          <Ornament
+            art={ornaments.letter}
+            delay={0.4}
+            className="absolute -top-16 -right-6 z-10 hidden w-36 rotate-6 md:block"
+          />
           <div className="grid gap-8 overflow-hidden rounded-3xl bg-paper p-6 ring-1 ring-paper-edge backdrop-blur-md md:grid-cols-[1.3fr_1fr] md:gap-12 md:p-10">
             <div className="flex flex-col gap-4 text-base leading-8 md:text-lg md:leading-9">
               {contact.body.map((paragraph) => (
@@ -70,19 +76,18 @@ export function Contact() {
             </ul>
           </div>
         </Reveal>
-        <footer className="mt-20 flex flex-col items-center gap-6 text-center">
-          <div className="relative w-full max-w-md overflow-hidden rounded-3xl ring-1 ring-white/15">
-            <img
-              src={scenes.balcony.src}
-              alt={scenes.balcony.alt}
-              loading="lazy"
-              className="aspect-[16/7] w-full object-cover opacity-90"
-            />
-            <div className="absolute inset-0 bg-linear-to-t from-[rgb(15_20_45/0.7)] to-transparent" />
-            <p className="absolute inset-x-0 bottom-3 text-sm text-white/90">
-              © {new Date().getFullYear()} {profile.name} · {profile.location}
-            </p>
-          </div>
+        <footer className="mt-20 flex flex-col items-center gap-3 text-center">
+          {/* Turnip Head hops along to see the visitor off. */}
+          <motion.div
+            className="w-24 md:w-28"
+            animate={{ y: [0, -14, 0, -6, 0], rotate: [-3, 2, -3, 1, -3] }}
+            transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <Ornament art={ornaments.scarecrow} />
+          </motion.div>
+          <p className="text-sm text-foreground/85">
+            © {new Date().getFullYear()} {profile.name} · {profile.location}
+          </p>
           <ul className="flex max-w-xl flex-col gap-1 text-xs leading-5 text-muted-foreground">
             {credits.map((line) => (
               <li key={line}>{line}</li>

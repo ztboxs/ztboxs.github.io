@@ -4,7 +4,7 @@ import { Reveal } from "@/components/magic/reveal"
 import { MediaFrame } from "@/components/site/media-frame"
 import { Section } from "@/components/site/section"
 import { Badge } from "@/components/ui/badge"
-import { scenes } from "@/content/art"
+import { ornaments } from "@/content/art"
 import { explorations } from "@/content/site"
 
 export function Explorations() {
@@ -13,7 +13,7 @@ export function Explorations() {
       id="explorations"
       title="其他经历与探索"
       kicker="the open fields"
-      scene={scenes.flowerField}
+      ornament={ornaments.wildflowers}
     >
       <div className="relative z-10 mx-auto grid max-w-5xl items-start gap-8 px-5 md:grid-cols-2 md:px-8">
         {explorations.map((item, index) => (
