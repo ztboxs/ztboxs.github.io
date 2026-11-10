@@ -14,7 +14,8 @@ const BODY_URL = "/models/castle-body.glb"
 
 // The hull and the town on its back are one sculpted model (generated from
 // the castle painting with Hunyuan3D; each part takes the island paint
-// nearest to the painting's colour on it). It is 1.25 units long, faces +x
+// nearest to the painting's colour on it, with rust and tile red mixed into
+// the rear so it is not one iron lump). It is 1.25 units long, faces +x
 // and rests on y = 0, so it is stretched to size here and set down on the
 // legs' hips.
 const BODY_SCALE: Vec3 = [3.75, 4.5, 3.75]
