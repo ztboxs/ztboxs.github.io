@@ -16,6 +16,7 @@ export const doors = [
     name: "港口",
     color: "var(--door-harbor)",
     target: "projects",
+    label: "精选项目",
     angle: 45,
   },
   {
@@ -23,6 +24,7 @@ export const doors = [
     name: "炉火",
     color: "var(--door-hearth)",
     target: "about",
+    label: "关于我",
     angle: 135,
   },
   {
@@ -30,6 +32,7 @@ export const doors = [
     name: "原野",
     color: "var(--door-meadow)",
     target: "explorations",
+    label: "其他经历",
     angle: 225,
   },
   {
@@ -37,6 +40,7 @@ export const doors = [
     name: "星夜",
     color: "var(--door-night)",
     target: "contact",
+    label: "经历与联系",
     angle: 315,
   },
 ] as const
